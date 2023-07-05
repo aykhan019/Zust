@@ -10,7 +10,8 @@
         public const string MyProfile = "my-profile";
         public const string ConnectionString = "Default";
         public const string TokenSection = "AppSettings:Token";
-        public const string Register = "Register";
-        public const string Login = "Login";
+        public const string Register = "register";
+        public const string Login = "login";
+        public const string MigrationsAssembly = "Zust.DataAccess";
     }
 }

@@ -2,8 +2,7 @@
 {
     public class ErrorConstants
     {
-        public const string UsernameErrorName = "Username";
-        public const string UsernameErrorText = "Username already exists";
-
+        public const string UsernameError = "Username";
+        public const string UsernameExistsError = "Username already exists";
     }
 }

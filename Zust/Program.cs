@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Zust.Business.Abstract;
 using Zust.Business.Concrete;
 using Zust.Core.Concrete.EntityFramework;
 using Zust.DataAccess.Abstract;
+using Zust.DataAccess.Concrete;
 using Zust.DataAccess.Concrete.EFEntityFramework;
 using Zust.Helpers;
 
@@ -16,12 +18,13 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString(Constants.ConnectionString);
 builder.Services.AddDbContext<ZustDbContext>(opt =>
 {
-    opt.UseSqlServer(connectionString);
+    opt.UseSqlServer(connectionString, b => b.MigrationsAssembly("Zust"));
 });
 
 // Register Interfaces
 builder.Services.AddScoped<IUserDal, EFUserDal>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 
 var app = builder.Build();
 

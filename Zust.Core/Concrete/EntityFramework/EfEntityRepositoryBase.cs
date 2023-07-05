@@ -15,7 +15,7 @@ namespace Zust.Core.Concrete.EntityFramework
         where TEntity : class, IEntity, new()
         where TContext : DbContext, new()
     {
-        public async Task Add(TEntity entity)
+        public async Task AddAsync(TEntity entity)
         {
             using (var context = new TContext())
             {
@@ -25,7 +25,7 @@ namespace Zust.Core.Concrete.EntityFramework
             }
         }
 
-        public async Task Delete(TEntity entity)
+        public async Task DeleteAsync(TEntity entity)
         {
             using (var context = new TContext())
             {
@@ -35,7 +35,7 @@ namespace Zust.Core.Concrete.EntityFramework
             }
         }
 
-        public async Task Update(TEntity entity)
+        public async Task UpdateAsync(TEntity entity)
         {
             using (var context = new TContext())
             {
@@ -45,7 +45,7 @@ namespace Zust.Core.Concrete.EntityFramework
             }   
         }
 
-        public async Task<TEntity?> Get(Expression<Func<TEntity, bool>> filter)
+        public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> filter)
         {
             using (var context = new TContext())
             {
@@ -53,7 +53,7 @@ namespace Zust.Core.Concrete.EntityFramework
             }
         }
 
-        public async Task<IEnumerable<TEntity>> GetAll(Expression<Func<TEntity, bool>>? filter = null)
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null)
         {
             using (var context = new TContext())
             {

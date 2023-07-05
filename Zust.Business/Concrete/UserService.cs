@@ -18,10 +18,20 @@ namespace Zust.Business.Concrete
             _userDal = userDal;
         }
 
-        public async Task<User?> GetUser(string id)
+        public async Task AddAsync(User user)
         {
-            return await _userDal.Get(u => u.Id == id);
+            await _userDal.AddAsync(user);
         }
 
+        public async Task<User?> GetUserByUsernameAsync(string username)
+        {
+            return await _userDal.GetAsync(u => u.UserName == username);
+        }
+
+        public async Task<bool> UserExistsAsync(string username)
+        {
+            var user = await GetUserByUsernameAsync(username);
+            return user != null;
+        }
     }
 }

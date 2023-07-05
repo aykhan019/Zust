@@ -11,9 +11,9 @@ using Zust.Web.Models;
 
 namespace Zust.Web.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/Auth")]
-    [ApiController]
+    //[Produces("application/json")]
+    //[Route("api/authentication")]
+    //[ApiController]
     public class AuthenticationController : ControllerBase
     {
         private IAuthenticationRepository _authRepository;
@@ -26,11 +26,12 @@ namespace Zust.Web.Controllers
         }
 
         [HttpPost(Constants.Register)]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterModel model)
         {
             if (await _authRepository.UserExists(model.Username))
             {
-                ModelState.AddModelError(ErrorConstants.UsernameErrorName, ErrorConstants.UsernameErrorText);
+                ModelState.AddModelError(ErrorConstants.UsernameError, ErrorConstants.UsernameExistsError);
             }
 
             if (!ModelState.IsValid)
@@ -39,6 +40,7 @@ namespace Zust.Web.Controllers
             var userToCreate = new User()
             {
                 UserName = model.Username,
+                Email = model.Email,
             };
 
             await _authRepository.Register(userToCreate, model.Password);
@@ -62,16 +64,16 @@ namespace Zust.Web.Controllers
 
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
-                Subject = new ClaimsIdentity( 
+                Subject = new ClaimsIdentity(
                     new Claim[]
                     {
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                         new Claim(ClaimTypes.Name, user.UserName)
                     }),
-    
-                    Expires = DateTime.Now.AddDays(1),
 
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512)
+                Expires = DateTime.Now.AddDays(1),
+
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);

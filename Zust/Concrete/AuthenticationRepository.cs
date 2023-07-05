@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Zust.Business.Abstract;
+using Zust.Business.Concrete;
 using Zust.DataAccess.Abstract;
 using Zust.Entities.Models;
 
@@ -20,11 +22,11 @@ namespace Zust.DataAccess.Concrete
 
         public async Task<User> Login(string username, string password)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == username);
+            var user = await _userService.GetUserByUsernameAsync(username);
             if (user == null)
                 return null!;
 
-            if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            if (!VerifyPasswordHash(password, Encoding.UTF8.GetBytes(user.PasswordHash), user.PasswordSalt))
             {
                 return null!;
             }
@@ -50,10 +52,9 @@ namespace Zust.DataAccess.Concrete
         {
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
-            user.PasswordHash = passwordHash;
+            user.PasswordHash = passwordHash.ToString();
             user.PasswordSalt = passwordSalt;
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            await _userService.AddAsync(user);
             return user;
         }
 
@@ -68,7 +69,7 @@ namespace Zust.DataAccess.Concrete
 
         public async Task<bool> UserExists(string username)
         {
-            return await _context.Users.AnyAsync(u => u.Username == username);
+            return await _userService.UserExistsAsync(username);
         }
     }
 }

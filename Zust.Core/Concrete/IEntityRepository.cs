@@ -5,14 +5,14 @@ namespace Zust.Core.Concrete
 {
     public interface IEntityRepository<T> where T : class, IEntity, new()
     {
-        Task<T?> Get(Expression<Func<T, bool>> filter);
+        Task<T?> GetAsync(Expression<Func<T, bool>> filter);
 
-        Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>>? filter = null);
+        Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null);
 
-        Task Add(T entity);
+        Task AddAsync(T entity);
 
-        Task Delete(T entity);
+        Task DeleteAsync(T entity);
 
-        Task Update(T entity);
+        Task UpdateAsync(T entity);
     }
 }

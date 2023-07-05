@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Zust.Entities.Models;
 using Zust.Helpers;
+using Zust.Web.Models;
 
 namespace Zust.Web.Controllers
 {
@@ -14,7 +15,7 @@ namespace Zust.Web.Controllers
 
         public IActionResult Register()
         {
-            return View();
+            return View(new RegisterModel());
         }
 
         public IActionResult Settings()
