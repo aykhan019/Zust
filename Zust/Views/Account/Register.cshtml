@@ -73,30 +73,30 @@
                         <form asp-controller="authentication" asp-action="register" method="post" enctype="application/x-www-form-urlencoded">
                             <div class="form-group">
                                 <label asp-for="Username">Name</label>
-                                <input id="Username" type="text" class="form-control" asp-for="Username" type="text" required>
+                                <input type="text" class="form-control" asp-for="Username" required>
                             </div>
 
                             <div class="form-group">
                                 <label asp-for="Email">Email</label>
-                                <input id="Email" type="email" class="form-control" asp-for="Email" type="email" required>
+                                <input type="email" class="form-control" asp-for="Email" required>
                             </div>
 
                             <div class="form-group">
                                 <label asp-for="Password">Password</label>
-                                <input id="Password" type="password" class="form-control" asp-for="Password" type="password" required>
+                                <input type="password" class="form-control" asp-for="Password" required>
                             </div>
 
-                            <div class="form-group">
+                           @* <div class="form-group">
                                 <label asp-for="ConfirmPassword"> Confirm Password</label>
                                 <input id="ConfirmPassword" type="password" class="form-control" asp-for="ConfirmPassword" type="password" required>
-                            </div>
+                            </div>*@
 
-                            <div class="remember-me-wrap">
+                        @*    <div class="remember-me-wrap">
                                 <p>
                                     <input type="checkbox" id="test1" name="AcceptPrivacy" required>
                                     <label for="test1">I Accept The <a href="/home/privacy">Privacy</a></label>
                                 </p>
-                            </div>
+                            </div>*@
                             <button type="submit" class="default-btn">Register</button>
                             @*<div class="or-text"><span>Or</span></div>*@
                             @*<button type="submit" class="google-btn">Log In with Google</button>*@

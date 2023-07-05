@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,16 +17,21 @@ namespace Zust.Web.Controllers
     //[ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private IAuthenticationRepository _authRepository;
-        private IConfiguration _configuration;
+        private readonly IAuthenticationRepository _authRepository;
+        private readonly IConfiguration _configuration;
+        private readonly SignInManager<User> _signInManager;
 
-        public AuthenticationController(IAuthenticationRepository authRepository, IConfiguration configuration)
+
+        public AuthenticationController(IAuthenticationRepository authRepository,
+                                        IConfiguration configuration,
+                                        SignInManager<User> signInManager)
         {
             _authRepository = authRepository;
             _configuration = configuration;
+            _signInManager = signInManager;
         }
 
-        [HttpPost(Constants.Register)]
+        [HttpPost(UrlConstants.Register)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
         {
@@ -45,11 +51,22 @@ namespace Zust.Web.Controllers
 
             await _authRepository.Register(userToCreate, model.Password);
 
-            return StatusCode(StatusCodes.Status201Created);
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, true, false);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(UrlConstants.Home);
+                }
+                ModelState.AddModelError(ErrorConstants.LoginError, ErrorConstants.InvalidLoginError);
+            }
+
+            return RedirectToAction(UrlConstants.Login, UrlConstants.Account);
         }
 
-        [HttpPost(Constants.Login)]
-        public async Task<IActionResult> Login([FromBody] LoginModel dto)
+        [HttpPost(UrlConstants.Login)]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginModel dto)
         {
             var user = await _authRepository.Login(dto.Username, dto.Password);
 
@@ -71,7 +88,7 @@ namespace Zust.Web.Controllers
                         new Claim(ClaimTypes.Name, user.UserName)
                     }),
 
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddDays(Constants.TokenExpiry),
 
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512)
             };
@@ -80,7 +97,7 @@ namespace Zust.Web.Controllers
 
             var tokenString = tokenHandler.WriteToken(token);
 
-            return Ok(tokenString);
+            return RedirectToAction(UrlConstants.Home, tokenString);
         }
     }
 

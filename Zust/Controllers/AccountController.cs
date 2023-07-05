@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Zust.Entities.Models;
 using Zust.Helpers;
+using Zust.Web.Helpers;
 using Zust.Web.Models;
 
 namespace Zust.Web.Controllers
@@ -23,10 +24,10 @@ namespace Zust.Web.Controllers
             return View();
         }
 
-        [HttpGet($"{Constants.Account}/{Constants.ForgotPassword}")]
+        [HttpGet($"{UrlConstants.Account}/{UrlConstants.ForgotPassword}")]
         public IActionResult ForgotPassword()
         {
-            return View(Constants.ForgotPassword);
+            return View(UrlConstants.ForgotPassword);
         }
     }
 }

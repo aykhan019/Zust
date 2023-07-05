@@ -1,7 +1,12 @@
+@using Zust.Web.Models;
+@model LoginModel
+
 @{
     Layout = null;
     ViewData["Title"] = "Zust - Login";
 }
+
+
 
 <!doctype html>
 <html lang="zxx">
@@ -63,15 +68,15 @@
                     <div class="login-form">
                         <h2>Login</h2>
 
-                        <form>
+                        <form asp-controller="authentication" asp-action="login" method="post" enctype="application/x-www-form-urlencoded">
                             <div class="form-group">
                                 <label>Username or email</label>
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" asp-for="Username">
                             </div>
 
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" class="form-control">
+                                <input type="password" class="form-control" asp-for="Password">
                             </div>
 
                             <div class="remember-me-wrap d-flex justify-content-between align-items-center">
@@ -89,7 +94,7 @@
                             <button type="submit" class="google-btn">Log In with Google</button>
                         </form>
 
-                            <a href="/account/register" class="lost-your-password mt-5">Don't have an account? Register Now!</a>
+                        <a href="/account/register" class="lost-your-password mt-5">Don't have an account? Register Now!</a>
                     </div>
                 </div>
             </div>

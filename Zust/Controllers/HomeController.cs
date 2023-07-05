@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Reflection.Metadata;
 using Zust.Helpers;
 using Zust.Models;
+using Zust.Web.Helpers;
 
-namespace Zust.Controllers
+namespace Zust.Web.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         public IActionResult Birthday()
@@ -33,10 +36,10 @@ namespace Zust.Controllers
             return View();
         }
 
-        [HttpGet($"{Constants.Home}/{Constants.HelpAndSupport}")]
+        [HttpGet($"{UrlConstants.Home}/{UrlConstants.HelpAndSupport}")]
         public IActionResult HelpAndSupport()
         {
-            return View(Constants.HelpAndSupport);
+            return View(UrlConstants.HelpAndSupport);
         }
 
         public IActionResult Index()
@@ -44,10 +47,10 @@ namespace Zust.Controllers
             return View();
         }
 
-        [HttpGet($"{Constants.Home}/{Constants.LiveChat}")]
+        [HttpGet($"{UrlConstants.Home}/{UrlConstants.LiveChat}")]
         public IActionResult LiveChat()
         {
-            return View(Constants.LiveChat);
+            return View(UrlConstants.LiveChat);
         }
 
         public IActionResult Marketplace()
@@ -60,10 +63,10 @@ namespace Zust.Controllers
             return View();
         }
 
-        [HttpGet($"{Constants.Home}/{Constants.MyProfile}")]
+        [HttpGet($"{UrlConstants.Home} / {UrlConstants.MyProfile}")]
         public IActionResult MyProfile()
         {
-            return View(Constants.MyProfile);
+            return View(UrlConstants.MyProfile);
         }
 
         public IActionResult Notifications()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,8 @@ namespace Zust.DataAccess.Concrete.EFEntityFramework
 {
     public class EFUserDal : EfEntityRepositoryBase<User, ZustDbContext>, IUserDal
     {
-
+        public EFUserDal()
+        {
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace Zust.DataAccess.Concrete
             if (user == null)
                 return null!;
 
-            if (!VerifyPasswordHash(password, Encoding.UTF8.GetBytes(user.PasswordHash), user.PasswordSalt))
+            if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
                 return null!;
             }
@@ -52,7 +52,7 @@ namespace Zust.DataAccess.Concrete
         {
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
-            user.PasswordHash = passwordHash.ToString();
+            user.PasswordHash = passwordHash; 
             user.PasswordSalt = passwordSalt;
             await _userService.AddAsync(user);
             return user;

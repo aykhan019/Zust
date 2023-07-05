@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zust", "Zust\Zust.csproj", "{84B3793E-E086-454B-A34C-61020D64940D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zust.Web", "Zust\Zust.Web.csproj", "{84B3793E-E086-454B-A34C-61020D64940D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zust.Business", "Zust.Business\Zust.Business.csproj", "{294CB443-044A-4ED8-87C4-87CA2136711E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zust.Business", "Zust.Business\Zust.Business.csproj", "{294CB443-044A-4ED8-87C4-87CA2136711E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zust.Core", "Zust.Core\Zust.Core.csproj", "{3EABA683-55EB-4585-94A8-55CA5350DEFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zust.Core", "Zust.Core\Zust.Core.csproj", "{3EABA683-55EB-4585-94A8-55CA5350DEFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zust.DataAccess", "Zust.DataAccess\Zust.DataAccess.csproj", "{F3398D17-2E02-41E5-BBC8-8F8D94724776}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zust.DataAccess", "Zust.DataAccess\Zust.DataAccess.csproj", "{F3398D17-2E02-41E5-BBC8-8F8D94724776}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zust.Entities", "Zust.Entities\Zust.Entities.csproj", "{7170675A-7E04-4215-94C7-896FFFF1E564}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zust.Entities", "Zust.Entities\Zust.Entities.csproj", "{7170675A-7E04-4215-94C7-896FFFF1E564}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
