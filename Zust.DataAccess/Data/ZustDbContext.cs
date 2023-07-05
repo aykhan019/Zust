@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ namespace Zust.Core.Concrete.EntityFramework
             base.OnConfiguring(optionsBuilder);
         }
 
-        public DbSet<User>? Users { get; set; }
+        //public DbSet<User>? Users { get; set; }
+        //public DbSet<IdentityRole>? Roles { get; set; }
     }
 }

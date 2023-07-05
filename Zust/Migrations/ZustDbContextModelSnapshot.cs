@@ -8,7 +8,7 @@ using Zust.Core.Concrete.EntityFramework;
 
 #nullable disable
 
-namespace Zust.Migrations
+namespace Zust.Web.Migrations
 {
     [DbContext(typeof(ZustDbContext))]
     partial class ZustDbContextModelSnapshot : ModelSnapshot
@@ -188,8 +188,8 @@ namespace Zust.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<byte[]>("PasswordHash")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("PasswordSalt")
                         .HasColumnType("varbinary(max)");

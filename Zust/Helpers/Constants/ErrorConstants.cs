@@ -1,4 +1,4 @@
-﻿namespace Zust.Web.Helpers
+﻿namespace Zust.Web.Helpers.Constants
 {
     public class ErrorConstants
     {

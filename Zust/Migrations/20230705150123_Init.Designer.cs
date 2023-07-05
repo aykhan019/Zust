@@ -9,11 +9,11 @@ using Zust.Core.Concrete.EntityFramework;
 
 #nullable disable
 
-namespace Zust.Migrations
+namespace Zust.Web.Migrations
 {
     [DbContext(typeof(ZustDbContext))]
-    [Migration("20230705135933_UpdatedDB")]
-    partial class UpdatedDB
+    [Migration("20230705150123_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -190,8 +190,8 @@ namespace Zust.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<byte[]>("PasswordHash")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("PasswordSalt")
                         .HasColumnType("varbinary(max)");

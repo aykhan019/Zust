@@ -12,8 +12,7 @@ using Zust.DataAccess.Abstract;
 using Zust.DataAccess.Concrete;
 using Zust.DataAccess.Concrete.EFEntityFramework;
 using Zust.Entities.Models;
-using Zust.Helpers;
-using Zust.Web.Helpers;
+using Zust.Web.Helpers.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +23,7 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString(Constants.ConnectionStringName);
 builder.Services.AddDbContext<ZustDbContext>(opt =>
 {
-    opt.UseSqlServer(connectionString, b => b.MigrationsAssembly("Zust.Web"));
+    opt.UseSqlServer(connectionString, b => b.MigrationsAssembly(Constants.MigrationsAssembly));
 });
 
 // Register Interfaces
@@ -33,14 +32,18 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 
 
-// Register Sign In Manager
+// Register Session
+builder.Services.AddSession();
+
+// Register Identity
 builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<ZustDbContext>()
-    .AddSignInManager<SignInManager<User>>();
+                .AddEntityFrameworkStores<ZustDbContext>()
+                .AddSignInManager<SignInManager<User>>()
+                .AddDefaultTokenProviders();
 
 
 // Register Token
-var section = builder.Configuration.GetSection(Constants.TokenSection).Value;
+var section = builder.Configuration.GetSection(TokenConstants.TokenSection).Value;
 var key = Encoding.ASCII.GetBytes(section);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -65,16 +68,21 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// Use Session
+app.UseSession();
+
+// Other things to use
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}");
 
 // For redirecting to https://www._____.com/home
 app.UseRewriter(new RewriteOptions().AddRedirect("^$", "/account/login"));

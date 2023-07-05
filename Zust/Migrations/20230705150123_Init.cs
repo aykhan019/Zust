@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Zust.Migrations
+namespace Zust.Web.Migrations
 {
     public partial class Init : Migration
     {

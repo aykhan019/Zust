@@ -1,4 +1,4 @@
-﻿namespace Zust.Web.Helpers
+﻿namespace Zust.Web.Helpers.Constants
 {
     public class UrlConstants
     {
@@ -10,5 +10,6 @@
         public const string MyProfile = "my-profile";
         public const string Register = "register";
         public const string Login = "login";
+        public const string Index = "Index";
     }
 }

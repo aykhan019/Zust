@@ -6,8 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using Zust.DataAccess.Abstract;
 using Zust.Entities.Models;
-using Zust.Helpers;
-using Zust.Web.Helpers;
+using Zust.Web.Helpers.Constants;
 using Zust.Web.Models;
 
 namespace Zust.Web.Controllers
@@ -77,7 +76,7 @@ namespace Zust.Web.Controllers
 
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            var key = Encoding.ASCII.GetBytes(_configuration.GetSection(Constants.TokenSection).Value);
+            var key = Encoding.ASCII.GetBytes(_configuration.GetSection(TokenConstants.TokenSection).Value);
 
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
@@ -88,7 +87,7 @@ namespace Zust.Web.Controllers
                         new Claim(ClaimTypes.Name, user.UserName)
                     }),
 
-                Expires = DateTime.Now.AddDays(Constants.TokenExpiry),
+                Expires = DateTime.Now.AddDays(TokenConstants.TokenExpiry),
 
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512)
             };
@@ -97,7 +96,11 @@ namespace Zust.Web.Controllers
 
             var tokenString = tokenHandler.WriteToken(token);
 
-            return RedirectToAction(UrlConstants.Home, tokenString);
+            HttpContext.Session.SetString(TokenConstants.MyToken, tokenString);
+
+            await _signInManager.SignInAsync(user, dto.RememberMe);
+
+            return RedirectToAction(UrlConstants.Index, UrlConstants.Home);
         }
     }
 
