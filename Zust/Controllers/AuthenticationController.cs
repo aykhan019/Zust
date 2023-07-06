@@ -11,16 +11,33 @@ using Zust.Web.Models;
 
 namespace Zust.Web.Controllers
 {
-    //[Produces("application/json")]
-    //[Route("api/authentication")]
-    //[ApiController]
+
+    /// <summary>
+    /// Controller responsible for authentication-related actions, such as user registration and login.
+    /// </summary>
     public class AuthenticationController : ControllerBase
     {
+        /// <summary>
+        /// Gets the repository for authentication-related operations.
+        /// </summary>
         private readonly IAuthenticationRepository _authRepository;
+
+        /// <summary>
+        /// Gets the configuration for accessing application settings.
+        /// </summary>
         private readonly IConfiguration _configuration;
+
+        /// <summary>
+        /// Gets the manager for user sign-in functionality.
+        /// </summary>
         private readonly SignInManager<User> _signInManager;
 
-
+        /// <summary>
+        /// Initializes a new instance of the AuthenticationController class with the required dependencies.
+        /// </summary>
+        /// <param name="authRepository">The repository for authentication-related operations.</param>
+        /// <param name="configuration">The configuration for accessing application settings.</param>
+        /// <param name="signInManager">The manager for user sign-in functionality.</param>
         public AuthenticationController(IAuthenticationRepository authRepository,
                                         IConfiguration configuration,
                                         SignInManager<User> signInManager)
@@ -40,34 +57,32 @@ namespace Zust.Web.Controllers
             }
 
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            {
+                var errorMessages = ModelState.GetErrorMessages();
+                return RedirectToAction(UrlConstants.Register, UrlConstants.Account, model);
+            }
 
             var userToCreate = new User()
-            {
+            {   
                 UserName = model.Username,
                 Email = model.Email,
             };
 
-            await _authRepository.Register(userToCreate, model.Password);
-
-            if (ModelState.IsValid)
+            var userRegistered = await _authRepository.Register(userToCreate, model.Password);
+            if (userRegistered != null)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, true, false);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction(UrlConstants.Home);
-                }
-                ModelState.AddModelError(ErrorConstants.LoginError, ErrorConstants.InvalidLoginError);
+                // Sign the user in
+                await _signInManager.SignInAsync(userToCreate, true);
+                return RedirectToAction(UrlConstants.Login, UrlConstants.Account);
             }
-
             return RedirectToAction(UrlConstants.Login, UrlConstants.Account);
         }
 
         [HttpPost(UrlConstants.Login)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel dto)
+        public async Task<IActionResult> Login(LoginModel model)
         {
-            var user = await _authRepository.Login(dto.Username, dto.Password);
+            var user = await _authRepository.Login(model.Username, model.Password);
 
             if (user == null)
             {
@@ -98,7 +113,9 @@ namespace Zust.Web.Controllers
 
             HttpContext.Session.SetString(TokenConstants.MyToken, tokenString);
 
-            await _signInManager.SignInAsync(user, dto.RememberMe);
+            //await _signInManager.SignInAsync(user, dto.RememberMe);
+
+            var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
 
             return RedirectToAction(UrlConstants.Index, UrlConstants.Home);
         }

@@ -11,15 +11,31 @@ using Zust.Entities.Models;
 
 namespace Zust.DataAccess.Concrete
 {
+    /// <summary>
+    /// Repository class for authentication-related operations.
+    /// </summary>
     public class AuthenticationRepository : IAuthenticationRepository
     {
+        /// <summary>
+        /// The service for user-related operations.
+        /// </summary>
         private readonly IUserService _userService;
 
+        /// <summary>
+        /// Initializes a new instance of the AuthenticationRepository class.
+        /// </summary>
+        /// <param name="userService">The user service dependency used for user-related operations.</param>
         public AuthenticationRepository(IUserService userService)
         {
             _userService = userService;
         }
 
+        /// <summary>
+        /// Retrieves a user from the database if the given username and password are valid user credentials.
+        /// </summary>
+        /// <param name="username">The username of the user.</param>
+        /// <param name="password">The password of the user.</param>
+        /// <returns>The user if the credentials are valid; otherwise, null.</returns>
         public async Task<User> Login(string username, string password)
         {
             var user = await _userService.GetUserByUsernameAsync(username);
@@ -33,6 +49,13 @@ namespace Zust.DataAccess.Concrete
             return user;
         }
 
+        /// <summary>
+        /// Verifies whether a given password matches a stored password hash.
+        /// </summary>
+        /// <param name="password">The password to verify.</param>
+        /// <param name="passwordHash">The stored password hash, represented as a byte array.</param>
+        /// <param name="passwordSalt">The stored password salt, represented as a byte array.</param>
+        /// <returns>True if the password matches the stored hash; otherwise, false.</returns>
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
@@ -48,6 +71,12 @@ namespace Zust.DataAccess.Concrete
             }
         }
 
+        /// <summary>
+        /// Registers a new user and stores the user in the database.
+        /// </summary>
+        /// <param name="user">The user object containing the user's details.</param>
+        /// <param name="password">The password of the user.</param>
+        /// <returns>The registered user.</returns>
         public async Task<User> Register(User user, string password)
         {
             byte[] passwordHash, passwordSalt;
@@ -58,6 +87,12 @@ namespace Zust.DataAccess.Concrete
             return user;
         }
 
+        /// <summary>
+        /// Creates a password hash and salt for the given password.
+        /// </summary>
+        /// <param name="password">The password to hash.</param>
+        /// <param name="passwordHash">The resulting password hash.</param>
+        /// <param name="passwordSalt">The resulting password salt.</param>
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
@@ -67,6 +102,11 @@ namespace Zust.DataAccess.Concrete
             }
         }
 
+        /// <summary>
+        /// Checks if a user with the given username exists in the database.
+        /// </summary>
+        /// <param name="username">The username to check.</param>
+        /// <returns>True if the user exists; otherwise, false.</returns>
         public async Task<bool> UserExists(string username)
         {
             return await _userService.UserExistsAsync(username);
