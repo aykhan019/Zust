@@ -6,6 +6,7 @@ using Zust.Web.Models;
 
 namespace Zust.Web.Controllers
 {
+    [Controller]
     public class AccountController : Controller
     {
         /// <summary>

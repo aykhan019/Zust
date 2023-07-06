@@ -36,7 +36,7 @@ namespace Zust.DataAccess.Concrete
         /// <param name="username">The username of the user.</param>
         /// <param name="password">The password of the user.</param>
         /// <returns>The user if the credentials are valid; otherwise, null.</returns>
-        public async Task<User> Login(string username, string password)
+        public async Task<User> LoginAsync(string username, string password)
         {
             var user = await _userService.GetUserByUsernameAsync(username);
             if (user == null)
@@ -77,7 +77,7 @@ namespace Zust.DataAccess.Concrete
         /// <param name="user">The user object containing the user's details.</param>
         /// <param name="password">The password of the user.</param>
         /// <returns>The registered user.</returns>
-        public async Task<User> Register(User user, string password)
+        public async Task<User> RegisterAsync(User user, string password)
         {
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
@@ -107,7 +107,7 @@ namespace Zust.DataAccess.Concrete
         /// </summary>
         /// <param name="username">The username to check.</param>
         /// <returns>True if the user exists; otherwise, false.</returns>
-        public async Task<bool> UserExists(string username)
+        public async Task<bool> UserExistsAsync(string username)
         {
             return await _userService.UserExistsAsync(username);
         }

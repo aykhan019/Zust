@@ -84,6 +84,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}");
 
+
 // For redirecting to https://www._____.com/home
 app.UseRewriter(new RewriteOptions().AddRedirect("^$", "/account/login"));
 app.Run();

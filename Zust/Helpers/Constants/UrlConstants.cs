@@ -24,5 +24,9 @@
         public const string Index = "Index";
 
         public const string Error = "Error";
+            
+        public const string UserExistsRoute = "userexists/{username}";
+
+        public const string Authentication = "Authentication";
     }
 }

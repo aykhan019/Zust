@@ -34,37 +34,9 @@
 
 <body>
     @*Errors *@
-@*    @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert alert-danger">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <ul>
-                @foreach (var key in ViewData.ModelState.Keys)
-                {
-                    foreach (var error in ViewData.ModelState[key].Errors)
-                    {
-                        <li>@error.ErrorMessage</li>
-                    }
-                }
-            </ul>
-        </div>
-    }
-*@
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert alert-danger">
-            <ul>
-                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    <li>@error.ErrorMessage</li>
-                }
-            </ul>
-        </div>
-    }
+   <div id="errors">
 
-
+   </div>
 
     <!-- Start Preloader Area -->
     <div class="preloader-area">
@@ -102,20 +74,23 @@
                     <div class="register-form">
                         <h2>Register</h2>
 
-                        <form asp-controller="authentication" asp-action="register" method="post" enctype="application/x-www-form-urlencoded">
+                        <form id="registrationForm" asp-controller="authentication" asp-action="register" method="post" enctype="application/x-www-form-urlencoded">
                             <div class="form-group">
                                 <label asp-for="Username">Name</label>
-                                <input type="text" class="form-control" asp-for="Username" value="@Model.Username" required>
+                                <input id="usernameInput" type="text" class="form-control" asp-for="Username" required>
+                                <span class="text-danger" asp-validation-for="Username"></span>
                             </div>
 
                             <div class="form-group">
                                 <label asp-for="Email">Email</label>
-                                <input type="email" class="form-control" asp-for="Email" value="@Model.Email" required>
+                                <input type="email" class="form-control" asp-for="Email" required>
+                                <span class="text-danger" asp-validation-for="@Model.Email"></span>
                             </div>
 
                             <div class="form-group">
                                 <label asp-for="Password">Password</label>
-                                <input type="password" class="form-control" asp-for="Password" value="@Model.Password" required>
+                                <input type="password" class="form-control" asp-for="Password" required>
+                                <span class="text-danger" asp-validation-for="@Model.Password"></span>
                             </div>
 
                            @* <div class="form-group">
@@ -140,13 +115,14 @@
             </div>
         </div>
 
-        <div class="home-btn-icon">
+        @*<div class="home-btn-icon">
             <a href="/home/index"><i class="flaticon-home"></i></a>
-        </div>
+        </div>*@
     </div>
     <!-- End Preloader Area -->
     <!-- Links of JS files -->
     <script src="~/assets/js/jquery.min.js"></script>
+    <script src="~/assets/js/functions.js"></script>
     <script src="~/assets/js/bootstrap.bundle.min.js"></script>
     <script src="~/assets/js/jquery.magnific-popup.min.js"></script>
     <script src="~/assets/js/jquery-ui.min.js"></script>

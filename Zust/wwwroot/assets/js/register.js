@@ -1,50 +1,47 @@
-﻿//// Function to handle form submission
-//function register(event) {
-//    // Prevent the default form submission
-//    event.preventDefault();
+﻿document.getElementById("registrationForm").addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-//    // Get the form data
-//    var password = $('#Password').val();
-//    var confirmPassword = $('#ConfirmPassword').val()
-  
-//    if (CheckPasswordsValidity(password, confirmPassword)) {
-//        // Get the form data
-//        var formData = {
-//            Username: $('#Username').val(),
-//            Email: $('#Email').val(),
-//            Password: password,
-//            ConfirmPassword: confirmPassword
-//        };
+    var username = document.getElementById("usernameInput").value;
 
-//        console.log(formData);
+    if (await usernameExists(username))
+    {
+        let toastHTML = createToast("Username is already taken! Please try a different one.");
+        showToast("errors" ,toastHTML);
+    }
+    else
+    {
+        alert("HERE 2");
+        event.target.submit();
+       
+    }
+});
 
-//        // Send the AJAX request to register the user
-//        $.ajax({
-//            url: 'https://localhost:7009/api/authentication/register',
-//            type: 'POST',
-//            data: JSON.stringify(formData),
-//            success: function (response) {
-//                // Handle the success response
-//                console.log(response);
-//            },
-//            error: function (xhr, status, error) {
-//                // Handle the error response
-//                console.log(xhr.responseText);
-//            }
-//        });
+function usernameExists(username) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: '/authentication/userexists/' + username,
+            type: 'GET',
+            success: function (data) {
+                resolve(data);
+            },
+            error: function () {
+                reject();
+            }
+        });
+    });
+}
+
+
+
+//// Function to validate form data
+// function validateForm(){
+//    // Get form fields
+
+//    // Check if user with this username exists
+//    if (usernameExists(username)) {
+//        return false;
 //    }
-//    else {
-//        //Warn User in View
-//    }
-//}
 
-//// Function to check "password" and "confirm password" similarity
-//// Returns true is when they are same. Else false
-//function CheckPasswordsValidity(password, confirmPassword) {
+//    // If all validation checks pass, return true
 //    return true;
-//}
-
-//// Bind the form submission event to the register function
-////$('#registerForm').submit(function (event) {
-////    register(event);
-////});
+//} 

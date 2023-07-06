@@ -49,7 +49,7 @@ namespace Zust.Core.Concrete.EntityFramework
         {
             using (var context = new TContext())
             {
-                return await context.Set<TEntity>().SingleOrDefaultAsync(filter);
+                return await context.Set<TEntity>().FirstOrDefaultAsync(filter);
             }
         }
 

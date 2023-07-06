@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Zust.DataAccess.Abstract;
+using Zust.DataAccess.Concrete;
 using Zust.Entities.Models;
 using Zust.Web.Helpers.Constants;
 using Zust.Web.Models;
@@ -15,6 +16,8 @@ namespace Zust.Web.Controllers
     /// <summary>
     /// Controller responsible for authentication-related actions, such as user registration and login.
     /// </summary>
+    [Route(UrlConstants.Authentication)]
+    [Controller]
     public class AuthenticationController : ControllerBase
     {
         /// <summary>
@@ -51,15 +54,9 @@ namespace Zust.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
         {
-            if (await _authRepository.UserExists(model.Username))
+            if (await _authRepository.UserExistsAsync(model.Username))
             {
                 ModelState.AddModelError(ErrorConstants.UsernameError, ErrorConstants.UsernameExistsError);
-            }
-
-            if (!ModelState.IsValid)
-            {
-                var errorMessages = ModelState.GetErrorMessages();
-                return RedirectToAction(UrlConstants.Register, UrlConstants.Account, model);
             }
 
             var userToCreate = new User()
@@ -68,7 +65,7 @@ namespace Zust.Web.Controllers
                 Email = model.Email,
             };
 
-            var userRegistered = await _authRepository.Register(userToCreate, model.Password);
+            var userRegistered = await _authRepository.RegisterAsync(userToCreate, model.Password);
             if (userRegistered != null)
             {
                 // Sign the user in
@@ -82,7 +79,7 @@ namespace Zust.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
-            var user = await _authRepository.Login(model.Username, model.Password);
+            var user = await _authRepository.LoginAsync(model.Username, model.Password);
 
             if (user == null)
             {
@@ -118,6 +115,13 @@ namespace Zust.Web.Controllers
             var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
 
             return RedirectToAction(UrlConstants.Index, UrlConstants.Home);
+        }
+
+        [HttpGet(UrlConstants.UserExistsRoute)]
+        public async Task<IActionResult> UserExistsAsync(string username)
+        {
+            var userExists = await _authRepository.UserExistsAsync(username);
+            return Ok(userExists);
         }
     }
 

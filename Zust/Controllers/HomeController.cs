@@ -8,6 +8,7 @@ using Zust.Web.Helpers.Constants;
 namespace Zust.Web.Controllers
 {
     [Authorize]
+    [Controller]
     public class HomeController : Controller
     {
         /// <summary>
