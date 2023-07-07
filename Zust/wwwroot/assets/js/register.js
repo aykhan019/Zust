@@ -2,18 +2,15 @@
     event.preventDefault();
 
     var username = document.getElementById("usernameInput").value;
+    var password = document.getElementById("passwordInput").value;
 
-    if (await usernameExists(username))
-    {
+    if (await usernameExists(username)) {
         let toastHTML = createToast("Username is already taken! Please try a different one.");
-        showToast("errors" ,toastHTML);
+        showToast("errors", toastHTML);
+        return;
     }
-    else
-    {
-        alert("HERE 2");
-        event.target.submit();
-       
-    }
+
+    event.target.submit();    
 });
 
 function usernameExists(username) {

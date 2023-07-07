@@ -107,7 +107,7 @@ namespace Zust.Web.Controllers
         /// Displays the MyProfile view.
         /// </summary>
         /// <returns>The MyProfile view.</returns>
-        [HttpGet($"{UrlConstants.Home} / {UrlConstants.MyProfile}")]
+        [HttpGet($"{UrlConstants.Home}/{UrlConstants.MyProfile}")]
         public IActionResult MyProfile()
         {
             return View(UrlConstants.MyProfile);

@@ -12,6 +12,8 @@
         /// </summary>
         public const string UsernameExistsError = "Username already exists";
 
+        public const string PasswordError = "Password";
+
         /// <summary>
         /// Represents the key for the login-related error.
         /// </summary>
@@ -21,5 +23,18 @@
         /// Represents the error message for an invalid login attempt.
         /// </summary>
         public const string InvalidLoginError = "Invalid Login";
+
+        /// <summary>
+        /// Represents the key for the role-related error.
+        /// </summary>
+        public const string RoleError = "Role";
+
+        /// <summary>
+        /// Represents the error message for when a role cannot be added.
+        /// </summary>
+        public const string CannotAddRoleError = "Role Cannot Be Added";
+
+
+        public const string RegisterError = "An error occurred during the registration process";
     }
 }

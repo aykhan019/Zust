@@ -13,16 +13,9 @@ namespace Zust.Core.Concrete.EntityFramework
 {
     public partial class ZustDbContext : IdentityDbContext<User, Role, string>
     {
-        public ZustDbContext(DbContextOptions<ZustDbContext> contextOptions)
-            : base(contextOptions)
-        {
+        public ZustDbContext(DbContextOptions<ZustDbContext> contextOptions) : base(contextOptions) { }
 
-        }
-
-        public ZustDbContext()
-        {
-
-        }
+        public ZustDbContext() { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -35,6 +28,6 @@ namespace Zust.Core.Concrete.EntityFramework
         }
 
         //public DbSet<User>? Users { get; set; }
-        //public DbSet<IdentityRole>? Roles { get; set; }
+        //public DbSet<IdentityRole> Roles { get; set; }
     }
 }

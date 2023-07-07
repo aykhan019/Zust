@@ -36,27 +36,10 @@ builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>(
 builder.Services.AddSession();
 
 // Register Identity
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ZustDbContext>()
                 .AddSignInManager<SignInManager<User>>()
                 .AddDefaultTokenProviders();
-
-
-// Register Token
-var section = builder.Configuration.GetSection(TokenConstants.TokenSection).Value;
-var key = Encoding.ASCII.GetBytes(section);
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = false,
-            ValidateAudience = false
-        };
-    });
-
 
 var app = builder.Build();
 
@@ -82,9 +65,8 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}");
+    pattern: "{controller=Account}/{action=Login}");
 
-
-// For redirecting to https://www._____.com/home
-app.UseRewriter(new RewriteOptions().AddRedirect("^$", "/account/login"));
+// For redirecting
+//app.UseRewriter(new RewriteOptions().AddRedirect("^$", "/account/login"));
 app.Run();

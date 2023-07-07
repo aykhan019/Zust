@@ -3,11 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Zust.DataAccess.Abstract;
 using Zust.DataAccess.Concrete;
 using Zust.Entities.Models;
+using Zust.Models;
 using Zust.Web.Helpers.Constants;
+using Zust.Web.Helpers.Validators;
 using Zust.Web.Models;
 
 namespace Zust.Web.Controllers
@@ -36,6 +39,13 @@ namespace Zust.Web.Controllers
         private readonly SignInManager<User> _signInManager;
 
         /// <summary>
+        /// The user manager component used for managing user-related operations.
+        /// </summary>
+        private readonly UserManager<User> _userManager;
+
+        private readonly RoleManager<Role> _roleManager;
+
+        /// <summary>
         /// Initializes a new instance of the AuthenticationController class with the required dependencies.
         /// </summary>
         /// <param name="authRepository">The repository for authentication-related operations.</param>
@@ -43,79 +53,90 @@ namespace Zust.Web.Controllers
         /// <param name="signInManager">The manager for user sign-in functionality.</param>
         public AuthenticationController(IAuthenticationRepository authRepository,
                                         IConfiguration configuration,
-                                        SignInManager<User> signInManager)
+                                        SignInManager<User> signInManager,
+                                        UserManager<User> userManager,
+                                        RoleManager<Role> roleManager)
         {
             _authRepository = authRepository;
             _configuration = configuration;
             _signInManager = signInManager;
+            _userManager = userManager;
+            _roleManager = roleManager;
+
+            // Create an instance of the custom password validator
+            var noPasswordValidator = new NoPasswordValidator<User>();
+
+            // Clear the existing password validators and add the custom validator
+            _userManager.PasswordValidators.Clear();
+            _userManager.PasswordValidators.Add(noPasswordValidator);
         }
 
         [HttpPost(UrlConstants.Register)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
         {
-            if (await _authRepository.UserExistsAsync(model.Username))
+            // Create a new User object and populate its properties
+            var user = new User
             {
-                ModelState.AddModelError(ErrorConstants.UsernameError, ErrorConstants.UsernameExistsError);
-            }
-
-            var userToCreate = new User()
-            {   
                 UserName = model.Username,
-                Email = model.Email,
+                Email = model.Email
             };
 
-            var userRegistered = await _authRepository.RegisterAsync(userToCreate, model.Password);
-            if (userRegistered != null)
+            // Register the user with the provided password
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
             {
-                // Sign the user in
-                await _signInManager.SignInAsync(userToCreate, true);
-                return RedirectToAction(UrlConstants.Login, UrlConstants.Account);
+                // Assign the "User" role to the registered user
+                if (!_roleManager.RoleExistsAsync(RoleConstants.User).Result)
+                {
+                    var role = new Role
+                    {
+                        Name = RoleConstants.User
+                    };
+
+                    await _roleManager.CreateAsync(role);
+                }
+
+                _userManager.AddToRoleAsync(user, RoleConstants.User).Wait();
+
+                // Sign in the user
+                await _signInManager.SignInAsync(user, isPersistent: false);
+
+                return RedirectToAction(UrlConstants.Index, UrlConstants.Home);
             }
-            return RedirectToAction(UrlConstants.Login, UrlConstants.Account);
+
+            // Error
+            var vm = new ErrorViewModel()
+            {
+                Error = ErrorConstants.RegisterError
+            };
+            return RedirectToAction(UrlConstants.Error, UrlConstants.Home, vm);
         }
 
         [HttpPost(UrlConstants.Login)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
-            var user = await _authRepository.LoginAsync(model.Username, model.Password);
-
-            if (user == null)
+            if (ModelState.IsValid)
             {
-                return Unauthorized();
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
+
+                if (result.Succeeded)
+                {
+                    // Redirect to home/index with the generated token
+                    return RedirectToAction(UrlConstants.Index, UrlConstants.Home);
+                }
+                else
+                {
+                    ModelState.AddModelError(ErrorConstants.UsernameError, ErrorConstants.InvalidLoginError);
+                }
             }
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var key = Encoding.ASCII.GetBytes(_configuration.GetSection(TokenConstants.TokenSection).Value);
-
-            var tokenDescriptor = new SecurityTokenDescriptor()
-            {
-                Subject = new ClaimsIdentity(
-                    new Claim[]
-                    {
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                        new Claim(ClaimTypes.Name, user.UserName)
-                    }),
-
-                Expires = DateTime.Now.AddDays(TokenConstants.TokenExpiry),
-
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            var tokenString = tokenHandler.WriteToken(token);
-
-            HttpContext.Session.SetString(TokenConstants.MyToken, tokenString);
-
-            //await _signInManager.SignInAsync(user, dto.RememberMe);
-
-            var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
-
-            return RedirectToAction(UrlConstants.Index, UrlConstants.Home);
+            // If there are any validation errors, return the login form with the model
+            return RedirectToAction(UrlConstants.Login, UrlConstants.Account);
         }
+
 
         [HttpGet(UrlConstants.UserExistsRoute)]
         public async Task<IActionResult> UserExistsAsync(string username)
