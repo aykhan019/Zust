@@ -1,6 +1,8 @@
-﻿@{
-    // Access the current signed-in user
-    var user = Context.User;
+﻿@using Microsoft.AspNetCore.Identity;
+@using Zust.Entities.Models;
+@{
+    var userManager = Context.RequestServices.GetService<UserManager<User>>();
+    var user = await userManager.GetUserAsync(Context.User);
 }
 
 <!doctype html>
@@ -86,7 +88,8 @@
                                     <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <div class="friend-requests-btn">
                                             <i class="flaticon-user"></i>
-                                            <span>3</span>
+                                            @*Number Of Friend Requests*@
+                                            <span></span>
                                         </div>
                                     </a>
 
@@ -96,6 +99,7 @@
                                             <i class="flaticon-menu"></i>
                                         </div>
 
+                                        @*Friend Requests*@
                                         <div class="friend-requests-body" data-simplebar>
                                             <div class="item d-flex align-items-center">
                                                 <div class="figure">
@@ -245,7 +249,8 @@
                                     <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <div class="messages-btn">
                                             <i class="flaticon-email"></i>
-                                            <span>2</span>
+                                            @*Number of Messages*@
+                                            <span></span>
                                         </div>
                                     </a>
 
@@ -260,6 +265,7 @@
                                                 <button type="submit"><i class="ri-search-line"></i></button>
                                             </form>
                                         </div>
+                                        @*Messages*@
                                         <div class="messages-body" data-simplebar>
                                             <div class="item d-flex justify-content-between align-items-center">
                                                 <div class="figure">
@@ -345,10 +351,12 @@
                                     <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <div class="notifications-btn">
                                             <i class="flaticon-bell"></i>
+                                            @*Number of Notifications*@
                                             <span>1</span>
                                         </div>
                                     </a>
 
+                                     @*Notifications*@
                                     <div class="dropdown-menu">
                                         <div class="notifications-header d-flex justify-content-between align-items-center">
                                             <h3>Notifications</h3>
@@ -423,6 +431,7 @@
                                 </div>
                             </div>
                             <div class="option-item">
+                                @*Langiages*@
                                 <div class="dropdown language-option">
                                     <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="flaticon-global"></i>
@@ -448,16 +457,24 @@
                                 <div class="dropdown profile-nav-item">
                                     <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <div class="menu-profile">
-                                            <img src="~/assets/images/user/user-1.jpg" class="rounded-circle" alt="image">
-                                            <span class="name">Matthew</span>
+                                            @*User Image*@
+                                            @if (user.ImageUrl == null || user.ImageUrl == string.Empty){
+                                                <img src="~/assets/images/user/defaultUserImage.png" class="rounded-circle" alt="image">
+                                            }
+                                            else
+                                            {
+                                                <img src="@user.ImageUrl" class="rounded-circle" alt="image">
+                                            }
+                                            @*Username*@
+                                            <span class="name">@user.UserName</span>
                                             <span class="status-online"></span>
                                         </div>
                                     </a>
 
                                     <div class="dropdown-menu">
                                         <div class="profile-header">
-                                            <h3>Matthew Turner</h3>
-                                            <a href="mailto:matthew507@gmail.com">matthew507@gmail.com</a>
+                                            <h3>@user.UserName</h3>
+                                            <a href="mailto:@user.Email">@user.Email</a>
                                         </div>
                                         <ul class="profile-body">
                                             <li><i class="flaticon-user"></i> <a href="/home/my-profile">My Profile</a></li>
@@ -474,6 +491,7 @@
                 </nav>
             </div>
 
+            @*For responsiveness*@
             <div class="others-option-for-responsive">
                 <div class="container">
                     <div class="dot-menu">
@@ -495,7 +513,7 @@
                                         <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <div class="friend-requests-btn">
                                                 <i class="flaticon-user"></i>
-                                                <span>3</span>
+                                                <span>0</span>
                                             </div>
                                         </a>
 
@@ -650,7 +668,7 @@
                                         <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <div class="notifications-btn">
                                                 <i class="flaticon-bell"></i>
-                                                <span>1</span>
+                                                <span></span>
                                             </div>
                                         </a>
 
@@ -731,7 +749,7 @@
 
                                         <div class="dropdown-menu">
                                             <div class="profile-header">
-                                                <h3>Matthew Turner</h3>
+                                                <h3>@user</h3>
                                                 <a href="mailto:matthew507@gmail.com">matthew507@gmail.com</a>
                                             </div>
                                             <ul class="profile-body">

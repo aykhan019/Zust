@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Zust.Core.Concrete.EntityFramework;
 
@@ -11,9 +12,10 @@ using Zust.Core.Concrete.EntityFramework;
 namespace Zust.Web.Migrations
 {
     [DbContext(typeof(ZustDbContext))]
-    partial class ZustDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230708132754_Init2")]
+    partial class Init2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,34 +128,6 @@ namespace Zust.Web.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("Zust.Entities.Models.Friendship", b =>
-                {
-                    b.Property<int>("FriendshipId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FriendshipId"), 1L, 1);
-
-                    b.Property<string>("FriendId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("FriendshipId");
-
-                    b.HasIndex("FriendId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("Friendships");
                 });
 
             modelBuilder.Entity("Zust.Entities.Models.Role", b =>
@@ -300,32 +274,6 @@ namespace Zust.Web.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Zust.Entities.Models.Friendship", b =>
-                {
-                    b.HasOne("Zust.Entities.Models.User", "Friend")
-                        .WithMany()
-                        .HasForeignKey("FriendId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Zust.Entities.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Zust.Entities.Models.User", null)
-                        .WithMany("Friendships")
-                        .HasForeignKey("UserId1");
-
-                    b.Navigation("Friend");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Zust.Entities.Models.User", b =>
-                {
-                    b.Navigation("Friendships");
                 });
 #pragma warning restore 612, 618
         }

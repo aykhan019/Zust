@@ -8,7 +8,7 @@ using Zust.Core.Concrete.EntityFramework;
 
 #nullable disable
 
-namespace Zust.Web.Migrations
+namespace Zust.DataAccess.Migrations
 {
     [DbContext(typeof(ZustDbContext))]
     partial class ZustDbContextModelSnapshot : ModelSnapshot

@@ -3,17 +3,19 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Zust.Core.Concrete.EntityFramework;
 
 #nullable disable
 
-namespace Zust.Web.Migrations
+namespace Zust.DataAccess.Migrations
 {
     [DbContext(typeof(ZustDbContext))]
-    partial class ZustDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230708142433_Friendship2")]
+    partial class Friendship2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

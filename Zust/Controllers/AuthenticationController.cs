@@ -118,11 +118,6 @@ namespace Zust.Web.Controllers
             }
         }
 
-        /// <summary>
-        /// Handles the login process for a user.
-        /// </summary>
-        /// <param name="model">The LoginViewModel containing the user's login credentials.</param>
-        /// <returns>The appropriate ActionResult based on the login result.</returns>
         [HttpPost(UrlConstants.Login)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -142,4 +137,5 @@ namespace Zust.Web.Controllers
             return RedirectToAction(UrlConstants.Login, UrlConstants.Account, routeValues: model);
         }
     }
+
 }

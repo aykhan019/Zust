@@ -63,10 +63,10 @@ app.UseAuthorization();
 
 // Configure default route
 app.MapControllerRoute(
-    name: "default",
+    name: "default",    
     pattern: "{controller=Account}/{action=Login}");
 
 // Uncomment the following line if you want to redirect the root URL to a specific route
-//app.UseRewriter(new RewriteOptions().AddRedirect("^$", "/account/login"));
+app.UseRewriter(new RewriteOptions().AddRedirect("^$", "/home/index"));
 
 app.Run();
