@@ -1,5 +1,8 @@
 ﻿namespace Zust.Web.Helpers.Constants
 {
+    /// <summary>
+    /// A collection constants in the application.
+    /// </summary>
     public class Constants
     {
         /// <summary>

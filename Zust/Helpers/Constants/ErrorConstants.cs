@@ -1,5 +1,8 @@
 ﻿namespace Zust.Web.Helpers.Constants
-{
+{ 
+    /// <summary>
+    /// A collection of error constants for common error scenarios in the application.
+    /// </summary>
     public class ErrorConstants
     {
         /// <summary>
@@ -10,9 +13,11 @@
         /// <summary>
         /// Represents the error message for when a username already exists.
         /// </summary>
-        public const string UsernameIsTakenError = "Username is already taken";
+        public const string UsernameIsTakenError = "Username is already taken!";
 
-
+        /// <summary>
+        /// Represents the key for the password-related error.
+        /// </summary>
         public const string PasswordError = "Password";
 
         /// <summary>
@@ -23,7 +28,7 @@
         /// <summary>
         /// Represents the error message for an invalid login attempt.
         /// </summary>
-        public const string InvalidLoginError = "Invalid Username or Password!";
+        public const string InvalidLoginError = "Invalid username or password!";
 
         /// <summary>
         /// Represents the key for the role-related error.
@@ -33,9 +38,11 @@
         /// <summary>
         /// Represents the error message for when a role cannot be added.
         /// </summary>
-        public const string CannotAddRoleError = "Role Cannot Be Added";
+        public const string CannotAddRoleError = "Role cannot be added!";
 
-
-        public const string RegisterError = "An error occurred during the registration process";
+        /// <summary>
+        /// Represents the error message for general registration error.
+        /// </summary>
+        public const string RegisterError = "An error occurred during the registration process.";
     }
 }

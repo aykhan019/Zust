@@ -6,6 +6,9 @@ using Zust.Web.Models;
 
 namespace Zust.Web.Controllers
 {
+    /// <summary>
+    /// Controller for user account management.
+    /// </summary>
     [Controller]
     public class AccountController : Controller
     {
@@ -22,9 +25,9 @@ namespace Zust.Web.Controllers
         /// Displays the register view with an empty register model.
         /// </summary>
         /// <returns>The register view.</returns>
-        public IActionResult Register()
+        public IActionResult Register(RegisterViewModel vm)
         {
-            return View(new RegisterViewModel());
+            return View(vm);
         }
 
         /// <summary>

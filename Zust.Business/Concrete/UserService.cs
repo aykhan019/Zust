@@ -25,7 +25,7 @@ namespace Zust.Business.Concrete
 
         public async Task<User?> GetUserByUsernameAsync(string username)
         {
-            return await _userDal.GetAsync(u => u.UserName == username);
+            return await _userDal.GetAsync(u => u.UserName.ToLower() == username.ToLower());
         }
 
         public async Task<bool> UsernameIsTakenAsync(string username)

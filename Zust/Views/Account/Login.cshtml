@@ -31,6 +31,8 @@
     <link rel="stylesheet" href="~/assets/css/style.css">
     <link rel="stylesheet" href="~/assets/css/responsive.css">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <title>Zust - Log In</title>
 
     <link rel="icon" type="image/png" href="~/assets/images/favicon.png">
@@ -79,9 +81,15 @@
 
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" class="form-control" asp-for="Password" value="@Model.Password">
+                                <div class="input-group">
+                                    <input type="password" class="form-control" asp-for="Password" value="@Model.Password">
+                                    <div class="input-group-append">
+                                        <button class="btn toggle-password" type="button" onclick="togglePasswordVisibility(this)">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-
 
                             <div class="remember-me-wrap d-flex justify-content-between align-items-center">
                                 <p>
@@ -100,8 +108,6 @@
                             }
 
                             <button type="submit" class="default-btn">Login</button>
-                            @*<div class="or-text"><span>Or</span></div>*@
-                            @*<button type="submit" class="google-btn">Log In with Google</button>*@
                         </form>
 
                         <a href="/account/register" class="lost-your-password mt-5">Don't have an account? Register Now!</a>
@@ -109,10 +115,6 @@
                 </div>
             </div>
         </div>
-
-        @*  <div class="home-btn-icon">
-        <a href="/home/index"><i class="flaticon-home"></i></a>
-        </div>*@
     </div>
 
     <!-- End Preloader Area -->
@@ -127,7 +129,16 @@
     <script src="~/assets/js/wow.min.js"></script>
     <script src="~/assets/js/main.js"></script>
     <script>
-        console.log(@Html.Raw(Json.Serialize(Model)));
+        function togglePasswordVisibility(button) {
+            var passwordInput = button.parentNode.previousElementSibling;
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                button.innerHTML = '<i class="fa fa-eye-slash"></i>';
+            } else {
+                passwordInput.type = 'password';
+                button.innerHTML = '<i class="fa fa-eye"></i>';
+            }
+        }
     </script>
 </body>
 </html>

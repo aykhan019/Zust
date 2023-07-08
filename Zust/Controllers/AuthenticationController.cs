@@ -9,14 +9,11 @@ using Zust.Business.Abstract;
 using Zust.DataAccess.Abstract;
 using Zust.DataAccess.Concrete;
 using Zust.Entities.Models;
-using Zust.Models;
 using Zust.Web.Helpers.Constants;
-using Zust.Web.Helpers.Validators;
 using Zust.Web.Models;
 
 namespace Zust.Web.Controllers
 {
-
     /// <summary>
     /// Controller responsible for authentication-related actions, such as user registration and login.
     /// </summary>
@@ -39,8 +36,14 @@ namespace Zust.Web.Controllers
         /// </summary>
         private readonly UserManager<User> _userManager;
 
+        /// <summary>
+        /// The role manager component used for managing roles.
+        /// </summary>
         private readonly RoleManager<Role> _roleManager;
 
+        /// <summary>
+        /// The IUserService component used for user-related operations.
+        /// </summary>
         private readonly IUserService _userService;
 
         /// <summary>
@@ -59,16 +62,14 @@ namespace Zust.Web.Controllers
             _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
-
-            // Create an instance of the custom password validator
-            var noPasswordValidator = new NoPasswordValidator<User>();
-
-            // Clear the existing password validators and add the custom validator
-            _userManager.PasswordValidators.Clear();
-            _userManager.PasswordValidators.Add(noPasswordValidator);
             _userService = userService;
         }
 
+        /// <summary>
+        /// Handles the registration process for a new user.
+        /// </summary>
+        /// <param name="model">The RegisterViewModel containing the user's registration details.</param>
+        /// <returns>The appropriate ActionResult based on the registration result.</returns>
         [HttpPost(UrlConstants.Register)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
@@ -76,7 +77,8 @@ namespace Zust.Web.Controllers
             if (await _userService.UsernameIsTakenAsync(model.Username))
             {
                 model.Errors.Add(ErrorConstants.UsernameIsTakenError);
-                return RedirectToAction(UrlConstants.Error, UrlConstants.Home, model);
+
+                return RedirectToAction(UrlConstants.Register, UrlConstants.Account, routeValues: model);
             }
 
             // Create a new User object and populate its properties
@@ -104,20 +106,23 @@ namespace Zust.Web.Controllers
 
                 _userManager.AddToRoleAsync(user, RoleConstants.User).Wait();
 
-                // Sign in the user
+                // Sign the user in
                 await _signInManager.SignInAsync(user, isPersistent: false);
 
                 return RedirectToAction(UrlConstants.Index, UrlConstants.Home);
             }
-
-            // Error
-            var vm = new ErrorViewModel()
+            else
             {
-                Error = ErrorConstants.RegisterError
-            };
-            return RedirectToAction(UrlConstants.Error, UrlConstants.Home, vm);
+                result.Errors.ToList().ForEach(error => { model.Errors.Add(error.Description); });
+                return RedirectToAction(UrlConstants.Register, UrlConstants.Account, routeValues: model);
+            }
         }
 
+        /// <summary>
+        /// Handles the login process for a user.
+        /// </summary>
+        /// <param name="model">The LoginViewModel containing the user's login credentials.</param>
+        /// <returns>The appropriate ActionResult based on the login result.</returns>
         [HttpPost(UrlConstants.Login)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -128,23 +133,13 @@ namespace Zust.Web.Controllers
 
                 if (result.Succeeded)
                 {
-                    // Redirect to home/index with the generated token
                     return RedirectToAction(UrlConstants.Index, UrlConstants.Home);
                 }
             }
 
             model.Errors.Add(ErrorConstants.InvalidLoginError);
-                
-            // If there are any validation errors, return the login form with the model
+
             return RedirectToAction(UrlConstants.Login, UrlConstants.Account, routeValues: model);
         }
-
-        [HttpGet(UrlConstants.UserExistsRoute)]
-        public async Task<IActionResult> UserExistsAsync(string username)
-        {
-            var userExists = await _userService.UsernameIsTakenAsync(username);
-            return Ok(userExists);
-        }
     }
-
 }

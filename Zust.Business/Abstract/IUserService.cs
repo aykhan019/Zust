@@ -10,7 +10,7 @@ namespace Zust.Business.Abstract
     public interface IUserService
     {
         Task<User?> GetUserByUsernameAsync(string username);
-        Task AddAsync(User user);
         Task<bool> UsernameIsTakenAsync(string username);
+        Task AddAsync(User user);
     }
 }

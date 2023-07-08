@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Reflection.Metadata;
-using Zust.Models;
 using Zust.Web.Helpers.Constants;
 
 namespace Zust.Web.Controllers
 {
+    /// <summary>
+    /// Controller for managing home-related views and actions.
+    /// </summary>
     [Authorize]
     [Controller]
     public class HomeController : Controller
@@ -155,9 +157,9 @@ namespace Zust.Web.Controllers
         /// <returns>The Error view.</returns>
         [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error(ErrorViewModel vm)
+        public IActionResult Error()
         {
-            return View(vm);
+            return View();
         }
     }
 }
