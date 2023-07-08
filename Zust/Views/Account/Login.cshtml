@@ -1,7 +1,7 @@
 @using Zust.Web.Helpers.Constants;
 @using Zust.Web.Models;
-@model LoginModel
-@using Microsoft.AspNetCore.Mvc.Rendering
+@model LoginViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering;
 
 @{
     Layout = null;
@@ -73,22 +73,15 @@
                             <!-- Form fields -->
 
                             <div class="form-group">
-                                <label>Username or email</label>
-                                <input type="text" class="form-control" asp-for="Username">
-                                @if (ViewData.ModelState.TryGetValue(ErrorConstants.UsernameError, out var usernameError) && usernameError.Errors.Count > 0)
-                                {
-                                    <p class="text-danger">@usernameError.Errors[0].ErrorMessage</p>
-                                }
+                                <label>Username</label>
+                                <input type="text" class="form-control" asp-for="Username" value="@Model.Username">
                             </div>
 
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" class="form-control" asp-for="Password">
-                                @if (ViewData.ModelState.TryGetValue(ErrorConstants.PasswordError, out var passwordError) && passwordError.Errors.Count > 0)
-                                {
-                                    <p class="text-danger">@passwordError.Errors[0].ErrorMessage</p>
-                                }
+                                <input type="password" class="form-control" asp-for="Password" value="@Model.Password">
                             </div>
+
 
                             <div class="remember-me-wrap d-flex justify-content-between align-items-center">
                                 <p>
@@ -101,9 +94,14 @@
                                 </div>
                             </div>
 
+                            @if (Model.Errors.Count > 0)
+                            {
+                                <p class="text-danger">@Model.Errors[0]</p>
+                            }
+
                             <button type="submit" class="default-btn">Login</button>
-                            <div class="or-text"><span>Or</span></div>
-                            <button type="submit" class="google-btn">Log In with Google</button>
+                            @*<div class="or-text"><span>Or</span></div>*@
+                            @*<button type="submit" class="google-btn">Log In with Google</button>*@
                         </form>
 
                         <a href="/account/register" class="lost-your-password mt-5">Don't have an account? Register Now!</a>
@@ -128,5 +126,8 @@
     <script src="~/assets/js/owl.carousel.min.js"></script>
     <script src="~/assets/js/wow.min.js"></script>
     <script src="~/assets/js/main.js"></script>
+    <script>
+        console.log(@Html.Raw(Json.Serialize(Model)));
+    </script>
 </body>
 </html>

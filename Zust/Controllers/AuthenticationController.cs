@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Zust.Business.Abstract;
 using Zust.DataAccess.Abstract;
 using Zust.DataAccess.Concrete;
 using Zust.Entities.Models;
@@ -24,11 +25,6 @@ namespace Zust.Web.Controllers
     public class AuthenticationController : ControllerBase
     {
         /// <summary>
-        /// Gets the repository for authentication-related operations.
-        /// </summary>
-        private readonly IAuthenticationRepository _authRepository;
-
-        /// <summary>
         /// Gets the configuration for accessing application settings.
         /// </summary>
         private readonly IConfiguration _configuration;
@@ -45,19 +41,20 @@ namespace Zust.Web.Controllers
 
         private readonly RoleManager<Role> _roleManager;
 
+        private readonly IUserService _userService;
+
         /// <summary>
         /// Initializes a new instance of the AuthenticationController class with the required dependencies.
         /// </summary>
         /// <param name="authRepository">The repository for authentication-related operations.</param>
         /// <param name="configuration">The configuration for accessing application settings.</param>
         /// <param name="signInManager">The manager for user sign-in functionality.</param>
-        public AuthenticationController(IAuthenticationRepository authRepository,
-                                        IConfiguration configuration,
+        public AuthenticationController(IConfiguration configuration,
                                         SignInManager<User> signInManager,
                                         UserManager<User> userManager,
-                                        RoleManager<Role> roleManager)
+                                        RoleManager<Role> roleManager,
+                                        IUserService userService)
         {
-            _authRepository = authRepository;
             _configuration = configuration;
             _signInManager = signInManager;
             _userManager = userManager;
@@ -69,12 +66,19 @@ namespace Zust.Web.Controllers
             // Clear the existing password validators and add the custom validator
             _userManager.PasswordValidators.Clear();
             _userManager.PasswordValidators.Add(noPasswordValidator);
+            _userService = userService;
         }
 
         [HttpPost(UrlConstants.Register)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
+            if (await _userService.UsernameIsTakenAsync(model.Username))
+            {
+                model.Errors.Add(ErrorConstants.UsernameIsTakenError);
+                return RedirectToAction(UrlConstants.Error, UrlConstants.Home, model);
+            }
+
             // Create a new User object and populate its properties
             var user = new User
             {
@@ -116,7 +120,7 @@ namespace Zust.Web.Controllers
 
         [HttpPost(UrlConstants.Login)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel model)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -127,21 +131,18 @@ namespace Zust.Web.Controllers
                     // Redirect to home/index with the generated token
                     return RedirectToAction(UrlConstants.Index, UrlConstants.Home);
                 }
-                else
-                {
-                    ModelState.AddModelError(ErrorConstants.UsernameError, ErrorConstants.InvalidLoginError);
-                }
             }
 
+            model.Errors.Add(ErrorConstants.InvalidLoginError);
+                
             // If there are any validation errors, return the login form with the model
-            return RedirectToAction(UrlConstants.Login, UrlConstants.Account);
+            return RedirectToAction(UrlConstants.Login, UrlConstants.Account, routeValues: model);
         }
-
 
         [HttpGet(UrlConstants.UserExistsRoute)]
         public async Task<IActionResult> UserExistsAsync(string username)
         {
-            var userExists = await _authRepository.UserExistsAsync(username);
+            var userExists = await _userService.UsernameIsTakenAsync(username);
             return Ok(userExists);
         }
     }

@@ -19,27 +19,25 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Register database
+// Register the database context
 var connectionString = builder.Configuration.GetConnectionString(Constants.ConnectionStringName);
 builder.Services.AddDbContext<ZustDbContext>(opt =>
 {
     opt.UseSqlServer(connectionString, b => b.MigrationsAssembly(Constants.MigrationsAssembly));
 });
 
-// Register Interfaces
+// Dependency injection configuration
 builder.Services.AddScoped<IUserDal, EFUserDal>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
-
 
 // Register Session
 builder.Services.AddSession();
 
 // Register Identity
 builder.Services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<ZustDbContext>()
-                .AddSignInManager<SignInManager<User>>()
-                .AddDefaultTokenProviders();
+    .AddEntityFrameworkStores<ZustDbContext>()
+    .AddSignInManager<SignInManager<User>>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
@@ -54,7 +52,7 @@ if (!app.Environment.IsDevelopment())
 // Use Session
 app.UseSession();
 
-// Other things to use
+// Other middleware
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -63,10 +61,12 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Configure default route
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}");
 
-// For redirecting
+// Uncomment the following line if you want to redirect the root URL to a specific route
 //app.UseRewriter(new RewriteOptions().AddRedirect("^$", "/account/login"));
+
 app.Run();

@@ -28,7 +28,7 @@ namespace Zust.Business.Concrete
             return await _userDal.GetAsync(u => u.UserName == username);
         }
 
-        public async Task<bool> UserExistsAsync(string username)
+        public async Task<bool> UsernameIsTakenAsync(string username)
         {
             var user = await GetUserByUsernameAsync(username);
             return user != null;

@@ -1,5 +1,5 @@
 @using Zust.Web.Models;
-@model RegisterModel
+@model RegisterViewModel
 
 @{
     Layout = null;
@@ -77,22 +77,24 @@
                         <form id="registrationForm" asp-controller="authentication" asp-action="register" method="post" enctype="application/x-www-form-urlencoded">
                             <div class="form-group">
                                 <label asp-for="Username">Name</label>
-                                <input id="usernameInput" type="text" class="form-control" asp-for="Username" required>
-                                <span class="text-danger" asp-validation-for="Username"></span>
-                            </div>
+                                <input type="text" class="form-control" asp-for="Username" value="@Model.Username" required>
+                            </div>  
 
                             <div class="form-group">
                                 <label asp-for="Email">Email</label>
-                                <input type="email" class="form-control" asp-for="Email" required>
-                                <span class="text-danger" asp-validation-for="@Model.Email"></span>
+                                <input type="email" class="form-control" asp-for="Email" value="@Model.Email" required>
                             </div>
 
                             <div class="form-group">
                                 <label asp-for="Password">Password</label>
-                                <input id="passwordInput" type="password" class="form-control" asp-for="Password" required>
-                                <span class="text-danger" asp-validation-for="@Model.Password"></span>
+                                <input type="password" class="form-control" asp-for="Password" value="@Model.Password" required>
                             </div>
 
+
+                            @if (Model.Errors.Count > 0)
+                            {
+                                <p class="text-danger">@Model.Errors[0]</p>
+                            }
                            @* <div class="form-group">
                                 <label asp-for="ConfirmPassword"> Confirm Password</label>
                                 <input id="ConfirmPassword" type="password" class="form-control" asp-for="ConfirmPassword" type="password" required>

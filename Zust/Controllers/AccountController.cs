@@ -13,10 +13,10 @@ namespace Zust.Web.Controllers
         /// Displays the login view.
         /// </summary>
         /// <returns>The login view.</returns>
-        public IActionResult Login()
+        public IActionResult Login(LoginViewModel vm)
         {
-            return View();
-        }
+            return View(vm);
+         }
 
         /// <summary>
         /// Displays the register view with an empty register model.
@@ -24,7 +24,7 @@ namespace Zust.Web.Controllers
         /// <returns>The register view.</returns>
         public IActionResult Register()
         {
-            return View(new RegisterModel());
+            return View(new RegisterViewModel());
         }
 
         /// <summary>

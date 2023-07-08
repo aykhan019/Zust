@@ -21,7 +21,7 @@
 
         public const string Login = "login";
 
-        public const string Index = "Index";
+        public const string Index = "index";
 
         public const string Error = "Error";
             
