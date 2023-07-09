@@ -40,6 +40,11 @@ builder.Services.AddIdentity<User, Role>()
     .AddSignInManager<SignInManager<User>>()
     .AddDefaultTokenProviders();
 
+
+// Register AutoMapper 
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddControllersWithViews();
+
 // Configure the expiration time span for the authentication cookie
 builder.Services.Configure<CookieAuthenticationOptions>(options =>
 {

@@ -13,5 +13,6 @@ namespace Zust.Business.Abstract
         Task<bool> UsernameIsTakenAsync(string username);
         Task AddAsync(User user);
         Task<User?> GetUserById(string id);
+        Task UpdateAsync(User user); 
     }
 }

@@ -1,6 +1,23 @@
+@using Microsoft.AspNetCore.Identity;
+@using Zust.Entities.Models;
 @{
+    var userManager = Context.RequestServices.GetService<UserManager<User>>();
+    var user = await userManager.GetUserAsync(Context.User);
     ViewData["Title"] = "Zust - My Profile";
 }
+
+<style>
+    .personal-information[contenteditable="true"] {
+        outline: none;
+        border: 1px solid black;
+        border-radius: 4px;
+        padding: 1px 5px;
+        margin: 5px 0px;
+        display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+</style>
 
 <div class="my-profile-inner-box">
     <div class="profile-cover-image">
@@ -14,32 +31,32 @@
         <div class="inner-info-box d-flex justify-content-between align-items-center">
             <div class="info-image">
                 <a href="#">
-                    <img src="~/assets/images/my-profile.jpg" alt="image">
+                    <img src="@user.ImageUrl" alt="image">
                 </a>
                 <div class="icon">
                     <a href="#"><i class="flaticon-photo-camera"></i></a>
                 </div>
             </div>
             <div class="info-text ms-3">
-                <h3><a href="#">Matthew Turner</a></h3>
-                <span><a href="mailto:matthew@gmail.com">matthew@gmail.com</a></span>
+                <h3><a href="/home/my-profile">@user.UserName</a></h3>
+                <span><a href="mailto:@user.Email">@user.Email</a></span>
             </div>
             <ul class="statistics">
                 <li>
                     <a href="#">
-                        <span class="item-number">59862</span>
+                        <span class="item-number">0</span>
                         <span class="item-text">Likes</span>
                     </a>
                 </li>
                 <li>
                     <a href="#">
-                        <span class="item-number">8591</span>
+                        <span class="item-number">0</span>
                         <span class="item-text">Following</span>
                     </a>
                 </li>
                 <li>
                     <a href="#">
-                        <span class="item-number">784514</span>
+                        <span class="item-number">0</span>
                         <span class="item-text">Followers</span>
                     </a>
                 </li>
@@ -68,7 +85,7 @@
 
         <ul class="profile-social">
             <li>
-                <a href="https://www.facebook.com/EnvyTheme" target="_blank">
+                <a href="https://www.facebook.com/" target="_blank">
                     <img src="~/assets/images/social/facebook.png" alt="image">
                 </a>
             </li>
@@ -96,18 +113,7 @@
     </div>
 </div>
 
-<style>
-    .personal-information[contenteditable="true"] {
-        outline: none;
-        border: 1px solid black;
-        border-radius: 4px;
-        padding: 1px;
-        margin: 5px 0px;
-        display: inline-block;
-        width: 100%;
-        box-sizing: border-box;
-    }
-</style>
+
 
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="about" role="tabpanel">
@@ -120,37 +126,37 @@
 
                     <ul class="information-list">
                         <li>
-                            <span>Email:</span> <a href="mailto:info@zust.com" class="personal-information">info@zust.com</a>
+                            <span>Email:</span> <a href="mailto:info@zust.com" class="personal-information">@user.Email</a>
                         </li>
                         <li>
-                            <span>Birthday:</span> <span class="personal-information" contenteditable="false">May 07, 1984</span>
+                            <span>Birthday:</span> <span class="personal-information" contenteditable="false">@user.Birthday</span>
                         </li>
                         <li>
-                            <span>Occupation:</span> <span class="personal-information" contenteditable="false">UX Designer</span>
+                            <span>Occupation:</span> <span class="personal-information" contenteditable="false">@user.Occupation</span>
                         </li>
                         <li>
-                            <span>Birthplace:</span> <span class="personal-information" contenteditable="false">4988 Woodland Terrace Citrus Heights, CA 95610</span>
+                            <span>Birthplace:</span> <span class="personal-information" contenteditable="false">@user.Birthplace</span>
                         </li>
                         <li>
-                            <span>Phone:</span> <a href="tel:916-879-7755" class="personal-information" contenteditable="false">916-879-7755</a>
+                            <span>Phone:</span> <a href="tel:@user.PhoneNumber" class="personal-information" contenteditable="false">@user.PhoneNumber</a>
                         </li>
                         <li>
-                            <span>Gender:</span> <span class="personal-information" contenteditable="false">Men</span>
+                            <span>Gender:</span> <span class="personal-information" contenteditable="false">@user.Gender</span>
                         </li>
                         <li>
-                            <span>Relationship Status:</span> <span class="personal-information" contenteditable="false">Single</span>
+                            <span>Relationship Status:</span> <span class="personal-information" contenteditable="false">@user.RelationshipStatus</span>
                         </li>
                         <li>
-                            <span>Blood Group:</span> <span class="personal-information" contenteditable="false">A+ Positive</span>
+                            <span>Blood Group:</span> <span class="personal-information" contenteditable="false">@user.BloodGroup</span>
                         </li>
                         <li>
-                            <span>Website:</span> <a href="#" class="personal-information" contenteditable="false">www.zust.com</a>
+                            <span>Website:</span> <a href="@user.Website" class="personal-information" contenteditable="false">@user.Website</a>
                         </li>
                         <li>
-                            <span>Social Link:</span> <a href="#" class="personal-information" contenteditable="false">www.zust.com</a>
+                            <span>Social Link:</span> <a href="@user.SocialLink" class="personal-information" contenteditable="false">@user.SocialLink</a>
                         </li>
                         <li>
-                            <span>Languages:</span> <span class="personal-information" contenteditable="false">English, Turkish</span>
+                            <span>Languages:</span> <span class="personal-information" contenteditable="false">@user.Languages</span>
                         </li>
                     </ul>
 
@@ -168,7 +174,9 @@
                             </div>
                         </div>
                         <div class="content">
-                            <p class="personal-information" contenteditable="false">Vivamus magna justo lacinia eget consectetur sed convallis at tellus. Nulla porttitor accumsan tincidunt. Quisque velit nisi pretium ut lacinia in elementum id enim. Donec rutrum congue leo eget malesuada. Quisque velit nisi pretium ut lacinia in elementum id enim. Vivamus magna justo lacinia eget consectetur sed convallis at tellus.</p>
+                            <p class="personal-information" contenteditable="false">
+                                @user.AboutMe
+                            </p>
                         </div>
                     </div>
 
@@ -179,7 +187,7 @@
                         </div>
                         <div class="box-content">
                             <p class="personal-information" contenteditable="false">
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                                @user.EducationWork
                             </p>
                         </div>
                     </div>
@@ -191,7 +199,7 @@
                         </div>
                         <div class="box-content">
                             <p class="personal-information" contenteditable="false">
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                                @user.Interests
                             </p>
                         </div>
                     </div>
@@ -569,19 +577,26 @@
     </div>
 </div>
 
+
 <script>
     // HTML template for the save button
     var btnHtml = `
-            <button id="saveBtn" class="btn btn-primary" disabled onclick="save()">
-                Save Changes
-            </button>`;
+                <button id="saveBtn" class="btn btn-primary" disabled onclick="save()">
+                    Save Changes
+                </button>`;
+
+    // HTML template for the save button
+    var cancelHtml = `
+                    <button class="btn btn-secondary" onclick="cancel()">
+                        Cancel Changes
+                    </button>`;
+
 
     // HTML template for the edit link
     var editHtml = `
-            <a id="editText" class="dropdown-item d-flex align-items-center" onclick="openEdit()" style="cursor:pointer;">
-                <i class="flaticon-edit"></i> Edit Information
-            </a>
-        `;
+                    <a id="editText" class="dropdown-item d-flex align-items-center" onclick="openEdit()" style="cursor:pointer;">
+                    <i class="flaticon-edit"></i> Edit Information
+                </a>`;
 
     // Get the dropdown element and set its content to the edit link
     var dropdown = document.getElementById("dropdown");
@@ -603,7 +618,8 @@
         }
 
         // Update the dropdown content to show the save button
-        dropdown.innerHTML = btnHtml;
+        dropdown.innerHTML = cancelHtml;
+        dropdown.innerHTML += btnHtml;
 
         // Get the save button and attach an event listener to each editable element
         saveButton = document.getElementById("saveBtn");
@@ -613,12 +629,34 @@
         }
     }
 
+    // Function to cancel changes and close the edit mode
+    function cancel() {
+        location.reload();
+    }
+
     // Function to save changes and close the edit mode
     function save() {
         closeEdit();
 
         // Save changes
-        // Implement your saving logic here
+        const personalInfo = {
+            username: user.UserName,
+            email: $('a.personal-information').first().text().trim(),
+            birthday: $('span.personal-information').eq(0).text().trim(),
+            occupation: $('span.personal-information').eq(1).text().trim(),
+            birthplace: $('span.personal-information').eq(2).text().trim(),
+            phone: $('a.personal-information').eq(1).text().trim(),
+            gender: $('span.personal-information').eq(3).text().trim(),
+            relationshipStatus: $('span.personal-information').eq(4).text().trim(),
+            bloodGroup: $('span.personal-information').eq(5).text().trim(),
+            website: $('a.personal-information').eq(2).text().trim(),
+            socialLink: $('a.personal-information').eq(3).text().trim(),
+            languages: $('span.personal-information').eq(6).text().trim(),
+            aboutMe: $('p.personal-information').eq(0).text().trim(),
+            educationWork: $('p.personal-information').eq(1).text().trim(),
+            interests: $('p.personal-information').eq(2).text().trim()
+        };
+
     }
 
     // Function to close the edit mode

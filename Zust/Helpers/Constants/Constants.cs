@@ -21,5 +21,7 @@
         public const string MigrationsAssembly = "Zust.Web";
 
         public const int CookieExpireTimeSpan = 30;
+
+
     }
 }

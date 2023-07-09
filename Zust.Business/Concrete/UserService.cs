@@ -39,5 +39,10 @@ namespace Zust.Business.Concrete
             var user = await _userDal.GetAsync(u  => u.Id == id);
             return user;
         }
+
+        public async Task UpdateAsync(User user)
+        {
+            await _userDal.UpdateAsync(user);
+        }
     }
 }

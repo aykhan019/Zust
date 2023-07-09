@@ -458,13 +458,7 @@
                                     <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <div class="menu-profile">
                                             @*User Image*@
-                                            @if (user.ImageUrl == null || user.ImageUrl == string.Empty){
-                                                <img src="~/assets/images/user/defaultUserImage.png" class="rounded-circle" alt="image">
-                                            }
-                                            else
-                                            {
-                                                <img src="@user.ImageUrl" class="rounded-circle" alt="image">
-                                            }
+                                            <img src="@user.ImageUrl" class="rounded-circle" alt="image">
                                             @*Username*@
                                             <span class="name">@user.UserName</span>
                                             <span class="status-online"></span>
