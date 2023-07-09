@@ -28,5 +28,7 @@
         public const string UserExistsRoute = "userexists/{username}";
 
         public const string Authentication = "Authentication";
+
+        public const string ProfileController = "api/profile";
     }
 }

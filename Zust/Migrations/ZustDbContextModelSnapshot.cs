@@ -140,18 +140,11 @@ namespace Zust.Web.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("FriendshipId");
 
                     b.HasIndex("FriendId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("Friendships");
                 });
@@ -305,22 +298,10 @@ namespace Zust.Web.Migrations
             modelBuilder.Entity("Zust.Entities.Models.Friendship", b =>
                 {
                     b.HasOne("Zust.Entities.Models.User", "Friend")
-                        .WithMany()
-                        .HasForeignKey("FriendId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Zust.Entities.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Zust.Entities.Models.User", null)
                         .WithMany("Friendships")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("FriendId");
 
                     b.Navigation("Friend");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Zust.Entities.Models.User", b =>

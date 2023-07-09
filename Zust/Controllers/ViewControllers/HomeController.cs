@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Reflection.Metadata;
 using Zust.Web.Helpers.Constants;
 
-namespace Zust.Web.Controllers
+namespace Zust.Web.Controllers.ViewControllers
 {
     /// <summary>
     /// Controller for managing home-related views and actions.
@@ -18,6 +18,15 @@ namespace Zust.Web.Controllers
         /// </summary>
         /// <returns>The Birthday view.</returns>
         public IActionResult Birthday()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Displays the Users view.
+        /// </summary>
+        /// <returns>The Users view.</returns>
+        public IActionResult Users()
         {
             return View();
         }

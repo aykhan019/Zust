@@ -33,5 +33,11 @@ namespace Zust.Business.Concrete
             var user = await GetUserByUsernameAsync(username);
             return user != null;
         }
+
+        public async Task<User?> GetUserById(string id)
+        {
+            var user = await _userDal.GetAsync(u  => u.Id == id);
+            return user;
+        }
     }
 }

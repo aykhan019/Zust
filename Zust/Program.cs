@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
@@ -38,6 +39,12 @@ builder.Services.AddIdentity<User, Role>()
     .AddEntityFrameworkStores<ZustDbContext>()
     .AddSignInManager<SignInManager<User>>()
     .AddDefaultTokenProviders();
+
+// Configure the expiration time span for the authentication cookie
+builder.Services.Configure<CookieAuthenticationOptions>(options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromDays(Constants.CookieExpireTimeSpan); 
+});
 
 var app = builder.Build();
 

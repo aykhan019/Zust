@@ -4,7 +4,7 @@ using Zust.Entities.Models;
 using Zust.Web.Helpers.Constants;
 using Zust.Web.Models;
 
-namespace Zust.Web.Controllers
+namespace Zust.Web.Controllers.ViewControllers
 {
     /// <summary>
     /// Controller for user account management.
@@ -19,7 +19,7 @@ namespace Zust.Web.Controllers
         public IActionResult Login(LoginViewModel vm)
         {
             return View(vm);
-         }
+        }
 
         /// <summary>
         /// Displays the register view with an empty register model.

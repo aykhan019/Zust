@@ -19,5 +19,7 @@
         /// Represents the name of the assembly containing database migrations.
         /// </summary>
         public const string MigrationsAssembly = "Zust.Web";
+
+        public const int CookieExpireTimeSpan = 30;
     }
 }

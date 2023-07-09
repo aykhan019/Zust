@@ -12,7 +12,7 @@ using Zust.Entities.Models;
 using Zust.Web.Helpers.Constants;
 using Zust.Web.Models;
 
-namespace Zust.Web.Controllers
+namespace Zust.Web.Controllers.ApiControllers
 {
     /// <summary>
     /// Controller responsible for authentication-related actions, such as user registration and login.

@@ -12,8 +12,8 @@ using Zust.Core.Concrete.EntityFramework;
 namespace Zust.Web.Migrations
 {
     [DbContext(typeof(ZustDbContext))]
-    [Migration("20230708132754_Init2")]
-    partial class Init2
+    [Migration("20230709135721_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -128,6 +128,27 @@ namespace Zust.Web.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Zust.Entities.Models.Friendship", b =>
+                {
+                    b.Property<int>("FriendshipId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FriendshipId"), 1L, 1);
+
+                    b.Property<string>("FriendId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FriendshipId");
+
+                    b.HasIndex("FriendId");
+
+                    b.ToTable("Friendships");
                 });
 
             modelBuilder.Entity("Zust.Entities.Models.Role", b =>
@@ -274,6 +295,20 @@ namespace Zust.Web.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Zust.Entities.Models.Friendship", b =>
+                {
+                    b.HasOne("Zust.Entities.Models.User", "Friend")
+                        .WithMany("Friendships")
+                        .HasForeignKey("FriendId");
+
+                    b.Navigation("Friend");
+                });
+
+            modelBuilder.Entity("Zust.Entities.Models.User", b =>
+                {
+                    b.Navigation("Friendships");
                 });
 #pragma warning restore 612, 618
         }
