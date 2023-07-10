@@ -9,6 +9,7 @@ namespace Zust.Entities.Helpers
     public class Constants
     {
         public const string DefaultProfileImagePath = "/assets/images/user/defaultUserImage.png";
+        public const string DefaultCoverImagePath = "/assets/images/user/defaultCoverImage.png";
 
     }
 }

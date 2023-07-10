@@ -32,5 +32,9 @@
         public const string ProfileController = "api/profile";
 
         public const string UpdateProfile = "UpdateProfile";
+
+        public const string UserController = "api/user";
+
+        public const string GetAllUsers = "GetAllUsers";
     }
 }

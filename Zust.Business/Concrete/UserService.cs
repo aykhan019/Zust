@@ -44,5 +44,10 @@ namespace Zust.Business.Concrete
         {
             await _userDal.UpdateAsync(user);
         }
+
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        {
+            return await _userDal.GetAllAsync();
+        }
     }
 }

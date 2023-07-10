@@ -14,6 +14,7 @@ using Zust.DataAccess.Concrete;
 using Zust.DataAccess.Concrete.EFEntityFramework;
 using Zust.Entities.Models;
 using Zust.Web.Helpers.Constants;
+using Zust.Web.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,9 @@ builder.Services.AddIdentity<User, Role>()
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllersWithViews();
 
+// Register SignalR
+builder.Services.AddSignalR();
+
 // Configure the expiration time span for the authentication cookie
 builder.Services.Configure<CookieAuthenticationOptions>(options =>
 {
@@ -73,10 +77,12 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Configure default route
-app.MapControllerRoute(
-    name: "default",    
-    pattern: "{controller=Account}/{action=Login}");
+// Configure routes
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute("Default", "{controller=Account}/{action=Login}");
+    endpoints.MapHub<UserHub>("/userhub");
+});
 
 // Uncomment the following line if you want to redirect the root URL to a specific route
 app.UseRewriter(new RewriteOptions().AddRedirect("^$", "/home/index"));
