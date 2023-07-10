@@ -23,7 +23,7 @@ namespace Zust.Web.Controllers.ApiControllers
             try
             {
                 var users = await _userService.GetAllUsersAsync();
-                return Ok(users);
+                return Ok(users.Take(20));
             }
             catch (Exception ex)
             {
