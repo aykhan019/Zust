@@ -39,7 +39,7 @@ namespace Zust.Core.Concrete.EntityFramework
         {
             using (var context = new TContext())
             {
-                var addedEntity = context.Entry(entity);
+                var addedEntity = context.Entry<TEntity>(entity);
                 addedEntity.State = EntityState.Modified;
                 await context.SaveChangesAsync();
             }   

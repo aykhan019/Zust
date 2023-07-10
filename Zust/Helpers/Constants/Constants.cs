@@ -22,6 +22,6 @@
 
         public const int CookieExpireTimeSpan = 30;
 
-
+        public const string DefaultProfileImagePath = "/assets/images/user/defaultUserImage.png";
     }
 }
