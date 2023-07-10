@@ -78,11 +78,15 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Configure routes
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute("Default", "{controller=Account}/{action=Login}");
-    endpoints.MapHub<UserHub>("/userhub");
-});
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllerRoute("Default", "{controller=Account}/{action=Login}");
+//    endpoints.MapHub<UserHub>("/userhub");
+//});
+
+app.MapControllerRoute(
+    name: "default",    
+    pattern: "{controller=Account}/{action=Login}");
 
 // Uncomment the following line if you want to redirect the root URL to a specific route
 app.UseRewriter(new RewriteOptions().AddRedirect("^$", "/home/index"));

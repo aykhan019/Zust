@@ -18,11 +18,11 @@ namespace Zust.Web.Controllers.ApiControllers
         }
 
         [HttpGet(UrlConstants.GetAllUsers)]
-        public ActionResult<IEnumerable<User>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
         {
             try
             {
-                var users = _userService.GetAllUsersAsync();
+                var users = await _userService.GetAllUsersAsync();
                 return Ok(users);
             }
             catch (Exception ex)
