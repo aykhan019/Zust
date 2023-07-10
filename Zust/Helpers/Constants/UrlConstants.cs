@@ -30,5 +30,7 @@
         public const string Authentication = "Authentication";
 
         public const string ProfileController = "api/profile";
+
+        public const string UpdateProfile = "UpdateProfile";
     }
 }

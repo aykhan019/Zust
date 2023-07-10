@@ -25,7 +25,7 @@ var connectionString = builder.Configuration.GetConnectionString(Constants.Conne
 builder.Services.AddDbContext<ZustDbContext>(opt =>
 {
     opt.UseSqlServer(connectionString, b => b.MigrationsAssembly(Constants.MigrationsAssembly));
-});
+}); 
 
 // Dependency injection configuration
 builder.Services.AddScoped<IUserDal, EFUserDal>();

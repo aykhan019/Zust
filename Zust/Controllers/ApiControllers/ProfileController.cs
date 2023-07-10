@@ -21,7 +21,7 @@ namespace Zust.Web.Controllers.ApiControllers
             _mapper = mapper;
         }
 
-        [HttpPut("UpdateProfile")]
+        [HttpPut(UrlConstants.UpdateProfile)]
         public async Task<IActionResult> UpdateProfile(UserProfile updatedProfile)
         {
             // Retrieve the existing user profile from the database based on the ID
@@ -33,19 +33,19 @@ namespace Zust.Web.Controllers.ApiControllers
             }
 
             // Update the user profile with the new values
-            user = _mapper.Map<User>(updatedProfile);
+            _mapper.Map(updatedProfile, user);
 
             try
             {
-
-            await _userService.UpdateAsync(user);
+                await _userService.UpdateAsync(user);
             }
             catch (Exception ex)
             {
-                await Console.Out.WriteLineAsync(ex.Message);
+                return BadRequest(ex.Message);
             }
 
-            return Ok(); // Return a 200 OK response indicating success
+            // Return a 200 OK response indicating success
+            return Ok(); 
         }
     }
 }

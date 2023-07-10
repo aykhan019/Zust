@@ -29,8 +29,8 @@ namespace Zust.Core.Concrete.EntityFramework
         {
             using (var context = new TContext())
             {
-                var addedEntity = context.Entry(entity);
-                addedEntity.State = EntityState.Deleted;
+                var deletedEntity = context.Entry(entity);
+                deletedEntity.State = EntityState.Deleted;
                 await context.SaveChangesAsync();
             }
         }
@@ -39,8 +39,8 @@ namespace Zust.Core.Concrete.EntityFramework
         {
             using (var context = new TContext())
             {
-                var addedEntity = context.Entry<TEntity>(entity);
-                addedEntity.State = EntityState.Modified;
+                var updatedEntity = context.Entry(entity);
+                updatedEntity.State = EntityState.Modified;
                 await context.SaveChangesAsync();
             }   
         }
