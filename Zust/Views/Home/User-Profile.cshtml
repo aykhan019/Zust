@@ -1,53 +1,50 @@
-@using Microsoft.AspNetCore.Identity;
-@using Zust.Entities.Models;
-@using Zust.Web.Helpers.Constants;
+﻿@using Zust.Web.Helpers.Constants;
+@model Zust.Entities.Models.User;
 @{
-    var userManager = Context.RequestServices.GetService<UserManager<User>>();
-    var user = await userManager.GetUserAsync(Context.User);
-    ViewData["Title"] = "Zust - My Profile";
+    ViewData["Title"] = $"Zust - {Model.UserName}";
 }
 
 <style>
-    .personal-information[contenteditable="true"] {
-        outline: none;
-        border: 1px solid black;
-        border-radius: 4px;
-        padding: 1px 5px;
-        margin: 5px 0px;
-        display: inline-block;
-        width: 100%;
-        box-sizing: border-box;
-    }
-
     .profile-image {
-        width: 250px !important; 
-        height: 250px !important; 
+        width: 250px !important;
+        height: 250px !important;
         object-fit: cover !important; /* Maintain aspect ratio and cover the container */
     }
+
+    #coverContainer {
+        background-color: var(--white-color);
+        border-radius: 0 0 5px 5px;
+        height: 275px !important;
+        
+    }
+
+        /*#coverContainer img {
+            width: 100%;
+            height: auto;
+            object-fit: fill;
+        }*/
 </style>
 
 <div class="my-profile-inner-box" id="body">
 
-    <div class="profile-cover-image">
-        <a href="#">
-            <img src="~/assets/images/my-profile-bg.jpg" alt="image">
-        </a>
-        <a href="#" class="edit-cover-btn">Edit Cover</a>
-    </div>
+    <div class="container">
+                <img class="col-12" src="@Model.CoverImage" alt="image">
+        </div>
+
 
     <div class="profile-info-box">
         <div class="inner-info-box d-flex justify-content-between align-items-center">
             <div class="info-image">
-                <a href="#">
-                    <img src="@user.ImageUrl" alt="image" class="profile-image">
+                <a>
+                    <img src="@Model.ImageUrl" alt="image" class="profile-image">
                 </a>
                 <div class="icon">
-                    <a href="#"><i class="flaticon-photo-camera"></i></a>
+                    <a><i class="flaticon-photo-camera"></i></a>
                 </div>
             </div>
             <div class="info-text ms-3">
-                <h3><a href='/home/my-profile'>@user.UserName</a></h3>
-                @*<span><a id="emailElement" href="mailto:@user.Email">@user.Email</a></span>*@
+                <h3><a href='/home/my-profile'>@Model.UserName</a></h3>
+                @*<span><a id="emailElement" href="mailto:@Model.Email">@Model.Email</a></span>*@
             </div>
             <ul class="statistics">
                 <li>
@@ -127,85 +124,85 @@
                         <li>
                             <span>Email:</span>
                             <a href="mailto:info@zust.com" class="personal-information">
-                                @(string.IsNullOrEmpty(user.Email) ? Constants.NoData : user.Email)
+                                @(string.IsNullOrEmpty(Model.Email) ? Constants.NoData : Model.Email)
                             </a>
                         </li>
                         <li>
                             <span>Birthday:</span>
                             <span class="personal-information">
-                                @(string.IsNullOrEmpty(user.Birthday) ? Constants.NoData : user.Birthday)
+                                @(string.IsNullOrEmpty(Model.Birthday) ? Constants.NoData : Model.Birthday)
                             </span>
                         </li>
                         <li>
                             <span>Occupation:</span>
                             <span class="personal-information">
-                                @(string.IsNullOrEmpty(user.Occupation) ? Constants.NoData : user.Occupation)
+                                @(string.IsNullOrEmpty(Model.Occupation) ? Constants.NoData : Model.Occupation)
                             </span>
                         </li>
                         <li>
                             <span>Birthplace:</span>
                             <span class="personal-information">
-                                @(string.IsNullOrEmpty(user.Birthplace) ? Constants.NoData : user.Birthplace)
+                                @(string.IsNullOrEmpty(Model.Birthplace) ? Constants.NoData : Model.Birthplace)
                             </span>
                         </li>
                         <li>
                             <span>Phone:</span>
-                            @if (string.IsNullOrEmpty(user.PhoneNumber))
+                            @if (string.IsNullOrEmpty(Model.PhoneNumber))
                             {
                                 <span class="personal-information">@Constants.NoData</span>
                             }
                             else
                             {
-                                <a href="@user.PhoneNumber" class="personal-information">@user.PhoneNumber</a>
+                                <a href="@Model.PhoneNumber" class="personal-information">@Model.PhoneNumber</a>
                             }
                         </li>
 
                         <li>
                             <span>Gender:</span>
                             <span class="personal-information">
-                                @(string.IsNullOrEmpty(user.Gender) ? Constants.NoData : user.Gender)
+                                @(string.IsNullOrEmpty(Model.Gender) ? Constants.NoData : Model.Gender)
                             </span>
                         </li>
                         <li>
                             <span>Relationship Status:</span>
                             <span class="personal-information">
-                                @(string.IsNullOrEmpty(user.RelationshipStatus) ? Constants.NoData : user.RelationshipStatus)
+                                @(string.IsNullOrEmpty(Model.RelationshipStatus) ? Constants.NoData : Model.RelationshipStatus)
                             </span>
                         </li>
                         <li>
                             <span>Blood Group:</span>
                             <span class="personal-information">
-                                @(string.IsNullOrEmpty(user.BloodGroup) ? Constants.NoData : user.BloodGroup)
+                                @(string.IsNullOrEmpty(Model.BloodGroup) ? Constants.NoData : Model.BloodGroup)
                             </span>
                         </li>
                         <li>
                             <span>Website:</span>
-                            @if (string.IsNullOrEmpty(user.Website))
+                            @if (string.IsNullOrEmpty(Model.Website))
                             {
                                 <span class="personal-information">@Constants.NoData</span>
                             }
                             else
                             {
-                                <a href="@user.Website" class="personal-information">@user.Website</a>
+                                <a href="@Model.Website" class="personal-information">@Model.Website</a>
                             }
                         </li>
 
                         <li>
                             <span>Social Link:</span>
-                            @if (string.IsNullOrEmpty(user.SocialLink))
+                            @if (string.IsNullOrEmpty(Model.SocialLink))
                             {
                                 <span class="personal-information">@Constants.NoData</span>
                             }
                             else
                             {
-                                <a href="@user.SocialLink" class="personal-information">@user.SocialLink</a>
+                                <a href="@Model.SocialLink" class="personal-information">@Model.SocialLink</a>
                             }
                         </li>
 
                         <li>
                             <span>Languages:</span>
                             <span class="personal-information">
-                                @(string.IsNullOrEmpty(user.Languages) ? Constants.NoData : user.Languages)
+                                @(string.IsNullOrEmpty(Model.Languages) ? Constants.NoData : Model.Languages)
                             </span>
                         </li>
                     </ul>
@@ -222,7 +219,7 @@
                         </div>
                         <div class="content">
                             <p class="personal-information">
-                                @(string.IsNullOrEmpty(user.AboutMe) ? Constants.NoData : user.AboutMe)
+                                @(string.IsNullOrEmpty(Model.AboutMe) ? Constants.NoData : Model.AboutMe)
                             </p>
                         </div>
                     </div>
@@ -234,7 +231,7 @@
                         </div>
                         <div class="box-content">
                             <p class="personal-information">
-                                @(string.IsNullOrEmpty(user.EducationWork) ? Constants.NoData : user.EducationWork)
+                                @(string.IsNullOrEmpty(Model.EducationWork) ? Constants.NoData : Model.EducationWork)
                             </p>
                         </div>
                     </div>
@@ -246,7 +243,7 @@
                         </div>
                         <div class="box-content">
                             <p class="personal-information">
-                                @(string.IsNullOrEmpty(user.Interests) ? Constants.NoData : user.Interests)
+                                @(string.IsNullOrEmpty(Model.Interests) ? Constants.NoData : Model.Interests)
                             </p>
                         </div>
                     </div>
@@ -622,124 +619,3 @@
         </div>
     </div>
 </div>
-
-<script src="~/assets/js/functions.js"></script>
-<script src="~/assets/js/jquery.min.js"></script>
-<script>
-
-
-    // HTML template for the save button
-    var btnHtml = `
-                                        <button id="saveBtn" class="btn btn-primary" disabled onclick="save()">
-                                            Save Changes
-                                        </button>`;
-
-    // HTML template for the save button
-    var cancelHtml = `
-                                            <button class="btn btn-secondary" onclick="cancel()">
-                                                Cancel Changes
-                                            </button>`;
-
-
-    // HTML template for the edit link
-    var editHtml = `
-                                        <a id="editText" class="dropdown-item d-flex align-items-center" onclick="openEdit()" style="cursor:pointer;">
-                                            <i class="flaticon-edit"></i> Edit Information
-                                        </a>`;
-
-    // Get the dropdown element and set its content to the edit link
-    var dropdown = document.getElementById("dropdown");
-    dropdown.innerHTML = editHtml;
-
-    // Get all the elements with the "personal-information" class
-    const editableElements = document.getElementsByClassName("personal-information");
-
-    // Declare the save button variable
-    var saveButton;
-
-    // Function to open the edit mode
-    function openEdit() {
-        // Enable editing for all editable elements
-        for (let i = 0; i < editableElements.length; i++) {
-            const element = editableElements[i];
-            element.contentEditable = true;
-            element.classList.add("personal-information-editable");
-        }
-
-        // Update the dropdown content to show the save button
-        dropdown.innerHTML = cancelHtml;
-        dropdown.innerHTML += btnHtml;
-
-        // Get the save button and attach an event listener to each editable element
-        saveButton = document.getElementById("saveBtn");
-        for (let i = 0; i < editableElements.length; i++) {
-            const element = editableElements[i];
-            element.addEventListener("input", enableSaveButton);
-        }
-    }
-
-    // Function to cancel changes and close the edit mode
-    function cancel() {
-        location.reload();
-    }
-
-    // Function to save changes and close the edit mode
-    function save() {
-        closeEdit();
-
-        var myUsername = '@user.UserName';
-
-        const personalInfo = {
-            username: myUsername,
-            email: $('a.personal-information').first().text().trim(),
-            birthday: $('span.personal-information').eq(0).text().trim(),
-            occupation: $('span.personal-information').eq(1).text().trim(),
-            birthplace: $('span.personal-information').eq(2).text().trim(),
-            phoneNumber: $('a.personal-information').eq(1).text().trim(),
-            gender: $('span.personal-information').eq(3).text().trim(),
-            relationshipStatus: $('span.personal-information').eq(4).text().trim(),
-            bloodGroup: $('span.personal-information').eq(5).text().trim(),
-            website: $('a.personal-information').eq(2).text().trim(),
-            socialLink: $('a.personal-information').eq(3).text().trim(),
-            languages: $('span.personal-information').eq(6).text().trim(),
-            aboutMe: $('p.personal-information').eq(0).text().trim(),
-            educationWork: $('p.personal-information').eq(1).text().trim(),
-            interests: $('p.personal-information').eq(2).text().trim()
-        };
-
-        // Make an AJAX request to update the user profile
-        $.ajax({
-            url: '/api/Profile/UpdateProfile',
-            type: 'PUT',
-            contentType: 'application/json',
-            data: JSON.stringify(personalInfo),
-            success: function (response) {
-                showToast("Your profile has been successfully updated!", "green");
-            },
-            error: function (error) {
-                showToast("There was an error in updating your profile!", "red");
-            }
-        });
-    }
-
-    // Function to close the edit mode
-    function closeEdit() {
-        // Disable editing for all editable elements
-        for (let i = 0; i < editableElements.length; i++) {
-            const element = editableElements[i];
-            element.contentEditable = false;
-            element.classList.remove("personal-information-editable");
-        }
-
-        // Update the dropdown content to show the edit link
-        dropdown.innerHTML = editHtml;
-
-        // Remove the event listener when closing the edit mode
-        dropdown.removeEventListener("input", enableSaveButton);
-    }
-
-    // Function to enable the save button when any editable element is modified
-    function enableSaveButton() {
-        saveButton.disabled = false;
-    }
-</script>

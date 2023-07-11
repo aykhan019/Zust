@@ -23,5 +23,9 @@
         public const int CookieExpireTimeSpan = 30;
 
         public const string DefaultProfileImagePath = "/assets/images/user/defaultUserImage.png";
+
+        public const string NoData = "No Data";
+        public const int TakeUserCount = 8;
+        public const string StringEmpty = "";
     }
 }

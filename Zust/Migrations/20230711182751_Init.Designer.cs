@@ -12,7 +12,7 @@ using Zust.Core.Concrete.EntityFramework;
 namespace Zust.Web.Migrations
 {
     [DbContext(typeof(ZustDbContext))]
-    [Migration("20230710221705_Init")]
+    [Migration("20230711182751_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

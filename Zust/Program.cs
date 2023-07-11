@@ -26,7 +26,7 @@ var connectionString = builder.Configuration.GetConnectionString(Constants.Conne
 builder.Services.AddDbContext<ZustDbContext>(opt =>
 {
     opt.UseSqlServer(connectionString, b => b.MigrationsAssembly(Constants.MigrationsAssembly));
-}); 
+});
 
 // Dependency injection configuration
 builder.Services.AddScoped<IUserDal, EFUserDal>();
@@ -52,7 +52,7 @@ builder.Services.AddSignalR();
 // Configure the expiration time span for the authentication cookie
 builder.Services.Configure<CookieAuthenticationOptions>(options =>
 {
-    options.ExpireTimeSpan = TimeSpan.FromDays(Constants.CookieExpireTimeSpan); 
+    options.ExpireTimeSpan = TimeSpan.FromDays(Constants.CookieExpireTimeSpan);
 });
 
 var app = builder.Build();
@@ -84,9 +84,24 @@ app.UseAuthorization();
 //    endpoints.MapHub<UserHub>("/userhub");
 //});
 
-app.MapControllerRoute(
-    name: "default",    
-    pattern: "{controller=Account}/{action=Login}");
+// Existing configuration
+
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "UsersWithId",
+        pattern: "home/users/{id}",
+        defaults: new { controller = "Home", action = "Users" }
+    );
+
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Account}/{action=Login}/{id?}"
+    );
+});
+
+// Other configurations
 
 // Uncomment the following line if you want to redirect the root URL to a specific route
 app.UseRewriter(new RewriteOptions().AddRedirect("^$", "/home/index"));

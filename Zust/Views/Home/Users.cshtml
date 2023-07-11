@@ -1,15 +1,24 @@
-﻿@{
+﻿@using Zust.Web.Helpers.Constants
+
+@{
+    var TakeUserCount = Constants.TakeUserCount;
     ViewData["Title"] = "Zust - Users";
 }
 
 <style>
-    /*  .user-image {
-            width: 156px;
-            height: 156px;
-            object-fit: cover;
-        }*/
+    .user-image {
+        width: 100px !important; /* Set the desired width */
+        height: 100px !important; /* Set the desired height */
+        object-fit: cover !important; /* Maintain aspect ratio and cover the container */
+    }
 
+    .transparent-button {
+        background-color: transparent;
+        border: 1px solid transparent;
+    }
 </style>
+
+
 
 <div class="page-banner-box bg-4">
     <h3>Zust Users</h3>
@@ -19,9 +28,9 @@
     <div class="tab-pane fade show active" role="tabpanel">
         <div class="row justify-content-center" id="users">
         </div>
-        @* <div class="load-more-posts-btn">
-        <a href="#"><i class="flaticon-loading"></i> Load More</a>
-        </div>*@
+         <div id="loadMore" class="load-more-posts-btn">
+            <button class="transparent-button" onclick="ShowUsersAsync()"><i class="flaticon-loading"></i> Load More</button>
+        </div>
     </div>
 
     <div class="tab-pane fade" id="people-you-know" role="tabpanel">
@@ -869,12 +878,34 @@
 
 <script src="~/assets/js/jquery.min.js"></script>
 <script>
+    var userCountInView = 0;
+    var takeUserCount = @TakeUserCount;
+    var container = document.getElementById("users");
+
+    function GetAllUsersCount(){
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: '/api/User/GetAllUsersCount',
+                method: 'GET',
+                success: function (data) {
+                    resolve(data);
+                },
+                error: function (error) {
+                    reject(error);
+                }
+            });
+        });
+    }
 
     function GetUsers() {
         return new Promise(function (resolve, reject) {
             $.ajax({
-                url: '/api/User/GetAllUsers',
-                type: 'GET',
+                url: '/api/User/GetUsers',
+                method: 'GET',
+                data: {
+                    startIndex: userCountInView,
+                    userCount: takeUserCount
+                },
                 success: function (data) {
                     resolve(data);
                 },
@@ -886,62 +917,67 @@
     }
 
     async function ShowUsersAsync() {
-        var container = document.getElementById("users");
         var users = await GetUsers();
         console.log(users);
         if (users != null) {
+            userCountInView += users.length;
+            var allUsersCount = await GetAllUsersCount();
+            if (userCountInView == allUsersCount - 1) { // Current User Subtracted
+                document.getElementById("loadMore").style.display = "none";
+            }
             var content = '';
             for (var i = 0; i < users.length; i++) {
                 var user = users[i];
-
                 var subContent = `
                     <div class="col-lg-3 col-sm-6">
                         <div class="single-friends-card">
-                            <div  class="friends-image">
-                                        <img src="${user.coverImage}" alt="${user.username}">
+                            <div class="friends-image">
+                                <a href="/home/users/${user.id}">
+                                    <img src="${user.coverImage}" alt="${user.normalizedUserName}">
+                                </a>
                                 <div class="icon">
-                                    <i class="flaticon-user"></i>
+                                    <a href="/home/users/${user.id}"><i class="flaticon-user"></i></a>
                                 </div>
                             </div>
                             <div class="friends-content">
                                 <div class="friends-info d-flex justify-content-between align-items-center">
-                                            <img class="user-image" src="${user.imageUrl}" alt="${user.username}">
+                                        <a href="/home/users/${user.id}">
+                                        <img src="${user.imageUrl}" alt="${user.username}">
+                                    </a>
                                     <div class="text ms-3">
-                                            <h3>${user.normalizedUserName}</h3>
-                                                <span>${truncateText(user.email, 15)}</span>
+                                        <h3>${user.normalizedUserName}</h3>
+                                        <span>${truncateText(user.email, 15)}</span>
                                     </div>
                                 </div>
                                 <ul class="statistics">
                                     <li>
-                                        <a href="#">
+                                        <a>
                                             <span class="item-number">0</span>
                                             <span class="item-text">Likes</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#">
+                                        <a>
                                             <span class="item-number">0</span>
                                             <span class="item-text">Following</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#">
+                                        <a>
                                             <span class="item-number">0</span>
                                             <span class="item-text">Followers</span>
                                         </a>
                                     </li>
                                 </ul>
                                 <div class="button-group d-flex justify-content-between align-items-center">
-                                    <div class="add-friend-btn">
-                                        <button type="submit">Add Friend</button>
-                                    </div>
-                                    <div class="send-message-btn">
-                                        <button type="submit">Send Message</button>
+                                    <div class="row add-friend-btn w-100" style="width: 100%;">
+                                        <button type="submit" class="mx-auto">Add Friend</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>`;
+
                 content += subContent;
             }
             container.innerHTML += content;

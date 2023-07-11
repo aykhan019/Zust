@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Reflection.Metadata;
+using Zust.Business.Abstract;
 using Zust.Web.Helpers.Constants;
 
 namespace Zust.Web.Controllers.ViewControllers
@@ -13,6 +14,13 @@ namespace Zust.Web.Controllers.ViewControllers
     [Controller]
     public class HomeController : Controller
     {
+        private readonly IUserService _userService;
+
+        public HomeController(IUserService userService)
+        {
+            _userService = userService;
+        }
+
         /// <summary>
         /// Displays the Birthday view.
         /// </summary>
@@ -22,13 +30,20 @@ namespace Zust.Web.Controllers.ViewControllers
             return View();
         }
 
-        /// <summary>
-        /// Displays the Users view.
-        /// </summary>
-        /// <returns>The Users view.</returns>
-        public IActionResult Users()
+       
+        public async Task<IActionResult> Users(string id = Constants.StringEmpty)
         {
-            return View();
+            if (id == Constants.StringEmpty)
+            {
+                return View();
+            }
+
+            var user = await _userService.GetUserById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(UrlConstants.UserProfile, user);
         }
 
         /// <summary>
