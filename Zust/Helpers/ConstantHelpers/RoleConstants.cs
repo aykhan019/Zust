@@ -1,4 +1,4 @@
-﻿namespace Zust.Web.Helpers.Constants
+﻿namespace Zust.Web.Helpers.ConstantHelpers
 {
     /// <summary>
     /// A collection of role constants representing different user roles in the application.

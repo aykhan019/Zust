@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Zust.Business.Abstract;
 using Zust.Entities.Models;
 using Zust.Web.Entities;
-using Zust.Web.Helpers.Constants;
+using Zust.Web.Helpers.ConstantHelpers;
 
 namespace Zust.Web.Controllers.ApiControllers
 {

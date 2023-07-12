@@ -1,6 +1,6 @@
 @using Microsoft.AspNetCore.Identity;
 @using Zust.Entities.Models;
-@using Zust.Web.Helpers.Constants;
+@using Zust.Web.Helpers.ConstantHelpers;
 @{
     var userManager = Context.RequestServices.GetService<UserManager<User>>();
     var user = await userManager.GetUserAsync(Context.User);
@@ -30,9 +30,8 @@
 
     <div class="profile-cover-image">
         <a href="#">
-            <img src="~/assets/images/my-profile-bg.jpg" alt="image">
+            <img src="@user.CoverImage" alt="image">
         </a>
-        <a href="#" class="edit-cover-btn">Edit Cover</a>
     </div>
 
     <div class="profile-info-box">

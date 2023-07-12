@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Reflection.Metadata;
 using Zust.Business.Abstract;
-using Zust.Web.Helpers.Constants;
+using Zust.Web.Helpers.ConstantHelpers;
 
 namespace Zust.Web.Controllers.ViewControllers
 {

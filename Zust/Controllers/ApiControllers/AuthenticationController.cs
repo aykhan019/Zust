@@ -9,7 +9,8 @@ using Zust.Business.Abstract;
 using Zust.DataAccess.Abstract;
 using Zust.DataAccess.Concrete;
 using Zust.Entities.Models;
-using Zust.Web.Helpers.Constants;
+using Zust.Web.Helpers.ConstantHelpers;
+using Zust.Web.Helpers.ImageHelpers;
 using Zust.Web.Models;
 
 namespace Zust.Web.Controllers.ApiControllers
@@ -85,7 +86,8 @@ namespace Zust.Web.Controllers.ApiControllers
             var user = new User
             {
                 UserName = model.Username,
-                Email = model.Email
+                Email = model.Email,
+                CoverImage = ImageHelper.GetRandomCoverImage()
             };
 
             // Register the user with the provided password
@@ -128,6 +130,12 @@ namespace Zust.Web.Controllers.ApiControllers
 
                 if (result.Succeeded)
                 {
+                    //var user = new User()
+                    //{
+                    //     UserName = model.Username
+                    //};
+                    //await _signInManager.SignInAsync(user , isPersistent: model.RememberMe);
+
                     return RedirectToAction(UrlConstants.Index, UrlConstants.Home);
                 }
             }

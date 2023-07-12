@@ -10,7 +10,7 @@ namespace Zust.Entities.Models
     {
         public string? ImageUrl { get; set; } = Constants.DefaultProfileImagePath;
 
-        public string? CoverImage { get; set; } = Constants.DefaultCoverImagePath;
+        public string? CoverImage { get; set; } 
 
         public string? Birthday { get; set; }
 

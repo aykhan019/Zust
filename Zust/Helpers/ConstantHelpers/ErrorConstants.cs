@@ -1,4 +1,4 @@
-﻿namespace Zust.Web.Helpers.Constants
+﻿namespace Zust.Web.Helpers.ConstantHelpers
 { 
     /// <summary>
     /// A collection of error constants for common error scenarios in the application.

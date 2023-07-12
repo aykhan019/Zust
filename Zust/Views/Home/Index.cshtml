@@ -1,62 +1,51 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity;
+@using Zust.Entities.Models;
+@using Zust.Web.Helpers.ConstantHelpers;
+@{
+    var userManager = Context.RequestServices.GetService<UserManager<User>>();
+    var user = await userManager.GetUserAsync(Context.User);
     ViewData["Title"] = "Zust - Home Page";
 }
+
+<style>
+    .profile-image{
+        height: 100px !important;
+        width: 100px !important;
+        object-fit: cover;
+    }
+</style>
 
 <div class="row">
     <div class="col-lg-3 col-md-12">
         <aside class="widget-area">
             <div class="widget widget-view-profile">
                 <div class="profile-box d-flex justify-content-between align-items-center">
-                    <a href="/home/my-profile"><img src="~/assets/images/user/user-1.jpg" alt="image"></a>
+                    <a href="/home/my-profile"><img src="@user.ImageUrl" alt="image" class="profile-image"></a>
                     <div class="text ms-2">
-                        <h3><a href="/home/my-profile">Matthew Turner</a></h3>
-                        <span>Washington</span>
+                        <h3><a href="/home/my-profile">@user.UserName</a></h3>
+                        <span>@user.Birthplace</span>
                     </div>
                 </div>
                 <ul class="profile-statistics">
                     <li>
-                        <a href="#">
+                        <a>
                             <span class="item-number">59862</span>
                             <span class="item-text">Likes</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a>
                             <span class="item-number">8591</span>
                             <span class="item-text">Following</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a>
                             <span class="item-number">784514</span>
                             <span class="item-text">Followers</span>
                         </a>
                     </li>
                 </ul>
-                <div class="profile-likes">
-                    <span><i class="flaticon-heart-shape-outline"></i> New Likes This Week</span>
-
-                    <ul>
-                        <li>
-                            <a href="#"><img src="~/assets/images/user/user-22.jpg" alt="image"></a>
-                        </li>
-                        <li>
-                            <a href="#"><img src="~/assets/images/user/user-23.jpg" alt="image"></a>
-                        </li>
-                        <li>
-                            <a href="#"><img src="~/assets/images/user/user-24.jpg" alt="image"></a>
-                        </li>
-                        <li>
-                            <a href="#"><img src="~/assets/images/user/user-25.jpg" alt="image"></a>
-                        </li>
-                        <li>
-                            <a href="#"><img src="~/assets/images/user/user-26.jpg" alt="image"></a>
-                        </li>
-                        <li>
-                            <a href="#"><img src="~/assets/images/user/user-27.jpg" alt="image"></a>
-                        </li>
-                    </ul>
-                </div>
                 <div class="profile-btn">
                     <a href="/home/my-profile" class="default-btn">View Profile</a>
                 </div>

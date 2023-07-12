@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Xml.Linq;
 using Zust.Business.Abstract;
 using Zust.Business.Concrete;
 using Zust.Core.Concrete.EntityFramework;
@@ -13,7 +14,7 @@ using Zust.DataAccess.Abstract;
 using Zust.DataAccess.Concrete;
 using Zust.DataAccess.Concrete.EFEntityFramework;
 using Zust.Entities.Models;
-using Zust.Web.Helpers.Constants;
+using Zust.Web.Helpers.ConstantHelpers;
 using Zust.Web.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -78,28 +79,31 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Configure routes
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapControllerRoute("Default", "{controller=Account}/{action=Login}");
-//    endpoints.MapHub<UserHub>("/userhub");
-//});
-
-// Existing configuration
-
-
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapControllerRoute(
-        name: "UsersWithId",
-        pattern: "home/users/{id}",
-        defaults: new { controller = "Home", action = "Users" }
-    );
-
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Account}/{action=Login}/{id?}"
-    );
+    endpoints.MapControllerRoute(name : "Default", pattern: "{controller=Home}/{action=Index}");
+    endpoints.MapHub<UserHub>("/userhub");
 });
+
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+
+//app.UseEndpoints(endpoints =>
+//{
+//endpoints.MapControllerRoute(
+//    name: "UsersWithId",
+//    pattern: "home/users/{id}",
+//    defaults: new { controller = "Home", action = "Users" }
+//);
+
+//endpoints.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Account}/{action=Login}"
+//);
+//});
 
 // Other configurations
 

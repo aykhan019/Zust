@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Zust.Entities.Models;
-using Zust.Web.Helpers.Constants;
+using Zust.Web.Helpers.ConstantHelpers;
 using Zust.Web.Models;
 
 namespace Zust.Web.Controllers.ViewControllers

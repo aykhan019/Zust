@@ -1,4 +1,4 @@
-﻿namespace Zust.Web.Helpers.Constants
+﻿namespace Zust.Web.Helpers.ConstantHelpers
 {
     /// <summary>
     /// Contains constant values related to tokens used in the application.

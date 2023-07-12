@@ -1,4 +1,4 @@
-﻿namespace Zust.Web.Helpers.Constants
+﻿namespace Zust.Web.Helpers.ConstantHelpers
 {
     /// <summary>
     /// A collection constants in the application.
@@ -25,7 +25,13 @@
         public const string DefaultProfileImagePath = "/assets/images/user/defaultUserImage.png";
 
         public const string NoData = "No Data";
+
         public const int TakeUserCount = 8;
+
         public const string StringEmpty = "";
+
+        public const string FilesFolderPath = "~/../Files";
+
+        public const string CoversFile = "covers.txt";
     }
 }
