@@ -16,6 +16,7 @@
         public const string LiveChat = "live-chat";
 
         public const string MyProfile = "my-profile";
+
         public const string UserProfile = "user-profile";
 
         public const string Register = "register";
@@ -44,6 +45,12 @@
 
         public const string GetAllUsersCount = "GetAllUsersCount";
 
+        public const string FriendRequest = "api/FriendRequest";
 
+        public const string AddFriendRequest = "AddFriendRequest";
+
+        public const string CancelFriendRequest = "CancelFriendRequest";
+
+        public const string GetSentFriendRequests = "GetSentFriendRequests";
     }
 }

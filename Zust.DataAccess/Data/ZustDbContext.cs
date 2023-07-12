@@ -29,5 +29,6 @@ namespace Zust.Core.Concrete.EntityFramework
         }
 
         public DbSet<Friendship>? Friendships { get; set; }
+        public DbSet<FriendRequest>? FriendRequest { get; set; }
     }
 }

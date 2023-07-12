@@ -1,6 +1,9 @@
 ﻿@using Zust.Web.Helpers.ConstantHelpers
-
+@using Microsoft.AspNetCore.Identity;
+@using Zust.Entities.Models;
 @{
+    var userManager = Context.RequestServices.GetService<UserManager<User>>();
+    var user = await userManager.GetUserAsync(Context.User);
     var TakeUserCount = Constants.TakeUserCount;
     ViewData["Title"] = "Zust - Users";
 }
@@ -16,6 +19,41 @@
         background-color: transparent;
         border: 1px solid transparent;
     }
+
+
+
+    .single-friends-card:hover .red-icon {
+        background-color: var(--red-color) !important;
+        color: var(--white-color) !important;
+    }
+
+    .single-friends-card:hover .yellow-icon {
+        background-color: var(--yellow-color) !important;
+        color: var(--black-color) !important;
+    }
+
+    .single-friends-card:hover .main-icon {
+        background-color: var(--main-color) !important;
+        color: var(--white-color) !important;
+    }
+
+    .single-friends-card:hover .send-request-btn {
+        background-color: var(--main-color) !important;
+        color: var(--white-color) !important;
+        border: 1px solid var(--main-color) !important;
+    }
+
+    .single-friends-card:hover .remove-friend-btn {
+        background-color: var(--red-color) !important;
+        color: var(--white-color) !important;
+        border: 1px solid var(--red-color) !important;
+    }
+
+    .single-friends-card:hover .cancel-btn {
+        background-color: var(--yellow-color) !important;
+        color: var(--black-color) !important;
+        border: 1px solid var(--yellow-color) !important;
+    }
 </style>
 
 
@@ -28,8 +66,8 @@
     <div class="tab-pane fade show active" role="tabpanel">
         <div class="row justify-content-center" id="users">
         </div>
-         <div id="loadMore" class="load-more-posts-btn">
-            <button class="transparent-button" onclick="ShowUsersAsync()"><i class="flaticon-loading"></i> Load More</button>
+        <div id="loadMore" class="load-more-posts-btn">
+            <button class="transparent-button" onclick="LoadUsers()"><i class="flaticon-loading"></i> Load More</button>
         </div>
     </div>
 </div>
@@ -37,11 +75,43 @@
 
 <script src="~/assets/js/jquery.min.js"></script>
 <script>
-    var userCountInView = 0;
+    var usersInView = [];
     var takeUserCount = @TakeUserCount;
     var container = document.getElementById("users");
 
-    function GetAllUsersCount(){
+    async function getSentFriendRequests() {
+        var id = '@user.Id.ToString()';
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: `/api/FriendRequest/GetSentFriendRequests?userId=` + id,
+                method: 'GET',
+                success: function (data) {
+                    resolve(data);
+                },
+                error: function (error) {
+                    alert("Error occurred: " + error.responseText);
+                }
+            });
+        });
+    }
+
+    var sentFriendRequests;
+
+    async function callGetSentFriendRequests() {
+        try {
+            sentFriendRequests = await getSentFriendRequests();
+        } catch (error) {
+            alert("Error occurred: " + error.responseText);
+        }
+    }
+
+    callGetSentFriendRequests();
+
+    async function LoadUsers() {
+        await GetUsersAsync();
+    }
+
+    function GetAllUsersCount() {
         return new Promise(function (resolve, reject) {
             $.ajax({
                 url: '/api/User/GetAllUsersCount',
@@ -50,100 +120,109 @@
                     resolve(data);
                 },
                 error: function (error) {
-                    reject(error);
+                    alert("Error occurred: " + error.responseText);
                 }
             });
         });
     }
 
-    function GetUsers() {
-        return new Promise(function (resolve, reject) {
-            $.ajax({
-                url: '/api/User/GetUsers',
-                method: 'GET',
-                data: {
-                    startIndex: userCountInView,
-                    userCount: takeUserCount
-                },
-                success: function (data) {
-                    resolve(data);
-                },
-                error: function (error) {
-                    reject(error);
-                }
-            });
+    function GetUsersAsync() {
+        $.ajax({
+            url: '/api/User/GetUsers',
+            method: 'GET',
+            data: {
+                startIndex: usersInView.length,
+                userCount: takeUserCount
+            },
+            success: function (data) {
+                usersInView.push(...data);
+                ShowUsersAsync();
+            },
+            error: function (error) {
+                alert("Error occurred: " + error.responseText);
+            }
         });
     }
 
     async function ShowUsersAsync() {
-        var users = await GetUsers();
-        console.log(users);
-        if (users != null) {
-            userCountInView += users.length;
+        if (usersInView.length === 0) {
+            container.style.padding = "30px";
+            container.innerHTML = "No Users Found";
+        }
+        else {
             var allUsersCount = await GetAllUsersCount();
-            if (userCountInView == allUsersCount - 1) { // Current User Subtracted
+            if (usersInView.length == allUsersCount - 1) { // Current User Subtracted
                 document.getElementById("loadMore").style.display = "none";
             }
             var content = '';
-            for (var i = 0; i < users.length; i++) {
-                var user = users[i];
+            for (var i = 0; i < usersInView.length; i++) {
+                var user = usersInView[i];
+                let btnContent = '';
+                let iconClass = '';
+                if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Pending')) {
+                    btnContent = `<button onclick="cancelFriendRequest('${user.id}')" class="mx-auto cancel-btn">Cancel Friend Request</button>`;
+                    iconClass = 'yellow-icon';
+                } else if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Accepted')) {
+                    btnContent = `<button onClick="removeFriend('${user.id}')" class="mx-auto remove-friend-btn">Remove Friend</button>`;
+                    iconClass = 'red-icon';
+                } else {
+                    btnContent = `<button onclick="sendFriendRequest('${user.id}')" type="submit" class="mx-auto send-request-btn">Send Friend Request</button>`;
+                    iconClass = 'main-icon';
+                }
+
                 var subContent = `
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-friends-card">
-                            <div class="friends-image">
-                                <a href="/home/users?id=${user.id}">
-                                    <img src="${user.coverImage}" alt="${user.normalizedUserName}">
-                                </a>
-                                <div class="icon">
-                                     <a href="/home/users?id=${user.id}"><i class="flaticon-user"></i></a>
-                                </div>
-                            </div>
-                            <div class="friends-content">
-                                <div class="friends-info d-flex justify-content-between align-items-center">
-                                    <a href="/home/users?id=${user.id}">
-                                        <img src="${user.imageUrl}" alt="${user.username}">
-                                    </a>
-                                    <div class="text ms-3">
-                                        <h3>${user.normalizedUserName}</h3>
-                                        <span>${truncateText(user.email, 15)}</span>
-                                    </div>
-                                </div>
-                                <ul class="statistics">
-                                    <li>
-                                        <a>
-                                            <span class="item-number">0</span>
-                                            <span class="item-text">Likes</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <span class="item-number">0</span>
-                                            <span class="item-text">Following</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <span class="item-number">0</span>
-                                            <span class="item-text">Followers</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <div class="button-group d-flex justify-content-between align-items-center">
-                                    <div class="row add-friend-btn w-100" style="width: 100%;">
-                                        <button type="submit" class="mx-auto">Add Friend</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
+                                        <div class="col-lg-3 col-sm-6">
+                                            <div class="single-friends-card">
+                                                <div class="friends-image">
+                                                    <a href="/home/users?id=${user.id}">
+                                                        <img src="${user.coverImage}" alt="${user.normalizedUserName}">
+                                                    </a>
+                                                    <div class="icon">
+                                                         <a href="/home/users?id=${user.id}"><i class="flaticon-user ${iconClass}"></i></a>
+                                                    </div>
+                                                </div>
+                                                <div class="friends-content">
+                                                    <div class="friends-info d-flex justify-content-between align-items-center">
+                                                        <a href="/home/users?id=${user.id}">
+                                                            <img src="${user.imageUrl}" alt="${user.username}">
+                                                        </a>
+                                                        <div class="text ms-3">
+                                                            <h3>${user.normalizedUserName}</h3>
+                                                            <span>${truncateText(user.email, 15)}</span>
+                                                        </div>
+                                                    </div>
+                                                    <ul class="statistics">
+                                                        <li>
+                                                            <a>
+                                                                <span class="item-number">0</span>
+                                                                <span class="item-text">Likes</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a>
+                                                                <span class="item-number">0</span>
+                                                                <span class="item-text">Following</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a>
+                                                                <span class="item-number">0</span>
+                                                                <span class="item-text">Followers</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="button-group d-flex justify-content-between align-items-center">
+                                                        <div class="row add-friend-btn w-100" style="width: 100%;">
+                                                            ${btnContent}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>`;
 
                 content += subContent;
             }
-            container.innerHTML += content;
-        }
-        else {
-            container.style.padding = "30px";
-            container.innerHTML = "No Users Found";
+            container.innerHTML = content;
         }
     }
 
@@ -155,6 +234,33 @@
         }
     }
 
+    function sendFriendRequest(receiverId) {
+        $.ajax({
+            url: '/api/FriendRequest/AddFriendRequest?receiverId=' + receiverId,
+            method: 'POST',
+            success: async function () {
+                await callGetSentFriendRequests();
+                ShowUsersAsync();
+            },
+            error: function (error) {
+                alert("Error occurred: " + error.responseText);
+            }
+        });
+    }
 
-    ShowUsersAsync();
+    function cancelFriendRequest(receiverId) {
+        $.ajax({
+            url: '/api/FriendRequest/CancelFriendRequest?receiverId=' + receiverId,
+            method: 'POST',
+            success: async function () {
+                await callGetSentFriendRequests();
+                ShowUsersAsync();
+            },
+            error: function (error) {
+                alert("Error occurred: " + error.responseText);
+            }
+        });
+    }
+
+    LoadUsers();
 </script>

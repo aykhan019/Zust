@@ -44,5 +44,7 @@
         /// Represents the error message for general registration error.
         /// </summary>
         public const string RegisterError = "An error occurred during the registration process.";
+
+        public const string FriendRequestNotFound = "Friend request was not found";
     }
 }

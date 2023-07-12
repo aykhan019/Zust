@@ -44,13 +44,15 @@ Default CSS
 :root {
     --main-font-family: 'Open Sans', sans-serif;
     --heading-font-family: 'Montserrat', sans-serif;
-    --main-color:#c32aa3;
-    --optional-color: #2E3AB8;
+    --main-color: #198754;
+    --optional-color: #4AD27B;
     --white-color: #ffffff;
     --black-color: #515355;
     --paragraph-color: #6B7C8F;
     --font-size: 16px;
     --transition: .4s;
+    --red-color: #FF0000;
+    --yellow-color: #FFFF00
 }
 body {
     padding: 0;
@@ -4180,9 +4182,9 @@ My Profile Area CSS
             }
         }
     }
-    &:hover {
-        .friends-image {
-            .icon {
+  /*      &:hover {
+            .friends-image {
+                .icon {
                 a {
                     i {
                         background-color: var(--main-color);
@@ -4202,7 +4204,7 @@ My Profile Area CSS
                 }
             }
         }
-    }
+    }*/
 }
 .photos-inner-box-style {
     background-color: var(--white-color);

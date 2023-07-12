@@ -42,13 +42,15 @@ Default CSS
 :root {
     --main-font-family: 'Open Sans', sans-serif;
     --heading-font-family: 'Montserrat', sans-serif;
-    --main-color: #3644D9;
-    --optional-color: #2E3AB8;
+    --main-color: #198754;
+    --optional-color: #4AD27B;
     --white-color: #ffffff;
     --black-color: #515355;
     --paragraph-color: #6B7C8F;
     --font-size: 16px;
     --transition: .4s;
+    --red-color: #FF0000;
+    --yellow-color: #FFFF00;
 }
 
 body {
@@ -4759,7 +4761,7 @@ My Profile Area CSS
                 transition: var(--transition);
             }
 
-    .single-friends-card:hover .friends-image .icon a i {
+ /*   .single-friends-card:hover .friends-image .icon a i {
         background-color: var(--main-color);
         color: var(--white-color);
     }
@@ -4768,7 +4770,7 @@ My Profile Area CSS
         background-color: var(--main-color);
         border: 1px solid var(--main-color);
         color: var(--white-color);
-    }
+    }*/
 
 .photos-inner-box-style {
     background-color: var(--white-color);

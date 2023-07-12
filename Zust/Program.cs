@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection.Emit;
 using System.Text;
 using System.Xml.Linq;
 using Zust.Business.Abstract;
@@ -32,6 +34,8 @@ builder.Services.AddDbContext<ZustDbContext>(opt =>
 // Dependency injection configuration
 builder.Services.AddScoped<IUserDal, EFUserDal>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IFriendRequestDal, EFFriendRequestDal>();
+builder.Services.AddScoped<IFriendRequestService, FriendRequestService>();
 
 // Register Session
 builder.Services.AddSession();
@@ -84,28 +88,6 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(name : "Default", pattern: "{controller=Home}/{action=Index}");
     endpoints.MapHub<UserHub>("/userhub");
 });
-
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-
-
-//app.UseEndpoints(endpoints =>
-//{
-//endpoints.MapControllerRoute(
-//    name: "UsersWithId",
-//    pattern: "home/users/{id}",
-//    defaults: new { controller = "Home", action = "Users" }
-//);
-
-//endpoints.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Account}/{action=Login}"
-//);
-//});
-
-// Other configurations
 
 // Uncomment the following line if you want to redirect the root URL to a specific route
 app.UseRewriter(new RewriteOptions().AddRedirect("^$", "/home/index"));

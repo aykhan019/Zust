@@ -4,10 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Zust.Core.Abstraction;
 
 namespace Zust.Entities.Models
 {
-    public class Friendship
+    public class Friendship : IEntity
     {
         public int FriendshipId { get; set; }
 

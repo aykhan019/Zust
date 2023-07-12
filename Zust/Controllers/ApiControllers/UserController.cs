@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Zust.Business.Abstract;
 using Zust.Entities.Models;
 using Zust.Web.Helpers.ConstantHelpers;
+using Zust.Web.Helpers.UserHelpers;
 
 namespace Zust.Web.Controllers.ApiControllers
 {
@@ -12,15 +13,11 @@ namespace Zust.Web.Controllers.ApiControllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly UserManager<User> _userManager;
-
-
-        public UserController(IUserService userService, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
+    
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _userManager = userManager;
-            _httpContextAccessor = httpContextAccessor;
+           
         }
 
         [HttpGet(UrlConstants.GetAllUsersCount)]
@@ -42,9 +39,10 @@ namespace Zust.Web.Controllers.ApiControllers
         {
             try
             {
+                var serviceProvider = HttpContext.RequestServices;
                 var users = await _userService.GetAllUsersAsync();
-                var currentUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
                 var list = users.ToList();
+                var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
                 // Excluded the current user to avoid displaying it among Zust Users, as the current user is the one viewing the user list.
                 list.RemoveAll(u => u.Id == currentUser.Id);
                 var range =new Range(startIndex, startIndex + userCount);
