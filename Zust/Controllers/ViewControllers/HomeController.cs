@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using System.Reflection.Metadata;
 using Zust.Business.Abstract;
 using Zust.Web.Helpers.ConstantHelpers;
 
@@ -14,8 +12,15 @@ namespace Zust.Web.Controllers.ViewControllers
     [Controller]
     public class HomeController : Controller
     {
+        /// <summary>
+        /// Gets the user service used by the controller.
+        /// </summary>
         private readonly IUserService _userService;
 
+        /// <summary>
+        /// Initializes a new instance of the HomeController class with the specified user service.
+        /// </summary>
+        /// <param name="userService">The user service to be used by the controller.</param>
         public HomeController(IUserService userService)
         {
             _userService = userService;
@@ -30,7 +35,11 @@ namespace Zust.Web.Controllers.ViewControllers
             return View();
         }
 
-       
+        /// <summary>
+        /// Renders the user profile view.
+        /// </summary>
+        /// <param name="id">The ID of the user.</param>
+        /// <returns>The user profile view.</returns>
         public async Task<IActionResult> Users(string id = Constants.StringEmpty)
         {
             if (id == Constants.StringEmpty)

@@ -1,19 +1,11 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.Reflection.Emit;
-using System.Text;
-using System.Xml.Linq;
 using Zust.Business.Abstract;
 using Zust.Business.Concrete;
 using Zust.Core.Concrete.EntityFramework;
 using Zust.DataAccess.Abstract;
-using Zust.DataAccess.Concrete;
 using Zust.DataAccess.Concrete.EFEntityFramework;
 using Zust.Entities.Models;
 using Zust.Web.Helpers.ConstantHelpers;
@@ -41,11 +33,10 @@ builder.Services.AddScoped<IFriendRequestService, FriendRequestService>();
 builder.Services.AddSession();
 
 // Register Identity
-builder.Services.AddIdentity<User, Role>()
-    .AddEntityFrameworkStores<ZustDbContext>()
-    .AddSignInManager<SignInManager<User>>()
-    .AddDefaultTokenProviders();
-
+builder.Services.AddIdentity<User, Zust.Entities.Models.Role>()
+                .AddEntityFrameworkStores<ZustDbContext>()
+                .AddSignInManager<SignInManager<User>>()
+                .AddDefaultTokenProviders();
 
 // Register AutoMapper 
 builder.Services.AddAutoMapper(typeof(Program));

@@ -6,6 +6,11 @@
     public class UserProfile
     {
         /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
+        public string? UserName { get; set; }
+
+        /// <summary>
         /// Gets or sets the email.
         /// </summary>
         public string? Email { get; set; }

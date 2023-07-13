@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Zust.Entities.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using Zust.Web.Helpers.ConstantHelpers;
 using Zust.Web.Models;
 
