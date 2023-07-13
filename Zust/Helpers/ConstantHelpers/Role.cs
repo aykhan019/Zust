@@ -3,7 +3,7 @@
     /// <summary>
     /// A collection of role constants representing different user roles in the application.
     /// </summary>
-    public class RoleConstants
+    public static class Role
     {
         /// <summary>
         /// Represents the role for a regular user.

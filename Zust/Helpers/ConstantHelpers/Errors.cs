@@ -1,9 +1,9 @@
 ﻿namespace Zust.Web.Helpers.ConstantHelpers
-{ 
+{
     /// <summary>
     /// A collection of error constants for common error scenarios in the application.
     /// </summary>
-    public class ErrorConstants
+    public static class Errors
     {
         /// <summary>
         /// Represents the key for the username-related error.
@@ -45,6 +45,9 @@
         /// </summary>
         public const string RegisterError = "An error occurred during the registration process.";
 
+        /// <summary>
+        /// Represents the error message for when a friend request is not found.
+        /// </summary>
         public const string FriendRequestNotFound = "Friend request was not found";
     }
 }

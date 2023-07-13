@@ -102,6 +102,16 @@ namespace Zust.Web.Controllers.ViewControllers
         }
 
         /// <summary>
+        /// Displays the Help and Support view.
+        /// </summary>
+        /// <returns>The Help and Support view.</returns>
+        [HttpGet($"{Routes.Home}/{Routes.FriendRequests}")]
+        public IActionResult FriendRequests()
+        {
+            return View(Routes.FriendRequests);
+        }
+
+        /// <summary>
         /// Displays the Index view.
         /// </summary>
         /// <returns>The Index view.</returns>

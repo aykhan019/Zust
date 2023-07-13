@@ -38,3 +38,28 @@ function showToast(message, color) {
     let toast2 = new bootstrap.Toast(toast);
     toast2.show();
 }
+
+function getDateTimeDifference(dateTime) {
+    const requestTime = new Date(dateTime);
+    const currentTime = new Date();
+
+    // Calculate the time difference in milliseconds
+    const difference = currentTime.getTime() - requestTime.getTime();
+
+    // Convert milliseconds to seconds, minutes, hours, and days
+    const seconds = Math.floor(difference / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    // Format the result as a string
+    if (days > 0) {
+        return days + " day(s) ago";
+    } else if (hours > 0) {
+        return hours + " hour(s) ago";
+    } else if (minutes > 0) {
+        return minutes + " minute(s) ago";
+    } else {
+        return seconds + " second(s) ago";
+    }
+}

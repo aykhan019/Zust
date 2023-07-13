@@ -28,6 +28,8 @@ builder.Services.AddScoped<IUserDal, EFUserDal>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFriendRequestDal, EFFriendRequestDal>();
 builder.Services.AddScoped<IFriendRequestService, FriendRequestService>();
+builder.Services.AddScoped<INotificationDal, EFNotificationDal>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 // Register Session
 builder.Services.AddSession();

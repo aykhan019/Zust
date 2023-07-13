@@ -1,0 +1,87 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using Zust.Entities.Models;
+@{
+    var userManager = Context.RequestServices.GetService<UserManager<User>>();
+    var user = await userManager.GetUserAsync(Context.User);
+    ViewData["Title"] = "Zust - Friend Requests";
+}
+
+<style>
+    .item {
+        width: 400px; /* Increase the width to your desired value */
+    }
+</style>
+
+<div class="all-notifications-body" style="margin-top: 0px; margin-bottom: 0px;">
+
+    <div class="all-notifications-header d-flex justify-content-between align-items-center">
+        <h3>Friend Requests</h3>
+
+        <div class="dropdown">
+            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="flaticon-menu"></i></button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item d-flex align-items-center" href="#"><i class="flaticon-edit"></i> Edit Notifications</a></li>
+                <li><a class="dropdown-item d-flex align-items-center" href="#"><i class="flaticon-private"></i> Hide Notifications</a></li>
+                <li><a class="dropdown-item d-flex align-items-center" href="#"><i class="flaticon-trash"></i> Delete Notifications</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="requestsBody">
+    </div>
+</div>
+
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/functions.js"></script>
+<script>
+    var requestBody = document.getElementById("requestBody");
+
+    async function getReceivedFriendRequests() {
+        var id = '@user.Id.ToString()';
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: `/api/FriendRequest/GetReceivedFriendRequests?userId=` + id,
+                method: 'GET',
+                success: function (data) {
+                    resolve(data);
+                },
+                error: function (error) {
+                    alert("Error occurred: " + error.responseText);
+                }
+            });
+        });
+    }
+
+    function getFriendRequestHtml(friendRequest) {
+        var date = getDateTimeDifference(friendRequest.requestDate)
+        var content = `
+                <div class="item d-flex justify-content-between align-items-center">
+                    <div class="figure">
+                        <a href="/home/users?id=${friendRequest.senderId}"><img src="${friendRequest.sender.imageUrl}" alt="image"></a>
+                    </div>
+                    <div class="text">
+                        <h4><a href="${friendRequest.sender.imageUrl}">${friendRequest.sender.userName}</a></h4>
+                        <span>Sent you a friend request</span>
+                        <span class="main-color">${date}</span>
+                    </div>
+                    <div class="icon">
+                        <a href="#"><i class="flaticon-check-mark"></i></a> <!-- Accept option -->
+                        <a href="#"><i class="flaticon-x-mark"></i></a> <!-- Decline option -->
+                    </div>
+                </div>
+            `;
+        return content;
+    }
+
+    async function showReceivedFriendRequests() {
+        var requests = await getReceivedFriendRequests();
+        for (var i = 0; i < requests.length; i++) {
+            var request = requests[i];
+            var content = getFriendRequestHtml(request);
+            requestBody.innerHTML += content;
+        }
+    }
+
+    showReceivedFriendRequests();
+</script>
+

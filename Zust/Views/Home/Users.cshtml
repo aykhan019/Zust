@@ -54,6 +54,18 @@
         color: var(--black-color) !important;
         border: 1px solid var(--yellow-color) !important;
     }
+
+    .search-box{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+    }
+
+    .search-box input{
+        border-radius: 10px;
+        border : 1px solid gray;
+    }
 </style>
 
 
@@ -64,6 +76,22 @@
 
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" role="tabpanel">
+      @*  <div class="search-box">
+            <form>
+                <input type="text" class="input-search" placeholder="Search">
+                <button type="submit"><i class="ri-search-line"></i></button>
+            </form>
+        </div>*@
+
+        <div class="friends-inner-box-style d-flex justify-content-between align-items-center margin-top-25">
+            <div class="friends-search-box" style="width: 100%;">
+                <div style="border: 1px solid gray; border-radius: 6px;">
+                    <input onkeydown="handleKeyPress(event)" id="searchText" type="text" class="input-search" placeholder="Search users...">
+                    <button onclick="searchUsers()"><i class="ri-search-line"></i></button>
+                </div>
+            </div>
+        </div>
+
         <div class="row justify-content-center" id="users">
         </div>
         <div id="loadMore" class="load-more-posts-btn">
@@ -78,6 +106,40 @@
     var usersInView = [];
     var takeUserCount = @TakeUserCount;
     var container = document.getElementById("users");
+
+
+    function handleKeyPress(event) {
+        if (event.keyCode === 13) { // 13 corresponds to the Enter key
+            event.preventDefault(); // Prevent the default form submission behavior
+            searchUsers(); // Call your desired function here
+        }
+    }
+
+    function hideLoadMore(){
+        document.getElementById("loadMore").style.display = "none";
+    }
+
+    function searchUsers(){
+        hideLoadMore();
+        var searchText = document.getElementById("searchText").value.trim();
+        if (searchText == '') return;
+        GetUsersByText(searchText);
+    }
+
+    function GetUsersByText(text){
+        $.ajax({
+            url: '/api/User/GetUsersByText/' + text,
+            method: 'GET',
+            success: function (data) {
+                console.log(data);
+                usersInView = data;
+                ShowUsersAsync();
+            },
+            error: function (error) {
+                alert("Error occurred: " + error.responseText);
+            }
+        });
+    }
 
     async function getSentFriendRequests() {
         var id = '@user.Id.ToString()';

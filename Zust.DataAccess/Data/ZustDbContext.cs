@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,13 @@ namespace Zust.Core.Concrete.EntityFramework
 {
     public partial class ZustDbContext : IdentityDbContext<User, Role, string>
     {
-        public ZustDbContext(DbContextOptions<ZustDbContext> contextOptions) : base(contextOptions) { }
+        public ZustDbContext(DbContextOptions<ZustDbContext> contextOptions) : base(contextOptions) {
+        }
 
-        public ZustDbContext() { }
+        public ZustDbContext() {
+
+
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -30,5 +35,6 @@ namespace Zust.Core.Concrete.EntityFramework
 
         public DbSet<Friendship>? Friendships { get; set; }
         public DbSet<FriendRequest>? FriendRequest { get; set; }
+        public DbSet<Notification>? Notifications { get; set; }
     }
 }

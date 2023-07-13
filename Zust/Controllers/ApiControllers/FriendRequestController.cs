@@ -94,5 +94,18 @@ namespace Zust.Web.Controllers.ApiControllers
             var friendRequests = await _friendRequestService.GetAllAsync(f => f.SenderId == userId);
             return friendRequests;
         }
+
+        /// <summary>
+        /// Gets the list of friend requests recevied by the specified user.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>A collection of FriendRequest objects.</returns>
+        [HttpGet(Routes.GetReceivedFriendRequests)]
+        public async Task<IEnumerable<FriendRequest>> GetReceivedFriendRequests(string userId)
+        {
+            var friendRequests = await _friendRequestService.GetAllAsync(f => f.ReceiverId == userId);
+            var l = friendRequests.ToList();
+            return friendRequests;
+        }
     }
 }

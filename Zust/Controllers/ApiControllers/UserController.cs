@@ -53,7 +53,6 @@ namespace Zust.Web.Controllers.ApiControllers
         {
             try
             {
-                var serviceProvider = HttpContext.RequestServices;
                 var users = await _userService.GetAllUsersAsync();
                 var list = users.ToList();
                 var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
@@ -80,6 +79,25 @@ namespace Zust.Web.Controllers.ApiControllers
             {
                 var user = await _userService.GetUserById(id);
                 return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(Routes.GetUsersByText)]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers(string text)
+        {
+            try
+            {
+                var users = await _userService.GetAllUsersAsync();
+                var list = users.ToList();
+                var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
+                // Excluded the current user to avoid displaying it among Zust Users, as the current user is the one viewing the user list.
+                list.RemoveAll(u => u.Id == currentUser.Id);
+                var filteredUsers = list.Where(u => u.UserName.ToLower().Contains(text.ToLower()));
+                return Ok(filteredUsers);
             }
             catch (Exception ex)
             {

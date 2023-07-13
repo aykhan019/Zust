@@ -3,7 +3,7 @@
     /// <summary>
     /// Contains constant values for various URLs used in the application.
     /// </summary>
-    public class UrlConstants
+    public static class Routes
     {
         public const string Home = "home";
 
@@ -18,6 +18,8 @@
         public const string MyProfile = "my-profile";
 
         public const string UserProfile = "user-profile";
+
+        public const string FriendRequests = "friend-requests";
 
         public const string Register = "register";
 
@@ -41,6 +43,8 @@
 
         public const string GetUsers = "GetUsers";
 
+        public const string GetUsersByText = "GetUsersByText/{text}";
+
         public const string GetUser = "GetUser/{id}";
 
         public const string GetAllUsersCount = "GetAllUsersCount";
@@ -52,5 +56,7 @@
         public const string CancelFriendRequest = "CancelFriendRequest";
 
         public const string GetSentFriendRequests = "GetSentFriendRequests";
+
+        public const string GetReceivedFriendRequests = "GetReceivedFriendRequests";
     }
 }
