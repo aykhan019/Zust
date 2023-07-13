@@ -5,6 +5,5 @@ namespace Zust.Web.Hubs
     public class UserHub : Hub
     {
 
-
     }
 }

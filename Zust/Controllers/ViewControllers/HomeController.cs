@@ -43,7 +43,7 @@ namespace Zust.Web.Controllers.ViewControllers
             {
                 return NotFound();
             }
-            return View(UrlConstants.UserProfile, user);
+            return View(Routes.UserProfile, user);
         }
 
         /// <summary>
@@ -86,10 +86,10 @@ namespace Zust.Web.Controllers.ViewControllers
         /// Displays the Help and Support view.
         /// </summary>
         /// <returns>The Help and Support view.</returns>
-        [HttpGet($"{UrlConstants.Home}/{UrlConstants.HelpAndSupport}")]
+        [HttpGet($"{Routes.Home}/{Routes.HelpAndSupport}")]
         public IActionResult HelpAndSupport()
         {
-            return View(UrlConstants.HelpAndSupport);
+            return View(Routes.HelpAndSupport);
         }
 
         /// <summary>
@@ -105,10 +105,10 @@ namespace Zust.Web.Controllers.ViewControllers
         /// Displays the Live Chat view.
         /// </summary>
         /// <returns>The Live Chat view.</returns>
-        [HttpGet($"{UrlConstants.Home}/{UrlConstants.LiveChat}")]
+        [HttpGet($"{Routes.Home}/{Routes.LiveChat}")]
         public IActionResult LiveChat()
         {
-            return View(UrlConstants.LiveChat);
+            return View(Routes.LiveChat);
         }
 
         /// <summary>
@@ -133,10 +133,10 @@ namespace Zust.Web.Controllers.ViewControllers
         /// Displays the MyProfile view.
         /// </summary>
         /// <returns>The MyProfile view.</returns>
-        [HttpGet($"{UrlConstants.Home}/{UrlConstants.MyProfile}")]
+        [HttpGet($"{Routes.Home}/{Routes.MyProfile}")]
         public IActionResult MyProfile()
         {
-            return View(UrlConstants.MyProfile);
+            return View(Routes.MyProfile);
         }
 
         /// <summary>

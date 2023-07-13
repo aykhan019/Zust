@@ -9,7 +9,7 @@ using Zust.Web.Helpers.ConstantHelpers;
 namespace Zust.Web.Controllers.ApiControllers
 {
     [ApiController]
-    [Route(UrlConstants.ProfileController)]
+    [Route(Routes.ProfileController)]
     public class ProfileController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -21,7 +21,7 @@ namespace Zust.Web.Controllers.ApiControllers
             _mapper = mapper;
         }
 
-        [HttpPut(UrlConstants.UpdateProfile)]
+        [HttpPut(Routes.UpdateProfile)]
         public async Task<IActionResult> UpdateProfile(UserProfile updatedProfile)
         {
             // Retrieve the existing user profile from the database based on the ID

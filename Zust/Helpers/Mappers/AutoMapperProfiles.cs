@@ -4,9 +4,15 @@ using Zust.Web.Entities;
 
 namespace Zust.Web.Helpers.Mappers
 {
-    public class AutoMapperProfiles: Profile
+    /// <summary>
+    /// Class responsible for defining AutoMapper profiles.
+    /// </summary>
+    public class AutoMapperProfiles : Profile
     {
-        public AutoMapperProfiles()
+        /// <summary>
+        /// Initializes a new instance of the AutoMapperProfiles class.
+        /// </summary>
+        public AutoMapperProfiles   ()
         {
             CreateMap<User, UserProfile>().ReverseMap();
         }

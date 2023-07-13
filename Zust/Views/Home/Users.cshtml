@@ -10,17 +10,17 @@
 
 <style>
     .user-image {
-        width: 100px !important; /* Set the desired width */
-        height: 100px !important; /* Set the desired height */
-        object-fit: cover !important; /* Maintain aspect ratio and cover the container */
+        max-width: 100px !important;
+        max-height: 100px !important; 
+        width: 100px !important; 
+        height: 100px !important; 
+        object-fit: cover !important; 
     }
 
     .transparent-button {
         background-color: transparent;
         border: 1px solid transparent;
     }
-
-
 
     .single-friends-card:hover .red-icon {
         background-color: var(--red-color) !important;
@@ -184,7 +184,7 @@
                                                 <div class="friends-content">
                                                     <div class="friends-info d-flex justify-content-between align-items-center">
                                                         <a href="/home/users?id=${user.id}">
-                                                            <img src="${user.imageUrl}" alt="${user.username}">
+                                                                <img src="${user.imageUrl}" alt="${user.username}" class="user-image">
                                                         </a>
                                                         <div class="text ms-3">
                                                             <h3>${user.normalizedUserName}</h3>

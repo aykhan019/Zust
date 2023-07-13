@@ -43,10 +43,10 @@ namespace Zust.Web.Controllers.ViewControllers
         /// Displays the forgot password view.
         /// </summary>
         /// <returns>The forgot password view.</returns>
-        [HttpGet($"{UrlConstants.Account}/{UrlConstants.ForgotPassword}")]
+        [HttpGet($"{Routes.Account}/{Routes.ForgotPassword}")]
         public IActionResult ForgotPassword()
         {
-            return View(UrlConstants.ForgotPassword);
+            return View(Routes.ForgotPassword);
         }
     }
 }

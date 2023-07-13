@@ -8,7 +8,7 @@ using Zust.Web.Helpers.UserHelpers;
 
 namespace Zust.Web.Controllers.ApiControllers
 {
-    [Route(UrlConstants.UserController)]
+    [Route(Routes.UserController)]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -20,7 +20,7 @@ namespace Zust.Web.Controllers.ApiControllers
            
         }
 
-        [HttpGet(UrlConstants.GetAllUsersCount)]
+        [HttpGet(Routes.GetAllUsersCount)]
         public async Task<ActionResult<int>> GetAllUsersCount()
         {
             try
@@ -34,7 +34,7 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
-        [HttpGet(UrlConstants.GetUsers)]
+        [HttpGet(Routes.GetUsers)]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers(int startIndex, int userCount)
         {
             try
@@ -54,7 +54,7 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
-        [HttpGet(UrlConstants.GetUser)]
+        [HttpGet(Routes.GetUser)]
         public async Task<ActionResult<IEnumerable<User>>> GetUser(string id)
         {
             try

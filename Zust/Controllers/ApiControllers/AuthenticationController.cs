@@ -77,7 +77,7 @@ namespace Zust.Web.Controllers.ApiControllers
         {
             if (await _userService.UsernameIsTakenAsync(model.Username))
             {
-                model.Errors.Add(ErrorConstants.UsernameIsTakenError);
+                model.Errors.Add(Errors.UsernameIsTakenError);
 
                 return RedirectToAction(UrlConstants.Register, UrlConstants.Account, routeValues: model);
             }
@@ -140,7 +140,7 @@ namespace Zust.Web.Controllers.ApiControllers
                 }
             }
 
-            model.Errors.Add(ErrorConstants.InvalidLoginError);
+            model.Errors.Add(Errors.InvalidLoginError);
 
             return RedirectToAction(UrlConstants.Login, UrlConstants.Account, routeValues: model);
         }

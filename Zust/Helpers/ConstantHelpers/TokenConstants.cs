@@ -3,7 +3,7 @@
     /// <summary>
     /// Contains constant values related to tokens used in the application.
     /// </summary>
-    public class TokenConstants
+    public static class TokenConstants
     {
         /// <summary>
         /// Represents the configuration section key for the token in the app settings.

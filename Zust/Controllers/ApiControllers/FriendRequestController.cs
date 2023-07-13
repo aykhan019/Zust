@@ -7,7 +7,7 @@ using Zust.Web.Helpers.UserHelpers;
 
 namespace Zust.Web.Controllers.ApiControllers
 {
-    [Route(UrlConstants.FriendRequest)]
+    [Route(Routes.FriendRequest)]
     [ApiController]
     public class FriendRequestController : ControllerBase
     {
@@ -18,7 +18,7 @@ namespace Zust.Web.Controllers.ApiControllers
             _friendRequestService = friendRequestService;
         }
 
-        [HttpPost(UrlConstants.AddFriendRequest)]
+        [HttpPost(Routes.AddFriendRequest)]
         public async Task<IActionResult> AddFriendRequest(string receiverId)
         {
             try
@@ -30,7 +30,7 @@ namespace Zust.Web.Controllers.ApiControllers
                     SenderId = currentUser.Id,
                     ReceiverId = receiverId,
                     RequestDate = DateTime.Now,
-                    Status = StatusConstants.Pending  
+                    Status = Status.Pending  
                 };  
                 await _friendRequestService.AddAsync(friendRequest);
                 return Ok();
@@ -41,7 +41,7 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
-        [HttpPost(UrlConstants.CancelFriendRequest)]
+        [HttpPost(Routes.CancelFriendRequest)]
         public async Task<IActionResult> CancelFriendRequest(string receiverId)
         {
             try
@@ -55,7 +55,7 @@ namespace Zust.Web.Controllers.ApiControllers
                 }
                 else
                 {
-                    return BadRequest(ErrorConstants.FriendRequestNotFound);
+                    return BadRequest(Errors.FriendRequestNotFound);
                 }
             }
             catch (Exception ex)
@@ -64,7 +64,7 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
-        [HttpGet(UrlConstants.GetSentFriendRequests)]
+        [HttpGet(Routes.GetSentFriendRequests)]
         public async Task<IEnumerable<FriendRequest>> GetSentFriendRequests(string userId)
         {
             var friendRequests = await _friendRequestService.GetAllAsync(f => f.SenderId == userId);
