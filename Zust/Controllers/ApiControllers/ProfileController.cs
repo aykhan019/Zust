@@ -24,6 +24,7 @@ namespace Zust.Web.Controllers.ApiControllers
         public ProfileController(IUserService userService, IMapper mapper)
         {
             _userService = userService;
+
             _mapper = mapper;
         }
 

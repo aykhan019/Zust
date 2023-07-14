@@ -20,7 +20,6 @@ namespace Zust.Core.Concrete.EntityFramework
 
         public ZustDbContext() {
 
-
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

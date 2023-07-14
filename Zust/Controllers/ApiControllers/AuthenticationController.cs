@@ -53,9 +53,13 @@ namespace Zust.Web.Controllers.ApiControllers
                                         IUserService userService)
         {
             _configuration = configuration;
+
             _signInManager = signInManager;
+
             _userManager = userManager;
+
             _roleManager = roleManager;
+
             _userService = userService;
         }
 
@@ -79,7 +83,9 @@ namespace Zust.Web.Controllers.ApiControllers
             var user = new User
             {
                 UserName = model.Username,
+
                 Email = model.Email,
+
                 CoverImage = ImageHelper.GetRandomCoverImage()
             };
 

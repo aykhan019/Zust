@@ -63,6 +63,22 @@ namespace Zust.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -169,11 +185,35 @@ namespace Zust.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FriendRequest",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SenderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ReceiverId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FriendRequest", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FriendRequest_AspNetUsers_ReceiverId",
+                        column: x => x.ReceiverId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_FriendRequest_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Friendships",
                 columns: table => new
                 {
-                    FriendshipId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FriendshipId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FriendId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
@@ -227,6 +267,16 @@ namespace Zust.Web.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FriendRequest_ReceiverId",
+                table: "FriendRequest",
+                column: "ReceiverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FriendRequest_SenderId",
+                table: "FriendRequest",
+                column: "SenderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Friendships_FriendId",
                 table: "Friendships",
                 column: "FriendId");
@@ -250,7 +300,13 @@ namespace Zust.Web.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "FriendRequest");
+
+            migrationBuilder.DropTable(
                 name: "Friendships");
+
+            migrationBuilder.DropTable(
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

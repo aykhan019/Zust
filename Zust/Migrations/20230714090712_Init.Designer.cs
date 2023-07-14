@@ -12,8 +12,8 @@ using Zust.Core.Concrete.EntityFramework;
 namespace Zust.Web.Migrations
 {
     [DbContext(typeof(ZustDbContext))]
-    [Migration("20230712105846_FriendRequest")]
-    partial class FriendRequest
+    [Migration("20230714090712_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -136,29 +136,30 @@ namespace Zust.Web.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ReceiverId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("SenderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
 
                     b.ToTable("FriendRequest");
                 });
 
             modelBuilder.Entity("Zust.Entities.Models.Friendship", b =>
                 {
-                    b.Property<int>("FriendshipId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FriendshipId"), 1L, 1);
+                    b.Property<string>("FriendshipId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FriendId")
                         .HasColumnType("nvarchar(450)");
@@ -171,6 +172,31 @@ namespace Zust.Web.Migrations
                     b.HasIndex("FriendId");
 
                     b.ToTable("Friendships");
+                });
+
+            modelBuilder.Entity("Zust.Entities.Models.Notification", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Zust.Entities.Models.Role", b =>
@@ -356,6 +382,21 @@ namespace Zust.Web.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Zust.Entities.Models.FriendRequest", b =>
+                {
+                    b.HasOne("Zust.Entities.Models.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId");
+
+                    b.HasOne("Zust.Entities.Models.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId");
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("Zust.Entities.Models.Friendship", b =>

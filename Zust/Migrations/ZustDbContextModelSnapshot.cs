@@ -156,11 +156,8 @@ namespace Zust.Web.Migrations
 
             modelBuilder.Entity("Zust.Entities.Models.Friendship", b =>
                 {
-                    b.Property<int>("FriendshipId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FriendshipId"), 1L, 1);
+                    b.Property<string>("FriendshipId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FriendId")
                         .HasColumnType("nvarchar(450)");

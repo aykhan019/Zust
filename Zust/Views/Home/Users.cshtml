@@ -102,6 +102,8 @@
 
 
 <script src="~/assets/js/jquery.min.js"></script>
+<link rel="stylesheet" href="~/assets//css/main.css"/>
+<script src="~/assets/js/functions.js"></script>
 <script>
     var usersInView = [];
     var takeUserCount = @TakeUserCount;
@@ -208,8 +210,7 @@
 
     async function ShowUsersAsync() {
         if (usersInView.length === 0) {
-            container.style.padding = "30px";
-            container.innerHTML = "No Users Found";
+            container.innerHTML = getNoResultHtml("No results found", "Sorry! We couldn't find any results.");
         }
         else {
             var allUsersCount = await GetAllUsersCount();

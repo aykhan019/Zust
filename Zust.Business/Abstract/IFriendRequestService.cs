@@ -16,5 +16,6 @@ namespace Zust.Business.Abstract
         Task<FriendRequest?> GetAsync(Expression<Func<FriendRequest, bool>  > filter);
         Task DeleteAsync(string id);
         Task DeleteAsync(FriendRequest friendRequest);
+        Task UpdateAsync(FriendRequest friendRequest);
     }
 }

@@ -58,5 +58,7 @@
         public const string GetSentFriendRequests = "GetSentFriendRequests";
 
         public const string GetReceivedFriendRequests = "GetReceivedFriendRequests";
+
+        public const string AcceptRequest = "AcceptRequest";
     }
 }

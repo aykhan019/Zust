@@ -10,7 +10,7 @@ namespace Zust.Entities.Models
 {
     public class Friendship : IEntity
     {
-        public int FriendshipId { get; set; }
+        public string? FriendshipId { get; set; }
 
         public string? UserId { get; set; }
 

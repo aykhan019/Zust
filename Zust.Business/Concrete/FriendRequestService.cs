@@ -34,6 +34,11 @@ namespace Zust.Business.Concrete
             await _friendRequestDal.DeleteAsync(friendRequest);
         }
 
+        public async Task UpdateAsync(FriendRequest friendRequest)
+        {
+            await _friendRequestDal.UpdateAsync(friendRequest);
+        }
+
         public async Task<IEnumerable<FriendRequest>> GetAllAsync(Func<FriendRequest, bool>? filter = null)
         {
             var items = await _friendRequestDal.GetAllAsync();

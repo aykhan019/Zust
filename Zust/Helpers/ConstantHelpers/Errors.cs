@@ -49,5 +49,8 @@
         /// Represents the error message for when a friend request is not found.
         /// </summary>
         public const string FriendRequestNotFound = "Friend request was not found";
+
+
+        public const string AnErrorOccured = "An Error Occured";
     }
 }

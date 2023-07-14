@@ -18,6 +18,7 @@ namespace Zust.Web.Helpers.UserHelpers
             if (httpContext.User.Identity.IsAuthenticated)
             {
                 var userManager = httpContext.RequestServices.GetService<UserManager<User>>();
+
                 return await userManager.GetUserAsync(httpContext.User);
             }
             return null!;

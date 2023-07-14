@@ -31,6 +31,7 @@ namespace Zust.Business.Concrete
         public async Task<bool> UsernameIsTakenAsync(string username)
         {
             var user = await GetUserByUsernameAsync(username);
+
             return user != null;
         }
 

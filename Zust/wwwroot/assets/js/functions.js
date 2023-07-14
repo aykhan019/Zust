@@ -54,12 +54,30 @@ function getDateTimeDifference(dateTime) {
 
     // Format the result as a string
     if (days > 0) {
-        return days + " day(s) ago";
+        return days + (days === 1 ? " day ago" : " days ago");
     } else if (hours > 0) {
-        return hours + " hour(s) ago";
+        return hours + (hours === 1 ? " hour ago" : " hours ago");
     } else if (minutes > 0) {
-        return minutes + " minute(s) ago";
+        return minutes + (minutes === 1 ? " minute ago" : " minutes ago");
     } else {
-        return seconds + " second(s) ago";
+        return seconds + (seconds === 1 ? " second ago" : " seconds ago");
     }
 }
+
+function getNoResultHtml(title, message) {
+    let content = `
+    <div class="empty-icon-container">
+      <div class="animation-container">
+        <div class="bounce"></div>
+        <div class="pebble1"></div>
+        <div class="pebble2"></div>
+        <div class="pebble3"></div>
+      </div>
+      <div>
+        <h2>${title}</h2>
+        <p>${message}</p>
+      </div>
+    </div>`;
+    return content;
+}
+
