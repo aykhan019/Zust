@@ -25,9 +25,9 @@
         min-height: 25px;
     }
 
-        .decline-icon:hover {
-            color: var(--red-color) !important;
-        }
+    .decline-icon:hover {
+        color: var(--red-color) !important;
+    }
 
 
     @@media only screen and (max-width: 700px) {
@@ -102,8 +102,8 @@
                                 <span class="main-color">${date}</span>
                             </div>
                             <div class="icon" class="gap-5">
-                                <a onclick="acceptRequest('${friendRequest.id}')"><i class="flaticon-check-mark accept-icon"></i></a>
-                                <a onclick="declineRequest('${friendRequest.id}')"><i class="flaticon-x-mark decline-icon"></i></a>
+                                <a title="Accept Request" onclick="acceptRequest('${friendRequest.id}')"><i class="flaticon-check-mark accept-icon"></i></a>
+                                <a title="Decline Request" onclick="declineRequest('${friendRequest.id}')"><i class="flaticon-x-mark decline-icon"></i></a>
                             </div>
                         </div>
                     `;
@@ -114,11 +114,13 @@
     async function showReceivedFriendRequests() {
         var requests = await getReceivedFriendRequests();
         if (requests != null && requests.length > 0){
+            var content = '';
             for (var i = 0; i < requests.length; i++) {
                 var request = requests[i];
-                var content = getFriendRequestHtml(request);
-                requestsBody.innerHTML += content;
+                var subContent = getFriendRequestHtml(request);
+                content += subContent;
             }
+            requestsBody.innerHTML = content;
         }
         else{
             requestsBody.innerHTML= getNoResultHtml("No Requests", "You have recieved no friend requests.")
@@ -126,11 +128,29 @@
     }
 
     function acceptRequest(friendRequestId) {
-        alert("ACCEPT " + friendRequestId);
+        $.ajax({
+            url: `/api/FriendRequest/AcceptRequest?requestId=` + friendRequestId,
+            method: 'POST',
+            success: function (data) {
+                showReceivedFriendRequests();
+            },
+            error: function (error) {
+                alert("Error occurred: " + error.responseText);
+            }
+        });
     }
 
     function declineRequest(friendRequestId) {
-        alert("DECLINE " + friendRequestId);
+        $.ajax({
+            url: `/api/FriendRequest/DeclineRequest?requestId=` + friendRequestId,
+            method: 'POST',
+            success: function (data) {
+                showReceivedFriendRequests();
+            },
+            error: function (error) {
+                alert("Error occurred: " + error.responseText);
+            }
+        });
     }
 
     showReceivedFriendRequests();

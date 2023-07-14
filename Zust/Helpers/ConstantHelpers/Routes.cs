@@ -60,5 +60,11 @@
         public const string GetReceivedFriendRequests = "GetReceivedFriendRequests";
 
         public const string AcceptRequest = "AcceptRequest";
+
+        public const string DeclineRequest = "DeclineRequest";
+
+        public const string GetFollowers = "GetFollowers";
+
+        public const string GetFollowings = "GetFollowings";
     }
 }

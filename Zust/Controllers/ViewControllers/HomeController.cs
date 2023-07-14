@@ -47,7 +47,7 @@ namespace Zust.Web.Controllers.ViewControllers
                 return View();
             }
 
-            var user = await _userService.GetUserById(id);
+            var user = await _userService.GetUserByIdAsync(id);
             if (user == null)
             {
                 return NotFound();

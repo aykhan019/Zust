@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 using Zust.Business.Abstract;
+using Zust.Business.Concrete;
 using Zust.Core.Concrete.EntityFramework;
 using Zust.Entities.Models;
 using Zust.Web.Helpers.ConstantHelpers;
@@ -19,16 +20,22 @@ namespace Zust.Web.Controllers.ApiControllers
         /// Gets or sets the friend request service used for friend request-related operations.
         /// </summary>
         private readonly IFriendRequestService _friendRequestService;
+
         private readonly IUserService _userService;
+
+        private readonly IFriendshipService _friendshipService;
 
         /// <summary>
         /// Initializes a new instance of the FriendRequestController class with the required dependencies.
         /// </summary>
         /// <param name="friendRequestService">The service for friend request-related operations.</param>
-        public FriendRequestController(IFriendRequestService friendRequestService, IUserService userService)
+        public FriendRequestController(IFriendRequestService friendRequestService, IUserService userService, IFriendshipService friendshipService)
         {
             _friendRequestService = friendRequestService;
+
             _userService = userService;
+
+            _friendshipService = friendshipService;
         }
 
         /// <summary>
@@ -42,15 +49,22 @@ namespace Zust.Web.Controllers.ApiControllers
             try
             {
                 var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
+
                 var friendRequest = new FriendRequest()
                 {
                     Id = Guid.NewGuid().ToString(),
+
                     SenderId = currentUser.Id,
+
                     ReceiverId = receiverId,
+
                     RequestDate = DateTime.Now,
-                    Status = Status.Pending  
-                };  
+
+                    Status = Status.Pending
+                };
+
                 await _friendRequestService.AddAsync(friendRequest);
+
                 return Ok();
             }
             catch (Exception ex)
@@ -70,10 +84,13 @@ namespace Zust.Web.Controllers.ApiControllers
             try
             {
                 var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
+
                 var friendRequest = await _friendRequestService.GetAsync(f => f.ReceiverId == receiverId && f.SenderId == currentUser.Id);
+
                 if (friendRequest != null)
                 {
                     await _friendRequestService.DeleteAsync(friendRequest);
+
                     return Ok();
                 }
                 else
@@ -98,7 +115,11 @@ namespace Zust.Web.Controllers.ApiControllers
             try
             {
                 var friendRequests = await _friendRequestService.GetAllAsync(f => f.SenderId == userId);
-                return Ok(friendRequests);
+
+                if (friendRequests != null)
+                    return Ok(friendRequests);
+                else 
+                    return BadRequest(Errors.AnErrorOccured);
             }
             catch (Exception ex)
             {
@@ -116,16 +137,15 @@ namespace Zust.Web.Controllers.ApiControllers
         {
             try
             {
-                
-
-
                 var friendRequests = await _friendRequestService.GetAllAsync(f => f.ReceiverId == userId);
-                var friendRequestsList = friendRequests.Where(fr => fr.Status != Status.Accepted).ToList();
+
+                var friendRequestsList = friendRequests.Where(fr => fr.Status == Status.Pending).ToList();
 
                 foreach (var fr in friendRequestsList)
                 {
-                    fr.Sender = await _userService.GetUserById(fr.SenderId);
-                    fr.Receiver = await _userService.GetUserById(fr.ReceiverId);
+                    fr.Sender = await _userService.GetUserByIdAsync(fr.SenderId);
+
+                    fr.Receiver = await _userService.GetUserByIdAsync(fr.ReceiverId);
                 }
 
                 return Ok(friendRequestsList);
@@ -137,28 +157,84 @@ namespace Zust.Web.Controllers.ApiControllers
         }
 
         [HttpPost(Routes.AcceptRequest)]
-        public IActionResult AcceptRequest(string requestId)
+        public async Task<IActionResult> AcceptRequest(string requestId)
         {
-            //var friendRequest = await _friendRequestService.GetAsync(fr => fr.Id == requestId);
-            //if (friendRequest != null)
-            //{
-            //    var friendShip = new Friendship()
-            //    {
-            //         FriendshipId = Guid.NewGuid().ToString(),
-            //          FriendId = friendRequest.SenderId,
-            //           UserId = friendRequest.ReceiverId,
-            //    };
-            //    _userService.AddFriendToUser(_userService.GetUserById(friendRequest.SenderId), friendRequest);
-            //    AddFriendToUser(friendRequest.Sender, friendRequest.Receiver);
-            //    // Other necessary operations
-            //    return Ok(); // Return an appropriate response
-            //}
-            //else
-            //{
-            //    return NotFound(Errors.FriendRequestNotFound);
-            //}
-            return Ok();
+            try
+            {
+                var friendRequest = await _friendRequestService.GetAsync(fr => fr.Id == requestId);
+
+                if (friendRequest != null)
+                {
+                    friendRequest.Status = Status.Accepted;
+
+                    await _friendRequestService.UpdateAsync(friendRequest);
+
+                    var friendShip = new Friendship()
+                    {
+                        FriendshipId = Guid.NewGuid().ToString(),
+
+                        FriendId = friendRequest.SenderId,
+
+                        UserId = friendRequest.ReceiverId
+                    };
+
+                    await _friendshipService.AddFriendship(friendShip);
+
+                    return Ok();
+                }
+                else
+                {   
+                    return NotFound(Errors.FriendRequestNotFound);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        [HttpPost(Routes.DeclineRequest)]
+        public async Task<IActionResult> DeclineRequest(string requestId)
+        {
+            try
+            {
+                var friendRequest = await _friendRequestService.GetAsync(fr => fr.Id == requestId);
+
+                if (friendRequest != null)
+                {
+                    friendRequest.Status = Status.Declined;
+
+                    await _friendRequestService.UpdateAsync(friendRequest);
+
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound(Errors.FriendRequestNotFound);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
+
+
+
+//var list = await _userService.GetAllUsersAsync();
+//var users = list.Take(15);
+//var current = await UserHelper.GetCurrentUserAsync(HttpContext);
+//foreach (var u in users)
+//{
+//    var fr = new FriendRequest()
+//    {
+//        Id = Guid.NewGuid().ToString(),
+//        ReceiverId = current.Id,
+//        SenderId = u.Id,
+//        RequestDate = DateTime.Now,
+//        Status = Status.Pending
+//    };
+//    _friendRequestService.AddAsync(fr);
+//}

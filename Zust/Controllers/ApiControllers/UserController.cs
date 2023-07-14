@@ -16,13 +16,17 @@ namespace Zust.Web.Controllers.ApiControllers
     {
         private readonly IUserService _userService;
 
+        private readonly IFriendshipService _friendshipService;
+
+
         /// <summary>
         /// Initializes a new instance of the UserController class.
         /// </summary>
         /// <param name="userService">The user service used for user-related operations.</param>
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IFriendshipService friendshipService)
         {
             _userService = userService;
+            _friendshipService = friendshipService;
         }
 
         /// <summary>
@@ -35,11 +39,12 @@ namespace Zust.Web.Controllers.ApiControllers
             try
             {
                 var users = await _userService.GetAllUsersAsync();
+
                 return Ok(users.Count());
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex.Message);
+                return Ok(0);
             }
         }
 
@@ -55,11 +60,16 @@ namespace Zust.Web.Controllers.ApiControllers
             try
             {
                 var users = await _userService.GetAllUsersAsync();
+
                 var list = users.ToList();
+
                 var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
+
                 // Excluded the current user to avoid displaying it among Zust Users, as the current user is the one viewing the user list.
                 list.RemoveAll(u => u.Id == currentUser.Id);
+
                 var range = new Range(startIndex, startIndex + userCount);
+
                 return Ok(list.Take(range));
             }
             catch (Exception ex)
@@ -78,7 +88,8 @@ namespace Zust.Web.Controllers.ApiControllers
         {
             try
             {
-                var user = await _userService.GetUserById(id);
+                var user = await _userService.GetUserByIdAsync(id);
+
                 return Ok(user);
             }
             catch (Exception ex)
@@ -88,17 +99,52 @@ namespace Zust.Web.Controllers.ApiControllers
         }
 
         [HttpGet(Routes.GetUsersByText)]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers(string text)
+        public async Task<ActionResult<IEnumerable<User>>> GetUsersByText(string text)
         {
             try
             {
                 var users = await _userService.GetAllUsersAsync();
+
                 var list = users.ToList();
+
                 var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
+
                 // Excluded the current user to avoid displaying it among Zust Users, as the current user is the one viewing the user list.
                 list.RemoveAll(u => u.Id == currentUser.Id);
+
                 var filteredUsers = list.Where(u => u.UserName.ToLower().Contains(text.ToLower()));
                 return Ok(filteredUsers);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(Routes.GetFollowers)]
+        public async Task<ActionResult<IEnumerable<User>>> GetFollowers(string userId)
+        {
+            try
+            {
+                var followers = await _friendshipService.GetAllFollowers(userId);
+
+                return Ok(followers.ToList());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet(Routes.GetFollowings)]
+        public async Task<ActionResult<IEnumerable<User>>> GetFollowings(string userId)
+        {
+            try
+            {
+                var followings = await _friendshipService.GetAllFollowings(userId);
+
+                return Ok(followings.ToList());
             }
             catch (Exception ex)
             {
