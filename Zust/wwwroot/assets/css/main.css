@@ -90,3 +90,38 @@
     }
 }
 
+
+/*.single-friends-card:hover .red-icon {
+    background-color: var(--red-color) !important;
+    color: var(--white-color) !important;
+}
+
+.single-friends-card:hover .yellow-icon {
+    background-color: var(--yellow-color) !important;
+    color: var(--black-color) !important;
+}
+
+.single-friends-card:hover .main-icon {
+    background-color: var(--main-color) !important;
+    color: var(--white-color) !important;
+}
+
+.single-friends-card:hover .send-request-btn {
+    background-color: var(--main-color) !important;
+    color: var(--white-color) !important;
+    border: 1px solid var(--main-color) !important;
+}
+
+.single-friends-card:hover .remove-friend-btn {
+    background-color: var(--red-color) !important;
+    color: var(--white-color) !important;
+    border: 1px solid var(--red-color) !important;
+}
+
+.single-friends-card:hover .cancel-btn {
+    background-color: var(--yellow-color) !important;
+    color: var(--black-color) !important;
+    border: 1px solid var(--yellow-color) !important;
+}
+
+*/

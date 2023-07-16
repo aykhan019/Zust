@@ -173,9 +173,9 @@ namespace Zust.Web.Controllers.ApiControllers
                     {
                         FriendshipId = Guid.NewGuid().ToString(),
 
-                        FriendId = friendRequest.SenderId,
+                        FriendId = friendRequest.ReceiverId,
 
-                        UserId = friendRequest.ReceiverId
+                        UserId = friendRequest.SenderId
                     };
 
                     await _friendshipService.AddFriendship(friendShip);
@@ -236,5 +236,5 @@ namespace Zust.Web.Controllers.ApiControllers
 //        RequestDate = DateTime.Now,
 //        Status = Status.Pending
 //    };
-//    _friendRequestService.AddAsync(fr);
+//    await _friendRequestService.AddAsync(fr);
 //}

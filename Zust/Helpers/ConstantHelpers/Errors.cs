@@ -50,6 +50,7 @@
         /// </summary>
         public const string FriendRequestNotFound = "Friend request was not found";
 
+        public const string FriendRequestAlreadySent = "Friend request was already sent";
 
         public const string AnErrorOccured = "An Error Occured";
     }

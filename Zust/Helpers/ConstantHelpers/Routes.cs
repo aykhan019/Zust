@@ -66,5 +66,7 @@
         public const string GetFollowers = "GetFollowers";
 
         public const string GetFollowings = "GetFollowings";
+
+        public const string RemoveFriend = "RemoveFriend";
     }
 }

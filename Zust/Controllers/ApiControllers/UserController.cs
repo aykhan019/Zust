@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using Zust.Business.Abstract;
+using Zust.Business.Concrete;
 using Zust.Entities.Models;
 using Zust.Web.Helpers.ConstantHelpers;
 using Zust.Web.Helpers.UserHelpers;
@@ -18,15 +19,18 @@ namespace Zust.Web.Controllers.ApiControllers
 
         private readonly IFriendshipService _friendshipService;
 
+        private readonly IFriendRequestService _friendRequestService;
+
 
         /// <summary>
         /// Initializes a new instance of the UserController class.
         /// </summary>
         /// <param name="userService">The user service used for user-related operations.</param>
-        public UserController(IUserService userService, IFriendshipService friendshipService)
+        public UserController(IUserService userService, IFriendshipService friendshipService, IFriendRequestService friendRequestService)
         {
             _userService = userService;
             _friendshipService = friendshipService;
+            _friendRequestService = friendRequestService;
         }
 
         /// <summary>
@@ -126,7 +130,7 @@ namespace Zust.Web.Controllers.ApiControllers
         {
             try
             {
-                var followers = await _friendshipService.GetAllFollowers(userId);
+                var followers = await _friendshipService.GetAllFollowersOfUserAsync(userId);
 
                 return Ok(followers.ToList());
             }
@@ -142,9 +146,42 @@ namespace Zust.Web.Controllers.ApiControllers
         {
             try
             {
-                var followings = await _friendshipService.GetAllFollowings(userId);
+                var followings = await _friendshipService.GetAllFollowingsOfUserAsync(userId);
 
                 return Ok(followings.ToList());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost(Routes.RemoveFriend)]
+        public async Task<IActionResult> RemoveFriend(string friendId)
+        {
+            try
+            {
+                var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
+
+                var currentUserId = currentUser.Id;
+
+                var friendRequest = await _friendRequestService.GetAsync(fr => fr.SenderId == currentUserId && fr.ReceiverId == friendId);
+
+                if (friendRequest == null)
+                {
+                    return BadRequest(Errors.FriendRequestNotFound);
+                }
+
+                await _friendRequestService.DeleteAsync(friendRequest);
+
+                var deleted = await _friendshipService.DeleteFriendshipAsync(currentUserId, friendId);
+
+                if (!deleted)
+                {
+                    return BadRequest(Errors.FriendRequestNotFound);
+                }
+
+                return Ok();
             }
             catch (Exception ex)
             {

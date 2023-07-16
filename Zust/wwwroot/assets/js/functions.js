@@ -81,3 +81,119 @@ function getNoResultHtml(title, message) {
     return content;
 }
 
+function getAllFollowings(currentUserId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: `/api/User/GetFollowings?userId=` + currentUserId,
+            method: 'GET',
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+    });
+}
+
+
+function getAllFollowers(currentUserId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: `/api/User/GetFollowers?userId=` + currentUserId,
+            method: 'GET',
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+    });
+}
+
+
+async function getSentFriendRequests(id) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: `/api/FriendRequest/GetSentFriendRequests?userId=` + id,
+            method: 'GET',
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                alert("Error occurred: " + error.responseText);
+                reject(false);
+            }
+        });
+    });
+}
+
+function sendFriendRequest(receiverId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: '/api/FriendRequest/AddFriendRequest?receiverId=' + receiverId,
+            method: 'POST',
+            success: async function () {
+                resolve(true);
+            },
+            error: function (error) {
+                alert("Error occurred: " + error.responseText);
+                reject(false);
+            }
+        });
+    });
+}
+
+function cancelFriendRequest(receiverId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: '/api/FriendRequest/CancelFriendRequest?receiverId=' + receiverId,
+            method: 'POST',
+            success: function () {
+                resolve(true);
+            },
+            error: function (error) {
+                alert("Error occurred: " + error.responseText);
+                reject(false);
+            }
+        });
+    });
+}
+
+function removeFriend(friendId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: '/api/User/RemoveFriend?friendId=' + friendId,
+            method: 'POST',
+            success: function () {
+                resolve(true);
+            },
+            error: function (error) {
+                alert("Error occurred: " + error.responseText);
+                reject(false);
+            }
+        });
+    });
+}
+
+
+function getButtonHtml(sentFriendRequests, user) {
+    if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Pending')) {
+        return `<button onclick="callCancelFriendRequest('${user.id}')" class="cancel-btn">Cancel Friend Request</button>`;
+    } else if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Accepted')) {
+        return `<button title="Click to stop following" onClick="callRemoveFriend('${user.id}')" class="remove-friend-btn">Following</button>`;
+    } else {
+        return `<button onclick="callSendFriendRequest('${user.id}')" type="submit" class="send-request-btn">Send Friend Request</button>`;
+    }
+}
+
+function getIconClass(sentFriendRequests, user) {
+    if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Pending')) {
+        return 'yellow-icon';
+    } else if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Accepted')) {
+        return 'red-icon';
+    } else {
+        return 'main-icon';
+    }
+}

@@ -49,5 +49,11 @@ namespace Zust.Business.Concrete
         {
             return _friendRequestDal.GetAsync(filter);
         }
+
+        public async Task<bool> CheckFriendRequestExistsAsync(string senderId, string receiverId, string status)
+        {
+            var friendRequest = await GetAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId && fr.Status == status);
+            return friendRequest != null;
+        }
     }
 }

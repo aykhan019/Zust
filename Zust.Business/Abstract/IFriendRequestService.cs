@@ -17,5 +17,6 @@ namespace Zust.Business.Abstract
         Task DeleteAsync(string id);
         Task DeleteAsync(FriendRequest friendRequest);
         Task UpdateAsync(FriendRequest friendRequest);
+        Task CheckUserExists();
     }
 }
