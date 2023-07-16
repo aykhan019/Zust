@@ -140,6 +140,22 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        [HttpGet(Routes.GetFollowersCount)]
+        public async Task<ActionResult<int>> GetFollowersCount(string userId)
+        {
+            try
+            {
+                var followers = await _friendshipService.GetAllFollowersOfUserAsync(userId);
+
+                var count = followers.Count();
+
+                return Ok(count);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpGet(Routes.GetFollowings)]
         public async Task<ActionResult<IEnumerable<User>>> GetFollowings(string userId)
@@ -149,6 +165,23 @@ namespace Zust.Web.Controllers.ApiControllers
                 var followings = await _friendshipService.GetAllFollowingsOfUserAsync(userId);
 
                 return Ok(followings.ToList());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(Routes.GetFollowingsCount)]
+        public async Task<ActionResult<int>> GetFollowingsCount(string userId)
+        {
+            try
+            {
+                var followings = await _friendshipService.GetAllFollowingsOfUserAsync(userId);
+
+                var count = followings.Count();
+
+                return Ok(count);
             }
             catch (Exception ex)
             {
@@ -182,6 +215,21 @@ namespace Zust.Web.Controllers.ApiControllers
                 }
 
                 return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(Routes.GetCurrentUser)]
+        public async Task<ActionResult<User?>> GetCurrentUser()
+        {
+            try
+            {
+                var user = await UserHelper.GetCurrentUserAsync(HttpContext);
+                
+                return Ok(user);
             }
             catch (Exception ex)
             {

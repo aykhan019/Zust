@@ -65,8 +65,14 @@
 
         public const string GetFollowers = "GetFollowers";
 
+        public const string GetFollowersCount = "GetFollowersCount";
+
         public const string GetFollowings = "GetFollowings";
 
+        public const string GetFollowingsCount = "GetFollowingsCount";
+
         public const string RemoveFriend = "RemoveFriend";
+
+        public const string GetCurrentUser = "GetCurrentUser";
     }
 }

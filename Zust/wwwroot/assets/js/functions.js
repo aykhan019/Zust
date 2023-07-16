@@ -1,4 +1,20 @@
-﻿let toastId = "liveToast";
+﻿
+var currentUser = getCurrentUser();
+
+function getCurrentUser() {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: '/api/User/GetCurrentUser',
+            method: 'Get',
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                reject(false);
+            }
+        });
+    });
+}
 
 function createToast(text, color) {
     let toast = `
@@ -15,7 +31,6 @@ function createToast(text, color) {
             </div>
         </div>
     `;
-
     return toast;
 }
 
@@ -96,6 +111,20 @@ function getAllFollowings(currentUserId) {
     });
 }
 
+function getAllFollowingsCount(currentUserId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: `/api/User/GetFollowingsCount?userId=` + currentUserId,
+            method: 'GET',
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+    });
+}
 
 function getAllFollowers(currentUserId) {
     return new Promise(function (resolve, reject) {
@@ -112,6 +141,21 @@ function getAllFollowers(currentUserId) {
     });
 }
 
+
+function getAllFollowersCount(currentUserId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: `/api/User/GetFollowersCount?userId=` + currentUserId,
+            method: 'GET',
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+    });
+}
 
 async function getSentFriendRequests(id) {
     return new Promise(function (resolve, reject) {
@@ -191,9 +235,15 @@ function getButtonHtml(sentFriendRequests, user) {
 function getIconClass(sentFriendRequests, user) {
     if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Pending')) {
         return 'yellow-icon';
-    } else if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Accepted')) {
+    } else if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Accepted')) { 
         return 'red-icon';
     } else {
         return 'main-icon';
     }
+}
+
+async function setSocialCounts(followerElementId, followingElementId, postLikeElementId) {
+    document.getElementById(followerElementId).innerHTML = await getAllFollowersCount();
+    document.getElementById(followingElementId).innerHTML = await getAllFollowingsCount();
+    // postLikeElementId --- Update when POSTS are available
 }

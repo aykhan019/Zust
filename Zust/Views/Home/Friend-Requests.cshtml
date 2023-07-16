@@ -114,6 +114,7 @@
     async function showReceivedFriendRequests() {
         var requests = await getReceivedFriendRequests();
         if (requests != null && requests.length > 0){
+            requests.sort((a, b) => new Date(a.requestDate) - new Date(b.requestDate)).reverse();
             var content = '';
             for (var i = 0; i < requests.length; i++) {
                 var request = requests[i];

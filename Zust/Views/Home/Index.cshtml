@@ -35,13 +35,13 @@
                     </li>
                     <li>
                         <a>
-                            <span class="item-number">0</span>
+                            <span class="item-number" id="following-count">0</span>
                             <span class="item-text">Following</span>
                         </a>
                     </li>
                     <li>
                         <a>
-                            <span class="item-number">0</span>
+                            <span class="item-number" id="follower-count">0</span>
                             <span class="item-text">Followers</span>
                         </a>
                     </li>
@@ -899,6 +899,11 @@
     </div>
 </div>
 
+<script src="~/assets/js/functions.js"></script>
+<script src="~/assets/js/jquery.min.js"></script>
 <script>
+    setSocialCounts()
+    
+
     localStorage.setItem('activeMenuItem', '#1');
 </script>

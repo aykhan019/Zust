@@ -618,10 +618,12 @@
 <script src="~/assets/js/jquery.min.js"></script>
 <script>
      var currentUserId = '@user.Id.ToString()';
+
      async function setInfo(){
-        document.getElementById("following-count").innerHTML = (await getAllFollowings(currentUserId)).length;
-        document.getElementById("follower-count").innerHTML = (await getAllFollowers(currentUserId)).length;
+        document.getElementById("following-count").innerHTML = await getAllFollowingsCount(currentUserId);
+        document.getElementById("follower-count").innerHTML = await getAllFollowersCount(currentUserId);
      }
+
      setInfo();
 
 

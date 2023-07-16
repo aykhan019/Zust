@@ -50,6 +50,13 @@ namespace Zust.Web.Controllers.ApiControllers
             {
                 var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
 
+                var exists = await _friendRequestService.CheckFriendRequestExistsAsync(currentUser.Id, receiverId, Status.Pending);
+
+                if (exists)
+                {
+                    throw new Exception(Errors.FriendRequestAlreadySent);
+                }
+
                 var friendRequest = new FriendRequest()
                 {
                     Id = Guid.NewGuid().ToString(),

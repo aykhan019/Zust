@@ -66,6 +66,10 @@
             border-radius: 10px;
             border: 1px solid gray;
         }
+
+    .custom-spinner-color {
+        color: var(--main-color); /* Replace with your desired custom color */
+    }
 </style>
 
 
@@ -94,8 +98,8 @@
 
         <div class="row justify-content-center" id="users">
         </div>
-        <div id="loadMore" class="load-more-posts-btn">
-            <button class="transparent-button" onclick="LoadUsers()"><i class="flaticon-loading"></i> Load More</button>
+        <div class="load-more-posts-btn">
+            <button id="loadMore" class="transparent-button" onclick="LoadUsers()"><i class="flaticon-loading"></i> Load More</button>
         </div>
     </div>
 </div>
@@ -111,15 +115,29 @@
     var container = document.getElementById("users");
 
 
+    function startSpinner() {
+        var spinner = `
+                        <div class="spinner-border custom-spinner-color" role="status">
+                            <span class="sr-only"></span>
+                        </div>`;
+        $('#loadMore').prop('disabled', true);
+        $('#loadMore').html(spinner);
+    }
+
+    function stopSpinner() {
+        $('#loadMore').prop('disabled', false);
+        $('#loadMore').html('<i class="flaticon-loading"></i> Load More');
+    }
+
     function handleKeyPress(event) {
         if (event.keyCode === 13) { // 13 corresponds to the Enter key
             event.preventDefault(); // Prevent the default form submission behavior
-            searchUsers(); // Call your desired function here
+            searchUsers();
         }
     }
 
     function hideLoadMore() {
-        document.getElementById("loadMore").style.display = "none";
+        document.querySelector(".load-more-posts-btn").style.display = "none";
     }
 
     function searchUsers() {
@@ -157,6 +175,7 @@
     callGetSentFriendRequests();
 
     async function LoadUsers() {
+        startSpinner();
         await GetUsersAsync();
     }
 
@@ -200,66 +219,70 @@
         else {
             var allUsersCount = await GetAllUsersCount();
             if (usersInView.length == allUsersCount - 1) { // Current User Subtracted
-                document.getElementById("loadMore").style.display = "none";
+                document.querySelector(".load-more-posts-btn").style.display = "none";
             }
             var content = '';
             for (var i = 0; i < usersInView.length; i++) {
                 var user = usersInView[i];
                 var btnContent = getButtonHtml(sentFriendRequests, user);
                 var iconClass = getIconClass(sentFriendRequests, user);
+                var followerCount = await getAllFollowersCount(user.id);
+                var followingCount = await getAllFollowingsCount(user.id);
+
                 var subContent = `
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="single-friends-card">
-                                <div class="friends-image">
-                                    <a href="/home/users?id=${user.id}">
-                                        <img src="${user.coverImage}" alt="${user.normalizedUserName}">
-                                    </a>
-                                    <div class="icon">
-                                            <a href="/home/users?id=${user.id}"><i class="flaticon-user ${iconClass}"></i></a>
-                                    </div>
-                                </div>
-                                <div class="friends-content">
-                                    <div class="friends-info d-flex justify-content-between align-items-center">
-                                        <a href="/home/users?id=${user.id}">
-                                                <img src="${user.imageUrl}" alt="${user.username}" class="user-image">
-                                        </a>
-                                        <div class="text ms-3">
-                                            <h3>${user.userName}</h3>
-                                            <span>${truncateText(user.email, 15)}</span>
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="single-friends-card">
+                                        <div class="friends-image">
+                                            <a href="/home/users?id=${user.id}">
+                                                <img src="${user.coverImage}" alt="${user.normalizedUserName}">
+                                            </a>
+                                            <div class="icon">
+                                                    <a href="/home/users?id=${user.id}"><i class="flaticon-user ${iconClass}"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="friends-content">
+                                            <div class="friends-info d-flex justify-content-between align-items-center">
+                                                <a href="/home/users?id=${user.id}">
+                                                        <img src="${user.imageUrl}" alt="${user.username}" class="user-image">
+                                                </a>
+                                                <div class="text ms-3">
+                                                    <h3>${user.userName}</h3>
+                                                    <span>${truncateText(user.email, 15)}</span>
+                                                </div>
+                                            </div>
+                                            <ul class="statistics">
+                                                <li>
+                                                    <a>
+                                                        <span class="item-number">0</span>
+                                                        <span class="item-text">Likes</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a>
+                                                        <span class="item-number">${followingCount}</span>
+                                                        <span class="item-text">Following</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a>
+                                                        <span class="item-number">${followerCount}</span>
+                                                        <span class="item-text">Followers</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <div class="button-group d-flex justify-content-between align-items-center">
+                                                <div class="row add-friend-btn w-100">
+                                                    ${btnContent}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <ul class="statistics">
-                                        <li>
-                                            <a>
-                                                <span class="item-number">0</span>
-                                                <span class="item-text">Likes</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a>
-                                                <span class="item-number">0</span>
-                                                <span class="item-text">Following</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a>
-                                                <span class="item-number">0</span>
-                                                <span class="item-text">Followers</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <div class="button-group d-flex justify-content-between align-items-center">
-                                        <div class="row add-friend-btn w-100">
-                                            ${btnContent}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>`;
+                                </div>`;
 
                 content += subContent;
             }
             container.innerHTML = content;
+            stopSpinner();
         }
     }
 
@@ -295,5 +318,6 @@
         }
     }
 
+    startSpinner();
     LoadUsers();
 </script>
