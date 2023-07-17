@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Zust.Core.Abstraction;
 
 namespace Zust.Entities.Models
 {
-    public class Post
+    public class Post : IEntity
     {
         public string? Id { get; set; }
 

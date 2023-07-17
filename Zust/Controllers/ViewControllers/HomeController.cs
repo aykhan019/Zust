@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Zust.Business.Abstract;
+using Zust.Entities.Models;
 using Zust.Web.Helpers.ConstantHelpers;
+using Zust.Web.Models;
 
 namespace Zust.Web.Controllers.ViewControllers
 {
@@ -117,7 +119,7 @@ namespace Zust.Web.Controllers.ViewControllers
         /// <returns>The Index view.</returns>
         public IActionResult Index()
         {
-            return View();
+            return View(new CreatePostViewModel());
         }
 
         /// <summary>

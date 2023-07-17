@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,8 @@ using Zust.Core.Concrete.EntityFramework;
 using Zust.DataAccess.Abstract;
 using Zust.DataAccess.Concrete.EFEntityFramework;
 using Zust.Entities.Models;
+using Zust.Web.Abstract;
+using Zust.Web.Concrete;
 using Zust.Web.Helpers.ConstantHelpers;
 using Zust.Web.Hubs;
 
@@ -32,6 +35,7 @@ builder.Services.AddScoped<INotificationDal, EFNotificationDal>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IFriendshipDal,EFFriendshipDal>();
 builder.Services.AddScoped<IFriendshipService, FriendshipService>();
+builder.Services.AddScoped<IMediaService, MediaService>();
 
 // Register Session
 builder.Services.AddSession();
@@ -53,6 +57,12 @@ builder.Services.AddSignalR();
 builder.Services.Configure<CookieAuthenticationOptions>(options =>
 {
     options.ExpireTimeSpan = TimeSpan.FromDays(Constants.CookieExpireTimeSpan);
+});
+
+builder.Services.Configure<FormOptions>(o => {
+    o.ValueLengthLimit = int.MaxValue;
+    o.MultipartBodyLengthLimit = int.MaxValue;
+    o.MemoryBufferThreshold = int.MaxValue;
 });
 
 var app = builder.Build();

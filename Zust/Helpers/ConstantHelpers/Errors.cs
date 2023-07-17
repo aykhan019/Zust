@@ -53,5 +53,7 @@
         public const string FriendRequestAlreadySent = "Friend request was already sent";
 
         public const string AnErrorOccured = "An Error Occured";
+
+        public const string FileTypeNotSupportedError = "File type not supported.";
     }
 }

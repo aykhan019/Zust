@@ -74,5 +74,7 @@
         public const string RemoveFriend = "RemoveFriend";
 
         public const string GetCurrentUser = "GetCurrentUser";
+
+        public const string Post = "api/Post";
     }
 }

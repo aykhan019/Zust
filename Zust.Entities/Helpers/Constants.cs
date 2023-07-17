@@ -12,5 +12,5 @@ namespace Zust.Entities.Helpers
         public const string Accepted = "Accepted";
         public const string Declined = "Declined";
         public const string Pending = "Pending";
-    }   
-}
+    }
+}   

@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @using Zust.Entities.Models;
 @using Zust.Web.Helpers.ConstantHelpers;
+@model CreatePostViewModel;
 @{
     var userManager = Context.RequestServices.GetService<UserManager<User>>();
     var user = await userManager.GetUserAsync(Context.User);
@@ -14,15 +15,11 @@
         object-fit: cover;
     }
 
-    .btn {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #4CAF50;
-        color: white;
-        cursor: pointer;
+    #file-upload {
+        display: none;
     }
 
-    #file-upload {
+    .hidden {
         display: none;
     }
 
@@ -40,6 +37,22 @@
             max-height: 100%;
             width: auto; /* Ensure video width adjusts based on aspect ratio */
             height: auto; /* Ensure video height adjusts based on aspect ratio */
+        }
+
+    #text-area {
+        font-size: 17px;
+        padding: 10px 12px;
+        border: 1px solid var(--black-color);
+    }
+
+    #btn-container {
+        display: flex;
+        gap: 10px;
+    }
+
+        #btn-container li:first-child button {
+            padding: 5px 25px;
+            font-size: 14px;
         }
 </style>
 
@@ -226,26 +239,28 @@
             <div class="news-feed news-feed-form">
                 <h3 class="news-feed-title">Create New Post</h3>
 
-                <form>
+                <form onsubmit="handleSubmit(event)">
                     <div class="form-group">
-                        <textarea name="message" class="form-control" placeholder="Write something here..."></textarea>
+                        <textarea id="text-area" asp-for="Description" class="form-control" placeholder="Write something here..." required></textarea>
 
-                        <input type="file" id="file-upload" accept="video/*,image/*">
+                        <input type="file" id="file-upload" asp-for="MediaFile" accept="video/*,image/*" style="display: none;">
                         <div id="media-preview"></div>
                     </div>
                     <ul class="button-group d-flex justify-content-between align-items-center">
                         <li class="photo-btn">
-                            <button onclick="chooseMedia('image', event)"><i class="flaticon-gallery"></i> Photo</button>
-                        </li>
-                        <li class="video-btn">
-                            <button onclick="chooseMedia('video', event)"><i class="flaticon-video"></i> Video</button>
+                            <button onclick="chooseMedia(event)"><i class="flaticon-gallery"></i> Choose Media</button>
                         </li>
                         <li class="tag-btn">
                             <button type="submit"><i class="flaticon-tag"></i> Tag Friends</button>
                         </li>
-                        <li class="post-btn">
-                            <button type="submit">Post</button>
-                        </li>
+                        <section id="btn-container">
+                            <li>
+                                <button class="btn btn-secondary" onclick="cancel()">Cancel</button>
+                            </li>
+                            <li class="post-btn">
+                                <button type="submit">Post</button>
+                            </li>
+                        </section>
                     </ul>
                 </form>
             </div>
@@ -933,46 +948,82 @@
 <script src="~/assets/js/functions.js"></script>
 <script src="~/assets/js/jquery.min.js"></script>
 <script>
-    function chooseMedia(mediaType, event) {
+    function handleSubmit(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Get the input values
+        var description = $('#text-area').val().trim();
+        var fileInput = $('#file-upload')[0];
+        var file = fileInput.files[0];
+
+        // Create FormData object to send the data
+        var formData = new FormData();
+        formData.append('Description', description);
+        formData.append('MediaFile', file);
+
+        // Send the form data using jQuery Ajax
+        $.ajax({
+            url: 'api/Post/CreatePost',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                // Handle the response from the API
+                console.log(response); // You can perform additional actions here
+            },
+            error: function (xhr, status, error) {
+                console.error('Request failed. Status: ' + status + ', Error: ' + error);
+            }
+        });
+    }
+
+
+    function cancel() {
+        location.reload();
+    }
+
+    function chooseMedia(event) {
         event.preventDefault();
 
         const fileUpload = document.getElementById('file-upload');
         const mediaPreview = document.getElementById('media-preview');
 
-        fileUpload.addEventListener('change', function () {
-            const file = this.files[0];
-            const allowedTypes = mediaType === 'video' ? ['video/mp4', 'video/quicktime'] : ['image/jpeg', 'image/png'];
+        fileUpload.onchange = function (event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
 
-            if (file && allowedTypes.includes(file.type)) {
-                const reader = new FileReader();
+            reader.onload = function (e) {
+                let mediaElement;
 
-                reader.onload = function (e) {
-                    let mediaElement;
-
-                    if (mediaType === 'video') {
-                        mediaElement = document.createElement('video');
-                        mediaElement.setAttribute('controls', true);
-                    } else if (mediaType === 'image') {
-                        mediaElement = document.createElement('img');
-                    }
-
+                if (file.type.includes('video')) {
+                    mediaElement = document.createElement('video');
+                    mediaElement.setAttribute('controls', true);
                     mediaElement.src = e.target.result;
                     mediaPreview.innerHTML = '';
                     mediaPreview.appendChild(mediaElement);
-                };
+                    mediaPreview.style.padding = "0px";
 
-                reader.readAsDataURL(file);
-            } else {
-                // Handle error or display a message for invalid file type
-                console.log('Invalid file type.');
-                fileUpload.value = null; // Reset file input value
-            }
-        });
+                    console.log('Media type: Video');
+                } else if (file.type.includes('image')) {
+                    mediaElement = document.createElement('img');
+                    mediaElement.src = e.target.result;
+                    mediaPreview.innerHTML = '';
+                    mediaPreview.appendChild(mediaElement);
+                    mediaPreview.style.padding = "10px";
 
-        fileUpload.accept = mediaType === 'video' ? 'video/mp4, video/quicktime' : 'image/jpeg, image/png';
+                    console.log('Media type: Image');
+                }
+
+                mediaPreview.style.border = "2px dashed var(--black-color)";
+
+            };
+
+            reader.readAsDataURL(file);
+        };
+
         fileUpload.click();
     }
-
 
     var currentUserId = '@user.Id.ToString()';
     setSocialCounts("follower-count", "following-count", "post-like-count", currentUserId);

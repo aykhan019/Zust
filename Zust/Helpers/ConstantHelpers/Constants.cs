@@ -54,5 +54,9 @@
         /// Represents the file name for covers.
         /// </summary>
         public const string CoversFile = "covers.txt";
+
+        public const string CloudinarySettings = "CloudinarySettings";
+        public const string ImageFileType = "image/";
+        public const string VideoFileType = "video/";
     }
 }
