@@ -54,6 +54,8 @@
 
         public const string AnErrorOccured = "An Error Occured";
 
-        public const string FileTypeNotSupportedError = "File type not supported.";
+        public const string FileTypeNotSupportedError = "File type not supported";
+
+        public const string ImageUploadError = "An error occurred while uploading the image";
     }
 }

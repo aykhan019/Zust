@@ -76,5 +76,7 @@
         public const string GetCurrentUser = "GetCurrentUser";
 
         public const string Post = "api/Post";
+
+        public const string CreatePost = "CreatePost";
     }
 }

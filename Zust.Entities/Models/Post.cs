@@ -13,6 +13,8 @@ namespace Zust.Entities.Models
 
         public string? Description { get; set; }
 
+        public bool HasMediaContent { get; set; }
+
         public string? ContentUrl { get; set; }
 
         public bool IsVideo { get; set; }

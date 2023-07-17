@@ -59,5 +59,13 @@ namespace Zust.Web.Concrete
             return uploadResult.SecureUrl.ToString();
         }
 
+        public bool IsVideoFile(IFormFile mediaFile)
+        {
+            if (mediaFile.ContentType.StartsWith(Constants.VideoFileType))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
