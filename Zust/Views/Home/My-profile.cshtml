@@ -51,7 +51,7 @@
             <ul class="statistics">
                 <li>
                     <a href="#">
-                        <span class="item-number">0</span>
+                        <span class="item-number" id="post-like-count">0</span>
                         <span class="item-text">Likes</span>
                     </a>
                 </li>
@@ -619,14 +619,8 @@
 <script>
      var currentUserId = '@user.Id.ToString()';
 
-     async function setInfo(){
-        document.getElementById("following-count").innerHTML = await getAllFollowingsCount(currentUserId);
-        document.getElementById("follower-count").innerHTML = await getAllFollowersCount(currentUserId);
-     }
-
-     setInfo();
-
-
+    setSocialCounts("follower-count", "following-count", "post-like-count", currentUserId);
+    
     // HTML template for the save button
     var btnHtml = `
                                         <button id="saveBtn" class="btn btn-primary" disabled onclick="save()">

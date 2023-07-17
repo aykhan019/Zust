@@ -34,19 +34,19 @@
             <ul class="statistics">
                 <li>
                     <a href="#">
-                        <span class="item-number">0</span>
+                        <span class="item-number" id="post-like-count">0</span>
                         <span class="item-text">Likes</span>
                     </a>
                 </li>
                 <li>
                     <a href="#">
-                        <span class="item-number">0</span>
+                        <span class="item-number" id="followings-count">0</span>
                         <span class="item-text">Following</span>
                     </a>
                 </li>
                 <li>
                     <a href="#">
-                        <span class="item-number">0</span>
+                        <span class="item-number" id="followers-count">0</span>
                         <span class="item-text">Followers</span>
                     </a>
                 </li>
@@ -604,3 +604,11 @@
         </div>
     </div>
 </div>
+
+<script src="~/assets/js/functions.js"></script>
+<script src="~/assets/js/jquery.min.js"></script>
+<script>
+    var currentUserId = '@Model.Id.ToString()';
+
+    setSocialCounts("followers-count", "followings-count", "post-like-count", currentUserId);
+</script>

@@ -8,11 +8,39 @@
 }
 
 <style>
-    .profile-image{
+    .profile-image {
         height: 100px !important;
         width: 100px !important;
         object-fit: cover;
     }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+    }
+
+    #file-upload {
+        display: none;
+    }
+
+    #media-preview {
+        max-width: 100%;
+        height: auto;
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        #media-preview video {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto; /* Ensure video width adjusts based on aspect ratio */
+            height: auto; /* Ensure video height adjusts based on aspect ratio */
+        }
 </style>
 
 <div class="row">
@@ -29,7 +57,7 @@
                 <ul class="profile-statistics">
                     <li>
                         <a>
-                            <span class="item-number">0</span>
+                            <span class="item-number" id="post-like-count">0</span>
                             <span class="item-text">Likes</span>
                         </a>
                     </li>
@@ -201,13 +229,16 @@
                 <form>
                     <div class="form-group">
                         <textarea name="message" class="form-control" placeholder="Write something here..."></textarea>
+
+                        <input type="file" id="file-upload" accept="video/*,image/*">
+                        <div id="media-preview"></div>
                     </div>
                     <ul class="button-group d-flex justify-content-between align-items-center">
                         <li class="photo-btn">
-                            <button type="submit"><i class="flaticon-gallery"></i> Photo</button>
+                            <button onclick="chooseMedia('image', event)"><i class="flaticon-gallery"></i> Photo</button>
                         </li>
                         <li class="video-btn">
-                            <button type="submit"><i class="flaticon-video"></i> Video</button>
+                            <button onclick="chooseMedia('video', event)"><i class="flaticon-video"></i> Video</button>
                         </li>
                         <li class="tag-btn">
                             <button type="submit"><i class="flaticon-tag"></i> Tag Friends</button>
@@ -866,35 +897,35 @@
                     <a href="#"><img src="~/assets/images/explore-events/explore-2.jpg" alt="image"></a>
                 </article>
             </div>
-            <div class="widget widget-who-following">
-                <h3 class="widget-title">Who's Following</h3>
+            @*       <div class="widget widget-who-following">
+            <h3 class="widget-title">Who's Following</h3>
 
-                <div class="following-item d-flex justify-content-between align-items-center">
-                    <a href="#"><img src="~/assets/images/user/user-42.jpg" class="rounded-circle" alt="image"></a>
-                    <span class="name"><a href="#">Shawn Lynch</a></span>
-                    <span class="add-friend"><a href="#">Add</a></span>
-                </div>
-                <div class="following-item d-flex justify-content-between align-items-center">
-                    <a href="#"><img src="~/assets/images/user/user-43.jpg" class="rounded-circle" alt="image"></a>
-                    <span class="name"><a href="#">Kenneth Perry</a></span>
-                    <span class="add-friend"><a href="#">Add</a></span>
-                </div>
-                <div class="following-item d-flex justify-content-between align-items-center">
-                    <a href="#"><img src="~/assets/images/user/user-44.jpg" class="rounded-circle" alt="image"></a>
-                    <span class="name"><a href="#">Janet Suarez</a></span>
-                    <span class="add-friend"><a href="#">Add</a></span>
-                </div>
-                <div class="following-item d-flex justify-content-between align-items-center">
-                    <a href="#"><img src="~/assets/images/user/user-45.jpg" class="rounded-circle" alt="image"></a>
-                    <span class="name"><a href="#">Brian Mingo</a></span>
-                    <span class="add-friend"><a href="#">Add</a></span>
-                </div>
-                <div class="following-item d-flex justify-content-between align-items-center">
-                    <a href="#"><img src="~/assets/images/user/user-46.jpg" class="rounded-circle" alt="image"></a>
-                    <span class="name"><a href="#">Julia Ramos</a></span>
-                    <span class="add-friend"><a href="#">Add</a></span>
-                </div>
+            <div class="following-item d-flex justify-content-between align-items-center">
+            <a href="#"><img src="~/assets/images/user/user-42.jpg" class="rounded-circle" alt="image"></a>
+            <span class="name"><a href="#">Shawn Lynch</a></span>
+            <span class="add-friend"><a href="#">Add</a></span>
             </div>
+            <div class="following-item d-flex justify-content-between align-items-center">
+            <a href="#"><img src="~/assets/images/user/user-43.jpg" class="rounded-circle" alt="image"></a>
+            <span class="name"><a href="#">Kenneth Perry</a></span>
+            <span class="add-friend"><a href="#">Add</a></span>
+            </div>
+            <div class="following-item d-flex justify-content-between align-items-center">
+            <a href="#"><img src="~/assets/images/user/user-44.jpg" class="rounded-circle" alt="image"></a>
+            <span class="name"><a href="#">Janet Suarez</a></span>
+            <span class="add-friend"><a href="#">Add</a></span>
+            </div>
+            <div class="following-item d-flex justify-content-between align-items-center">
+            <a href="#"><img src="~/assets/images/user/user-45.jpg" class="rounded-circle" alt="image"></a>
+            <span class="name"><a href="#">Brian Mingo</a></span>
+            <span class="add-friend"><a href="#">Add</a></span>
+            </div>
+            <div class="following-item d-flex justify-content-between align-items-center">
+            <a href="#"><img src="~/assets/images/user/user-46.jpg" class="rounded-circle" alt="image"></a>
+            <span class="name"><a href="#">Julia Ramos</a></span>
+            <span class="add-friend"><a href="#">Add</a></span>
+            </div>
+            </div>*@
         </aside>
     </div>
 </div>
@@ -902,8 +933,49 @@
 <script src="~/assets/js/functions.js"></script>
 <script src="~/assets/js/jquery.min.js"></script>
 <script>
-    setSocialCounts()
-    
+    function chooseMedia(mediaType, event) {
+        event.preventDefault();
+
+        const fileUpload = document.getElementById('file-upload');
+        const mediaPreview = document.getElementById('media-preview');
+
+        fileUpload.addEventListener('change', function () {
+            const file = this.files[0];
+            const allowedTypes = mediaType === 'video' ? ['video/mp4', 'video/quicktime'] : ['image/jpeg', 'image/png'];
+
+            if (file && allowedTypes.includes(file.type)) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    let mediaElement;
+
+                    if (mediaType === 'video') {
+                        mediaElement = document.createElement('video');
+                        mediaElement.setAttribute('controls', true);
+                    } else if (mediaType === 'image') {
+                        mediaElement = document.createElement('img');
+                    }
+
+                    mediaElement.src = e.target.result;
+                    mediaPreview.innerHTML = '';
+                    mediaPreview.appendChild(mediaElement);
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                // Handle error or display a message for invalid file type
+                console.log('Invalid file type.');
+                fileUpload.value = null; // Reset file input value
+            }
+        });
+
+        fileUpload.accept = mediaType === 'video' ? 'video/mp4, video/quicktime' : 'image/jpeg, image/png';
+        fileUpload.click();
+    }
+
+
+    var currentUserId = '@user.Id.ToString()';
+    setSocialCounts("follower-count", "following-count", "post-like-count", currentUserId);
 
     localStorage.setItem('activeMenuItem', '#1');
 </script>

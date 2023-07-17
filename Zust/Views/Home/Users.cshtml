@@ -68,7 +68,7 @@
         }
 
     .custom-spinner-color {
-        color: var(--main-color); /* Replace with your desired custom color */
+        color: var(--main-color); 
     }
 </style>
 
@@ -228,7 +228,7 @@
                 var iconClass = getIconClass(sentFriendRequests, user);
                 var followerCount = await getAllFollowersCount(user.id);
                 var followingCount = await getAllFollowingsCount(user.id);
-
+                var postLikeCount = await getAllPostLikeCount(user.id);
                 var subContent = `
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="single-friends-card">
@@ -253,7 +253,7 @@
                                             <ul class="statistics">
                                                 <li>
                                                     <a>
-                                                        <span class="item-number">0</span>
+                                                        <span class="item-number">${postLikeCount}</span>
                                                         <span class="item-text">Likes</span>
                                                     </a>
                                                 </li>

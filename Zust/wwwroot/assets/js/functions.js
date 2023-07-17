@@ -1,20 +1,4 @@
-﻿
-var currentUser = getCurrentUser();
-
-function getCurrentUser() {
-    return new Promise(function (resolve, reject) {
-        $.ajax({
-            url: '/api/User/GetCurrentUser',
-            method: 'Get',
-            success: function (data) {
-                resolve(data);
-            },
-            error: function (error) {
-                reject(false);
-            }
-        });
-    });
-}
+﻿var toastId = "myToast";
 
 function createToast(text, color) {
     let toast = `
@@ -157,6 +141,10 @@ function getAllFollowersCount(currentUserId) {
     });
 }
 
+function getAllPostLikeCount(currentUserId) {
+    return 0;
+}
+
 async function getSentFriendRequests(id) {
     return new Promise(function (resolve, reject) {
         $.ajax({
@@ -224,11 +212,11 @@ function removeFriend(friendId) {
 
 function getButtonHtml(sentFriendRequests, user) {
     if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Pending')) {
-        return `<button onclick="callCancelFriendRequest('${user.id}')" class="cancel-btn">Cancel Friend Request</button>`;
+        return `<button onclick="callCancelFriendRequest('${user.id}')" class="cancel-btn">Cancel Follow Request</button>`;
     } else if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Accepted')) {
-        return `<button title="Click to stop following" onClick="callRemoveFriend('${user.id}')" class="remove-friend-btn">Following</button>`;
+        return `<button title="Click to stop following" onClick="callRemoveFriend('${user.id}')" class="remove-friend-btn">Unfollow</button>`;
     } else {
-        return `<button onclick="callSendFriendRequest('${user.id}')" type="submit" class="send-request-btn">Send Friend Request</button>`;
+        return `<button onclick="callSendFriendRequest('${user.id}')" type="submit" class="send-request-btn">Follow</button>`;
     }
 }
 
@@ -242,8 +230,8 @@ function getIconClass(sentFriendRequests, user) {
     }
 }
 
-async function setSocialCounts(followerElementId, followingElementId, postLikeElementId) {
-    document.getElementById(followerElementId).innerHTML = await getAllFollowersCount();
-    document.getElementById(followingElementId).innerHTML = await getAllFollowingsCount();
-    // postLikeElementId --- Update when POSTS are available
+async function setSocialCounts(followerElementId, followingElementId, postLikeElementId, currentUserId) {
+    document.getElementById(followerElementId).innerHTML = await getAllFollowersCount(currentUserId);
+    document.getElementById(followingElementId).innerHTML = await getAllFollowingsCount(currentUserId);
+    document.getElementById(postLikeElementId).innerHTML = await getAllPostLikeCount(currentUserId);
 }
