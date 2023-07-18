@@ -1,13 +1,22 @@
 ﻿using Zust.Web.Abstract;
 using Zust.Web.Entities;
+using Zust.Web.Extensions;
 using Zust.Web.Helpers.ConstantHelpers;
-using Zust.Web.Helpers.FileHelpers;
-using Zust.Web.Helpers.ImageHelpers;
+using Zust.Web.Helpers.Utilities;
 
 namespace Zust.Web.Concrete
 {
     public class StaticService : IStaticService
     {
+        public List<Advertisement?> GetAdvertisements(string path)
+        {
+            var advertisements = FileHelper<Advertisement>.Deserialize(path);
+
+            advertisements.Shuffle();
+
+            return advertisements.Take(Constants.AdvertisementCountInNewsFeed).ToList();
+        }
+
         public string GetRandomCoverImage(string path)
         {
             var imageUrls = FileHelper<string>.ReadTextFile(path);
@@ -42,9 +51,11 @@ namespace Zust.Web.Concrete
             return randomImages;
         }
 
-        public List<Video> GetWatchVideos(string path)
+        public List<Video?> GetWatchVideos(string path)
         {
-            var videos = FileHelper<Video>.Deserialize(path);
+            var videos = FileHelper<Video>.Deserialize(path).Take(Constants.VideoCountInNewsFeed).ToList();
+
+            videos.Shuffle();
 
             return videos;
         }

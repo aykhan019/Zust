@@ -12,5 +12,6 @@ namespace Zust.Web.Abstract
         string GetRandomCoverImage(string path);
         List<string> GetRandomStatusImagePaths(int count, string path);
         List<Video> GetWatchVideos(string path);
+        List<Advertisement> GetAdvertisements(string path);
     }
 }

@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @using Zust.Entities.Models;
 @using Zust.Web.Helpers.ConstantHelpers;
-@model CreatePostViewModel;
+@model IndexViewModel;
 @{
     var userManager = Context.RequestServices.GetService<UserManager<User>>();
     var user = await userManager.GetUserAsync(Context.User);
@@ -79,6 +79,7 @@
         0% {
             opacity: 0;
         }
+
         100% {
             opacity: 1;
         }
@@ -110,6 +111,21 @@
         max-height: 650px; /* Adjust the height as per your requirement */
         object-fit: contain;
     }
+
+    .advertisement-image {
+        background-color: black;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        border-radius: 5px;
+        margin-bottom: 20px; /* Adjust the value as per your desired gap size */
+    }
+
+        .advertisement-image:last-child {
+            margin-bottom: 0; /* Remove the margin for the last advertisement */
+        }
+
+        
 </style>
 
 <div class="row">
@@ -219,18 +235,29 @@
             <div class="widget widget-watch-video">
                 <h3 class="widget-title">Watch Video</h3>
 
-                <div class="watch-video-slides owl-carousel owl-theme" id="watch-videos-container">
-                    
-                   
+                <div class="watch-video-slides owl-carousel owl-theme" id="item">
+                    @foreach (var videoItem in Model.WatchVideos)
+                    {
+                        <div class="video-item">
+                            <img src="@videoItem.ImageUrl" alt="image">
+
+                            <a href="@videoItem.VideoUrl" class="video-btn popup-youtube">
+                                <i class="ri-play-fill"></i>
+                            </a>
+                        </div>
+                    }
                 </div>
             </div>
 
             <div class="widget widget-advertisement">
-                <h3 class="widget-title">Advertisement</h3>
+                <h3 class="widget-title">Advertisements</h3>
 
-                <div class="advertisement-image">
-                    <a href="#"><img src="~/assets/images/advertisement.jpg" alt="image"></a>
-                </div>
+                @foreach (var ads in Model.Advertisements)
+                {
+                   <a class="advertisement-image" href="@ads.AdvertisementUrl" onmouseover="advertisementHoverHandle(this.querySelector('img'), '@ads.LogoUrl')" onmouseout="restoreOriginalSize(this.querySelector('img'), '@ads.AdvertisementImageUrl')">
+                        <img src="@ads.AdvertisementImageUrl" alt="Image">
+                    </a>
+                }
             </div>
 
             <div class="widget widget-suggested-groups">
@@ -454,8 +481,9 @@
     </div>
 </div>
 
-<script src="~/assets/js/functions.js"></script>
 <script src="~/assets/js/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="~/assets/js/functions.js"></script>
 <script src="~/assets/js/bootstrap.bundle.min.js"></script>
 <script src="~/assets/js/jquery.magnific-popup.min.js"></script>
 <script src="~/assets/js/jquery-ui.min.js"></script>
@@ -465,17 +493,50 @@
 <script src="~/assets/js/wow.min.js"></script>
 <script src="~/assets/js/main.js"></script>
 <script>
+    function advertisementHoverHandle(element, newSource) {
+        element.dataset.originalWidth = element.offsetWidth;
+        element.dataset.originalHeight = element.offsetHeight;
+
+        var parentWidth = element.parentNode.offsetWidth;
+        var parentHeight = element.parentNode.offsetHeight;
+
+        var aspectRatio = element.naturalWidth / element.naturalHeight;
+
+        if (aspectRatio > parentWidth / parentHeight) {
+            element.style.maxWidth = parentWidth + "px";
+            element.style.maxHeight = (parentWidth / aspectRatio) + "px";
+        } else {
+            element.style.maxWidth = (parentHeight * aspectRatio) + "px";
+            element.style.maxHeight = parentHeight + "px";
+        }
+
+        element.addEventListener('transitionend', function () {
+            element.src = newSource;
+            element.style.opacity = 1;
+        });
+
+        element.src = newSource;
+    }
+
+    function restoreOriginalSize(element, oldSource) {
+        if (element.dataset.originalWidth && element.dataset.originalHeight) {
+            element.style.maxWidth = element.dataset.originalWidth + "px";
+            element.style.maxHeight = element.dataset.originalHeight + "px";
+            element.src = oldSource;
+        }
+    }
+
     // Create Post Region
     var spinnerContainer = document.getElementById("spinner-container");
     var container = document.getElementById("post-form");
 
     function startSpinner() {
         spinnerContainer.innerHTML = `
-                              <div class="spinner-border custom-spinner-color" role="status" id="followers-spinner">
-                                        <span class="sr-only"></span>
-                              </div>
-                              <p class="loading-text mt-3">Post is being created . . .</p>
-                            `;
+                                      <div class="spinner-border custom-spinner-color" role="status" id="followers-spinner">
+                                                <span class="sr-only"></span>
+                                      </div>
+                                      <p class="loading-text mt-3">Post is being created . . .</p>
+                                    `;
     }
 
     function stopSpinner() {
@@ -484,27 +545,27 @@
 
     function setPostForm() {
         container.innerHTML = `
-                                    <h3 class="news-feed-title">Create New Post</h3>
+                                            <h3 class="news-feed-title">Create New Post</h3>
 
-                                    <form onsubmit="handleSubmit(event)">
-                                        <div class="form-group">
-                                            <textarea id="text-area" asp-for="Description" class="form-control" placeholder="Write something here..." required></textarea>
+                                            <form onsubmit="handleSubmit(event)">
+                                                <div class="form-group">
+                                                    <textarea id="text-area" asp-for="CreatePostViewModel.Description" class="form-control" placeholder="Write something here..." required></textarea>
 
-                                            <input type="file" id="file-upload" asp-for="MediaFile" accept="video/*,image/*" style="display: none;">
-                                            <div id="media-preview"></div>
-                                        </div>
-                                        <ul class="button-group d-flex justify-content-between align-items-center">
-                                            <li class="photo-btn">
-                                                <button onclick="chooseMedia(event)"><i class="flaticon-gallery"></i> Choose Media</button>
-                                            </li>
-                                            <section id="btn-container">
-                                                <li>
-                                                    <button type="submit" class="btn btn-success">Post</button>
-                                                </li>
-                                            </section>
-                                        </ul>
-                                    </form>
-                                `;
+                                                    <input type="file" id="file-upload" asp-for="CreatePostViewModel.MediaFile" accept="video/*,image/*" style="display: none;">
+                                                    <div id="media-preview"></div>
+                                                </div>
+                                                <ul class="button-group d-flex justify-content-between align-items-center">
+                                                    <li class="photo-btn">
+                                                        <button onclick="chooseMedia(event)"><i class="flaticon-gallery"></i> Choose Media</button>
+                                                    </li>
+                                                    <section id="btn-container">
+                                                        <li>
+                                                            <button type="submit" class="btn btn-success">Post</button>
+                                                        </li>
+                                                    </section>
+                                                </ul>
+                                            </form>
+                                        `;
     }
 
     setPostForm();
@@ -555,7 +616,7 @@
                     showToast("An error occured while sharing the post!", "red");
                 }
             });
-        }, 5000);
+        }, 15000);
     }
 
     function chooseMedia(event) {
@@ -612,71 +673,71 @@
 
         if (post.hasMediaContent && !post.IsVide) {
             content = `
-                            <div class="image-post" style="display:flex; justify-content: center;">
-                                    <img src="${post.contentUrl}" alt="image" class="fit-image">
-                            </div>
-                        `;
+                                    <div class="image-post" style="display:flex; justify-content: center;">
+                                            <img src="${post.contentUrl}" alt="image" class="fit-image">
+                                    </div>
+                                `;
         }
         else if (post.hasMediaContent && post.IsVideo) {
             content = `
-                          <div class="post-video">
-                               <video src="${post.contentUrl}" controls></video>
-                          </div>
-                        `;
+                                  <div class="post-video">
+                                       <video src="${post.contentUrl}" controls></video>
+                                  </div>
+                                `;
         }
 
         var dateDiff = getDateTimeDifference(post.createdAt);
 
         var html = `
-                        <div class="news-feed news-feed-post">
-                            <div class="post-header d-flex justify-content-between align-items-center">
-                                <div class="image">
-                                    <a href="/home/users?id=${post.userId}"><img src="${post.user.imageUrl}" class="rounded-circle" alt="image"></a>
-                                </div>
-                                <div class="info ms-3">
-                                    <span class="name"><a href="/home/users?id=${post.userId}">${post.user.userName}</a></span>
-                                    <span class="small-text"><a>${dateDiff}</a></span>
-                                </div>
-                            </div>
-
-                            <div class="post-body">
-                                <p>${post.description}</p>
-                                ${content}
-                                <ul class="post-meta-wrap d-flex justify-content-between align-items-center">
-                                    <li class="post-react">
-                                        <a href="#">
-                                            <i class="flaticon-like"></i>
-                                            <span>Like</span>
-                                            <span class="number">0</span>
-                                        </a>
-                                    </li>
-                                    <li class="post-comment">
-                                        <a href="#">
-                                            <i class="flaticon-comment"></i>
-                                            <span>Comment</span>
-                                            <span class="number">0</span>
-                                        </a>
-                                    </li>
-                                    <li class="post-share">
-                                        <a href="#">
-                                            <i class="flaticon-share"></i>
-                                            <span>Share</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <form class="post-footer">
-                                    <div class="footer-image">
-                                        <a href="/home/my-profile"><img src="${currentUserProfile}" class="rounded-circle" alt="image"></a>
+                                <div class="news-feed news-feed-post">
+                                    <div class="post-header d-flex justify-content-between align-items-center">
+                                        <div class="image">
+                                            <a href="/home/users?id=${post.userId}"><img src="${post.user.imageUrl}" class="rounded-circle" alt="image"></a>
+                                        </div>
+                                        <div class="info ms-3">
+                                            <span class="name"><a href="/home/users?id=${post.userId}">${post.user.userName}</a></span>
+                                            <span class="small-text"><a>${dateDiff}</a></span>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <textarea name="message" class="form-control" placeholder="Write a comment..."></textarea>
-                                        <label><a href="#"><i class="flaticon-send"></i></a></label>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
 
-                        <hr/>`;
+                                    <div class="post-body">
+                                        <p>${post.description}</p>
+                                        ${content}
+                                        <ul class="post-meta-wrap d-flex justify-content-between align-items-center">
+                                            <li class="post-react">
+                                                <a href="#">
+                                                    <i class="flaticon-like"></i>
+                                                    <span>Like</span>
+                                                    <span class="number">0</span>
+                                                </a>
+                                            </li>
+                                            <li class="post-comment">
+                                                <a href="#">
+                                                    <i class="flaticon-comment"></i>
+                                                    <span>Comment</span>
+                                                    <span class="number">0</span>
+                                                </a>
+                                            </li>
+                                            <li class="post-share">
+                                                <a href="#">
+                                                    <i class="flaticon-share"></i>
+                                                    <span>Share</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <form class="post-footer">
+                                            <div class="footer-image">
+                                                <a href="/home/my-profile"><img src="${currentUserProfile}" class="rounded-circle" alt="image"></a>
+                                            </div>
+                                            <div class="form-group">
+                                                <textarea name="message" class="form-control" placeholder="Write a comment..."></textarea>
+                                                    <label><a href="#"><i class="ri-send-plane-line"></i></a></label>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <hr/>`;
         return html;
     }
 
@@ -720,9 +781,9 @@
 
     function startLoaderSpinner() {
         var spinner = `
-                <div class="spinner-border custom-spinner-color" role="status">
-                    <span class="sr-only"></span>
-                </div>`;
+                        <div class="spinner-border custom-spinner-color" role="status">
+                            <span class="sr-only"></span>
+                        </div>`;
         $('#loader').prop('disabled', true);
         $('#loader').html(spinner);
     }
@@ -780,14 +841,14 @@
 
     function createStatusHtml(statusImagePath, author) {
         var content = `
-             <div class="col-lg-2 col-sm-4 col-4">
-                <div class="stories-item">
-                    <a>
-                        <img src="${statusImagePath}" alt="image">
-                    </a>
-                    <span><a>${author}</a></span>
-                </div>
-            </div>`;
+                     <div class="col-lg-2 col-sm-4 col-4">
+                        <div class="stories-item">
+                            <a>
+                                <img src="${statusImagePath}" alt="image">
+                            </a>
+                            <span><a>${author}</a></span>
+                        </div>
+                    </div>`;
         return content;
     }
 
@@ -848,59 +909,58 @@
         statusesContainer.innerHTML = htmlContainer;
     }
 
-    function getWatchVideos(){
-        return new Promise(function (resolve, reject) {
-            $.ajax({
-                url: '/api/Static/GetWatchVideos',
-                type: 'GET',
-                success: function (response) {
-                    resolve(response);
-                },
-                error: function (error) {
-                    reject(new Error(xhr.responseText));
-                }
-            });
-        });
-    }
+    //function getWatchVideos(){
+    //    return new Promise(function (resolve, reject) {
+    //        $.ajax({
+    //            url: '/api/Static/GetWatchVideos',
+    //            type: 'GET',
+    //            success: function (response) {
+    //                resolve(response);
+    //            },
+    //            error: function (error) {
+    //                reject(new Error(xhr.responseText));
+    //            }
+    //        });
+    //    });
+    //}
 
-    var videoCount = 9;
+    //var videoCount = 9;
 
-    function createWatchVideoHtml(video) {
-        var content = `
-            <div class="video-item">
-                <img src="${video.imageUrl}" alt="image">
+    //function createWatchVideoHtml(video) {
+    //    var content = `
+    //        <div class="video-item">
+    //            <img src="${video.imageUrl}" alt="image">
 
-                <a href="${video.videoUrl}" class="video-btn popup-youtube">
-                    <i class="ri-play-fill"></i>
-                 </a>
-            </div>`;
-        return content;
-    }
+    //            <a href="${video.videoUrl}" class="video-btn popup-youtube">
+    //                <i class="ri-play-fill"></i>
+    //             </a>
+    //        </div>`;
+    //    return content;
+    //}
 
-    async function setWatchVideos(){
-        var watchVideos = await getWatchVideos();
+    //async function setWatchVideos(){
+    //    var watchVideos = await getWatchVideos();
 
-        if (watchVideos === null || watchVideos.count === 0) {
-            watchVideos = Array(videoCount).fill({ videoUrl: "https://www.youtube.com", imageUrl: "https://res.cloudinary.com/dax9yhk8g/image/upload/v1689665492/noContentFound_m74is3.png" });
-        }
+    //    if (watchVideos === null || watchVideos.count === 0) {
+    //        watchVideos = Array(videoCount).fill({ videoUrl: "https://www.youtube.com", imageUrl: "https://res.cloudinary.com/dax9yhk8g/image/upload/v1689665492/noContentFound_m74is3.png" });
+    //    }
 
-        watchVideos = shuffleArray(watchVideos);
-        watchVideos = watchVideos.slice(0, videoCount);
+    //    watchVideos = shuffleArray(watchVideos);
+    //    watchVideos = watchVideos.slice(0, videoCount);
 
-        var htmlContainer = '';
-        for (var i = 0; i < watchVideos.length; i++) {
-            var video = watchVideos[i];
-            var html = createWatchVideoHtml(video);
-            htmlContainer += html;
-        }
-        var watchVideosContainer = document.getElementById("watch-videos-container");
-        watchVideosContainer.innerHTML = htmlContainer;
-    }
+    //    var htmlContainer = '';
+    //    for (var i = 0; i < watchVideos.length; i++) {
+    //        var video = watchVideos[i];
+    //        var html = createWatchVideoHtml(video);
+    //        htmlContainer += html;
+    //    }
+    //    var watchVideosContainer = document.getElementById("id");
+    //    watchVideosContainer.innerHTML += htmlContainer;
+    //}
 
+    //setWatchVideos();
 
     setStatuses();
-    setWatchVideos();
-    // Call the loadPosts function to start loading posts
     loadPosts();
 </script>
 

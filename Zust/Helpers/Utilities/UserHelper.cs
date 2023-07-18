@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Zust.Entities.Models;
 
-namespace Zust.Web.Helpers.UserHelpers
+namespace Zust.Web.Helpers.Utilities
 {
     /// <summary>
     /// Helper class for retrieving the current authenticated user.

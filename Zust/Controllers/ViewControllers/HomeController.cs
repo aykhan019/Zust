@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Zust.Business.Abstract;
 using Zust.Entities.Models;
+using Zust.Web.Abstract;
 using Zust.Web.Helpers.ConstantHelpers;
 using Zust.Web.Models;
 
@@ -14,6 +15,8 @@ namespace Zust.Web.Controllers.ViewControllers
     [Controller]
     public class HomeController : Controller
     {
+        private readonly IStaticService _staticService;
+
         /// <summary>
         /// Gets the user service used by the controller.
         /// </summary>
@@ -23,9 +26,10 @@ namespace Zust.Web.Controllers.ViewControllers
         /// Initializes a new instance of the HomeController class with the specified user service.
         /// </summary>
         /// <param name="userService">The user service to be used by the controller.</param>
-        public HomeController(IUserService userService)
+        public HomeController(IUserService userService, IStaticService staticService)
         {
             _userService = userService;
+            _staticService = staticService;
         }
 
         /// <summary>
@@ -119,7 +123,13 @@ namespace Zust.Web.Controllers.ViewControllers
         /// <returns>The Index view.</returns>
         public IActionResult Index()
         {
-            return View(new CreatePostViewModel());
+            var vm = new IndexViewModel()
+            {
+                 CreatePostViewModel = new CreatePostViewModel(),
+                 WatchVideos = _staticService.GetWatchVideos(Path.Combine(FileConstants.FilesFolderPath, FileConstants.WatchVideoUrlsFile)),
+                 Advertisements = _staticService.GetAdvertisements(Path.Combine(FileConstants.FilesFolderPath, FileConstants.AdvertisementsFile))
+            };
+            return View(vm);
         }
 
         /// <summary>

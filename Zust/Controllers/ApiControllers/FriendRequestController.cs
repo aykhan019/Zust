@@ -5,7 +5,7 @@ using Zust.Business.Concrete;
 using Zust.Core.Concrete.EntityFramework;
 using Zust.Entities.Models;
 using Zust.Web.Helpers.ConstantHelpers;
-using Zust.Web.Helpers.UserHelpers;
+using Zust.Web.Helpers.Utilities;
 
 namespace Zust.Web.Controllers.ApiControllers
 {

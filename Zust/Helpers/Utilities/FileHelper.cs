@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Zust.Web.Helpers.FileHelpers
+namespace Zust.Web.Helpers.Utilities
 {
     /// <summary>
     /// Helper class for working with files.

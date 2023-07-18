@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Zust.Web.Abstract;
 using Zust.Web.Helpers.ConstantHelpers;
-using Zust.Web.Helpers.ImageHelpers;
 
 namespace Zust.Web.Controllers.ApiControllers
 {
