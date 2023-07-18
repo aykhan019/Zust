@@ -36,7 +36,7 @@ namespace Zust.Web.Controllers.ApiControllers
                     {
                         Id = Guid.NewGuid().ToString(),
                         CreatedAt = DateTime.Now,
-                        ContentUrl = string.Empty,
+                        ContentUrl = Constants.NoContentImageUrl,
                         Description = model.Description,
                         HasMediaContent = false,
                         IsVideo = false,

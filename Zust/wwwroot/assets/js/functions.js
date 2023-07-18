@@ -2,40 +2,44 @@
 
 function createToast(text, color) {
     let toast = `
-        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-            <div id="${toastId}" lass="toast" role="alert" aria-live="assertive" aria-atomic="true" style="border: 1px solid ${color}; background-color: white;">
-                <div class="toast-header">
-                    <strong class="me-auto">Zust</strong>
-                    <small>Now</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body" style="color: ${color};">
-                    ${text}
-                </div>
-            </div>
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+      <div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="border: 1px solid ${color}; background-color: white;">
+        <div class="toast-header">
+          <strong class="me-auto">Zust</strong>
+          <small>Now</small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
-    `;
+        <div class="toast-body" style="color: ${color};">
+          ${text}
+        </div>
+      </div>
+    </div>
+  `;
     return toast;
 }
 
 // Function to show the toast
 function showToast(message, color) {
+    // Remove existing toast if it exists
+    var existingToast = document.getElementById(toastId);
+    if (existingToast) {
+        existingToast.remove();
+    }
+
     var toastHTML = createToast(message, color);
-    $('body').append(toastHTML);
-    let toast = $(toastId);
-    const bsToast = new bootstrap.Toast(toast);
+    document.body.insertAdjacentHTML("beforeend", toastHTML);
+    var toast = document.getElementById(toastId);
+    var bsToast = new bootstrap.Toast(toast);
     bsToast.show();
-    setTimeout(() => {
-        bsToast.hide();
+    setTimeout(function () {
+        toast.style.display = "none";
     }, 6000);
 
     // Handle close button click event
-    const closeButton = toast.querySelector(".btn-close");
-    closeButton.addEventListener("click", () => {
-        bsToast.hide();
+    var closeButton = toast.querySelector(".btn-close");
+    closeButton.addEventListener("click", function () {
+        toast.style.display = "none";
     });
-    let toast2 = new bootstrap.Toast(toast);
-    toast2.show();
 }
 
 function getDateTimeDifference(dateTime) {

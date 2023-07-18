@@ -36,6 +36,8 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IFriendshipDal,EFFriendshipDal>();
 builder.Services.AddScoped<IFriendshipService, FriendshipService>();
 builder.Services.AddScoped<IMediaService, MediaService>();
+builder.Services.AddScoped<IPostDal, EFPostDal>();
+builder.Services.AddScoped<IPostService, PostService>();
 
 // Register Session
 builder.Services.AddSession();

@@ -58,5 +58,7 @@
         public const string CloudinarySettings = "CloudinarySettings";
         public const string ImageFileType = "image/";
         public const string VideoFileType = "video/";
+
+        public const string NoContentImageUrl = "https://res.cloudinary.com/dax9yhk8g/image/upload/v1689665492/noContentFound_m74is3.png";
     }
 }
