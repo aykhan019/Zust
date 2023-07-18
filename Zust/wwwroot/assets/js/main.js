@@ -1,5 +1,5 @@
 jQuery(function ($) {
-    'use strict';
+	'use strict';
 
 	// Metis Menu JS
 	$(function () {
@@ -7,13 +7,13 @@ jQuery(function ($) {
 	});
 
 	// Responsive Burger Menu JS
-	$('.responsive-burger-menu').on('click', function() {
+	$('.responsive-burger-menu').on('click', function () {
 		$('.responsive-burger-menu').toggleClass('active');
 		$('.sidemenu-area').toggleClass('active-sidemenu-area');
 	});
 
 	// Navbar Burger Menu JS
-	$('.navbar-burger-menu').on('click', function() {
+	$('.navbar-burger-menu').on('click', function () {
 		$('.navbar-burger-menu').toggleClass('active');
 		$('.sidemenu-area').toggleClass('active-sidemenu-area');
 	});
@@ -24,19 +24,19 @@ jQuery(function ($) {
 	});
 
 	// Language Switcher
-	$(".language-option").each(function() {
-        var each = $(this)
-        each.find(".lang-name").html(each.find(".language-dropdown-menu a:nth-child(1)").text());
-        var allOptions = $(".language-dropdown-menu").children('a');
-        each.find(".language-dropdown-menu").on("click", "a", function() {
-            allOptions.removeClass('selected');
-            $(this).addClass('selected');
-            $(this).closest(".language-option").find(".lang-name").html($(this).text());
-        });
-    })
+	$(".language-option").each(function () {
+		var each = $(this)
+		each.find(".lang-name").html(each.find(".language-dropdown-menu a:nth-child(1)").text());
+		var allOptions = $(".language-dropdown-menu").children('a');
+		each.find(".language-dropdown-menu").on("click", "a", function () {
+			allOptions.removeClass('selected');
+			$(this).addClass('selected');
+			$(this).closest(".language-option").find(".lang-name").html($(this).text());
+		});
+	})
 
 	// Others Option For Responsive JS
-	$(".others-option-for-responsive .dot-menu").on("click", function(){
+	$(".others-option-for-responsive .dot-menu").on("click", function () {
 		$(".others-option-for-responsive .container .container").toggleClass("active");
 	});
 
@@ -64,7 +64,7 @@ jQuery(function ($) {
 			}
 		}
 	});
-	
+
 	// Popup Video
 	$('.popup-youtube').magnificPopup({
 		disableOn: 320,
@@ -107,17 +107,17 @@ jQuery(function ($) {
 	$("#datepicker").datepicker();
 
 	// Go to Top
-	$(window).on('scroll', function(){
+	$(window).on('scroll', function () {
 		var scrolled = $(window).scrollTop();
 		if (scrolled > 600) $('.go-top').addClass('active');
 		if (scrolled < 600) $('.go-top').removeClass('active');
-	});  
-	$('.go-top').on('click', function() {
-		$("html, body").animate({ scrollTop: "0" },  500);
 	});
-	
+	$('.go-top').on('click', function () {
+		$("html, body").animate({ scrollTop: "0" }, 500);
+	});
+
 	// Preloader
-	$(window).on('load', function() {
+	$(window).on('load', function () {
 		$('.preloader-area').fadeOut();
 	});
 

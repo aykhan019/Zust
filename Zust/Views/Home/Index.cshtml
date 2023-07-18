@@ -456,7 +456,6 @@
 
 <script src="~/assets/js/functions.js"></script>
 <script src="~/assets/js/jquery.min.js"></script>
-<script src="~/assets/js/jquery.min.js"></script>
 <script src="~/assets/js/bootstrap.bundle.min.js"></script>
 <script src="~/assets/js/jquery.magnific-popup.min.js"></script>
 <script src="~/assets/js/jquery-ui.min.js"></script>
@@ -753,13 +752,14 @@
     }
 
     function addPostsToView(posts, reset = false) {
+        var container = document.getElementById("posts-container");
         if (reset) {
-            document.getElementById("posts-container").innerHTML = "";
+            container.innerHTML = "";
         }
         posts.forEach(function (post) {
             var postHtml = createPostHtml(post);
             // Append the postHtml to container
-            $('#posts-container').append(postHtml);
+            container.innerHTML += postHtml;
         });
     }
 
