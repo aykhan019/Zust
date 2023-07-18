@@ -2,13 +2,12 @@
 using System;
 using System.Reflection.Metadata;
 using Zust.Core.Abstraction;
-using Zust.Entities.Helpers;
 
 namespace Zust.Entities.Models
 {
     public class User : IdentityUser, IEntity
     {
-        public string? ImageUrl { get; set; } = Constants.DefaultProfileImagePath;
+        public string? ImageUrl { get; set; }
 
         public string? CoverImage { get; set; } 
 

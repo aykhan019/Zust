@@ -38,6 +38,7 @@ builder.Services.AddScoped<IFriendshipService, FriendshipService>();
 builder.Services.AddScoped<IMediaService, MediaService>();
 builder.Services.AddScoped<IPostDal, EFPostDal>();
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IStaticService, StaticService>();
 
 // Register Session
 builder.Services.AddSession();

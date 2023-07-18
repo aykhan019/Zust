@@ -86,5 +86,7 @@
         public const string Static = "api/Static";
 
         public const string GetRandomStatusImagePaths = "GetRandomStatusImagePaths";
+
+        public const string GetWatchVideos = "GetWatchVideos";
     }
 }

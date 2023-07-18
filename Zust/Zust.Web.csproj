@@ -8,7 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Files\watchVideoUrls.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
+    <None Include="Files\watchVideoUrls.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +40,10 @@
     <ProjectReference Include="..\Zust.Business\Zust.Business.csproj" />
     <ProjectReference Include="..\Zust.DataAccess\Zust.DataAccess.csproj" />
     <ProjectReference Include="..\Zust.Entities\Zust.Entities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
 </Project>

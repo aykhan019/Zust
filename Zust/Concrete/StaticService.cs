@@ -1,4 +1,5 @@
 ﻿using Zust.Web.Abstract;
+using Zust.Web.Entities;
 using Zust.Web.Helpers.ConstantHelpers;
 using Zust.Web.Helpers.FileHelpers;
 using Zust.Web.Helpers.ImageHelpers;
@@ -9,7 +10,7 @@ namespace Zust.Web.Concrete
     {
         public string GetRandomCoverImage(string path)
         {
-            var imageUrls = FileHelper.GetImagePathsFromFile(path);
+            var imageUrls = FileHelper<string>.ReadTextFile(path);
 
             var rand = new Random().Next(0, imageUrls.Count);
 
@@ -18,7 +19,7 @@ namespace Zust.Web.Concrete
 
         public List<string> GetRandomStatusImagePaths(int count, string path)
         {
-            var imageUrls = FileHelper.GetImagePathsFromFile(path);
+            var imageUrls = FileHelper<string>.ReadTextFile(path);
 
             var rand = new Random();
 
@@ -39,6 +40,13 @@ namespace Zust.Web.Concrete
             }
 
             return randomImages;
+        }
+
+        public List<Video> GetWatchVideos(string path)
+        {
+            var videos = FileHelper<Video>.Deserialize(path);
+
+            return videos;
         }
     }
 }

@@ -4,6 +4,7 @@ using Zust.Entities.Models;
 using Zust.Web.Abstract;
 using Zust.Web.Helpers.ConstantHelpers;
 using Zust.Web.Helpers.ImageHelpers;
+using Zust.Web.Entities;
 
 namespace Zust.Web.Concrete
 {

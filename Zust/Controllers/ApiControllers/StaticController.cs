@@ -34,6 +34,21 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        [HttpGet(Routes.GetWatchVideos)]
+        public ActionResult<List<string>> GetWatchVideos()
+        {
+            try
+            {
+                string path = Path.Combine(FileConstants.FilesFolderPath, FileConstants.WatchVideoUrlsFile);
 
+                var videos = _staticService.GetWatchVideos(path);
+
+                return Ok(videos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

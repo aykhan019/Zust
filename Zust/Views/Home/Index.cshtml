@@ -79,7 +79,6 @@
         0% {
             opacity: 0;
         }
-
         100% {
             opacity: 1;
         }
@@ -220,9 +219,9 @@
             <div class="widget widget-watch-video">
                 <h3 class="widget-title">Watch Video</h3>
 
-                <div class="watch-video-slides owl-carousel owl-theme" id="watch-videos">
-                   
+                <div class="watch-video-slides owl-carousel owl-theme" id="watch-videos-container">
                     
+                   
                 </div>
             </div>
 
@@ -457,6 +456,15 @@
 
 <script src="~/assets/js/functions.js"></script>
 <script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/bootstrap.bundle.min.js"></script>
+<script src="~/assets/js/jquery.magnific-popup.min.js"></script>
+<script src="~/assets/js/jquery-ui.min.js"></script>
+<script src="~/assets/js/simplebar.min.js"></script>
+<script src="~/assets/js/metismenu.min.js"></script>
+<script src="~/assets/js/owl.carousel.min.js"></script>
+<script src="~/assets/js/wow.min.js"></script>
+<script src="~/assets/js/main.js"></script>
 <script>
     // Create Post Region
     var spinnerContainer = document.getElementById("spinner-container");
@@ -824,7 +832,6 @@
     }
 
     async function setStatuses() {
-        var statusesContainer = document.getElementById("statuses");
         var statusImages = await getRandomImagePaths();
         if (statusImages === null || statusImages.count === 0) {
             statusImages = Array(statusCount).fill("https://res.cloudinary.com/dax9yhk8g/image/upload/v1689665492/noContentFound_m74is3.png"); // no content image
@@ -837,10 +844,62 @@
             var html = createStatusHtml(statusImages[i], randomAuthors[i]);
             htmlContainer += html;
         }
+        var statusesContainer = document.getElementById("statuses");
         statusesContainer.innerHTML = htmlContainer;
     }
 
+    function getWatchVideos(){
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: '/api/Static/GetWatchVideos',
+                type: 'GET',
+                success: function (response) {
+                    resolve(response);
+                },
+                error: function (error) {
+                    reject(new Error(xhr.responseText));
+                }
+            });
+        });
+    }
+
+    var videoCount = 9;
+
+    function createWatchVideoHtml(video) {
+        var content = `
+            <div class="video-item">
+                <img src="${video.imageUrl}" alt="image">
+
+                <a href="${video.videoUrl}" class="video-btn popup-youtube">
+                    <i class="ri-play-fill"></i>
+                 </a>
+            </div>`;
+        return content;
+    }
+
+    async function setWatchVideos(){
+        var watchVideos = await getWatchVideos();
+
+        if (watchVideos === null || watchVideos.count === 0) {
+            watchVideos = Array(videoCount).fill({ videoUrl: "https://www.youtube.com", imageUrl: "https://res.cloudinary.com/dax9yhk8g/image/upload/v1689665492/noContentFound_m74is3.png" });
+        }
+
+        watchVideos = shuffleArray(watchVideos);
+        watchVideos = watchVideos.slice(0, videoCount);
+
+        var htmlContainer = '';
+        for (var i = 0; i < watchVideos.length; i++) {
+            var video = watchVideos[i];
+            var html = createWatchVideoHtml(video);
+            htmlContainer += html;
+        }
+        var watchVideosContainer = document.getElementById("watch-videos-container");
+        watchVideosContainer.innerHTML = htmlContainer;
+    }
+
+
     setStatuses();
+    setWatchVideos();
     // Call the loadPosts function to start loading posts
     loadPosts();
 </script>
