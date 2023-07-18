@@ -10,5 +10,8 @@ namespace Zust.Business.Abstract
     public interface IPostService
     {
         Task AddPostAsync(Post post);
+        Task<IEnumerable<Post>> GetAllPostsAsync();
+        Task<IEnumerable<Post>> GetAllPostsForNewsFeedAsync(string currentUserId);
+        Task<IEnumerable<Post>> GetAllPostsOfUserAsync(string userId);
     }
 }

@@ -78,5 +78,13 @@
         public const string Post = "api/Post";
 
         public const string CreatePost = "CreatePost";
+
+        public const string GetAllPosts = "GetAllPosts";
+
+        public const string GetAllPostsOfUser = "GetAllPostsOfUser";
+
+        public const string Static = "api/Static";
+
+        public const string GetRandomStatusImagePaths = "GetRandomStatusImagePaths";
     }
 }

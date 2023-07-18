@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Zust.Business.Abstract;
 using Zust.Entities.Models;
+using Zust.Web.Abstract;
 using Zust.Web.Helpers.ConstantHelpers;
 using Zust.Web.Helpers.ImageHelpers;
 using Zust.Web.Models;
@@ -30,6 +31,8 @@ namespace Zust.Web.Controllers.ApiControllers
         /// </summary>
         private readonly UserManager<User> _userManager;
 
+        private readonly IStaticService _staticService;
+
         /// <summary>
         /// The role manager component used for managing roles.
         /// </summary>
@@ -50,7 +53,8 @@ namespace Zust.Web.Controllers.ApiControllers
                                         SignInManager<User> signInManager,
                                         UserManager<User> userManager,
                                         RoleManager<Zust.Entities.Models.Role> roleManager,
-                                        IUserService userService)
+                                        IUserService userService,
+                                        IStaticService staticService)
         {
             _configuration = configuration;
 
@@ -61,6 +65,7 @@ namespace Zust.Web.Controllers.ApiControllers
             _roleManager = roleManager;
 
             _userService = userService;
+            _staticService = staticService;
         }
 
         /// <summary>
@@ -86,7 +91,7 @@ namespace Zust.Web.Controllers.ApiControllers
 
                 Email = model.Email,
 
-                CoverImage = ImageHelper.GetRandomCoverImage()
+                CoverImage = _staticService.GetRandomCoverImage(FileConstants.CoversFile)
             };
 
             // Register the user with the provided password

@@ -6,11 +6,11 @@
     public class FileHelper
     {
         /// <summary>
-        /// Retrieves a list of cover images from a text file.
+        /// Retrieves a list of images from a text file.
         /// </summary>
         /// <param name="path">The path to the text file.</param>
-        /// <returns>A list of cover images.</returns>
-        public static List<string> GetCoverImagesFromFile(string path)
+        /// <returns>A list of images.</returns>
+        public static List<string> GetImagePathsFromFile(string path)
         {
             var lines = File.ReadAllLines(path);
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Zust.Business.Abstract;
+using Zust.Business.Concrete;
 using Zust.Entities.Models;
 using Zust.Web.Abstract;
 using Zust.Web.Helpers.ConstantHelpers;
@@ -15,11 +16,13 @@ namespace Zust.Web.Controllers.ApiControllers
     {
         private readonly IMediaService _mediaService;
         private readonly IPostService _postService;
+        private readonly IUserService _userService;
 
-        public PostController(IMediaService mediaService, IPostService postService)
+        public PostController(IMediaService mediaService, IPostService postService, IUserService userService)
         {
             _mediaService = mediaService;
             _postService = postService;
+            _userService = userService;
         }
 
         [HttpPost(Routes.CreatePost)]
@@ -28,20 +31,29 @@ namespace Zust.Web.Controllers.ApiControllers
             try
             {
                 IFormFile? mediaFile = model.MediaFile;
+
                 var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
+
+                var post = new Post()
+                {
+                    Id = Guid.NewGuid().ToString(),
+
+                    CreatedAt = DateTime.Now,
+
+                    Description = model.Description,
+
+                    UserId = currentUser.Id
+                };
+
                 // If mediaFile is null, it mean post does not have an image
                 if (mediaFile == null)
                 {
-                    var post = new Post()
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        CreatedAt = DateTime.Now,
-                        ContentUrl = Constants.NoContentImageUrl,
-                        Description = model.Description,
-                        HasMediaContent = false,
-                        IsVideo = false,
-                        UserId = currentUser.Id
-                    };
+                    post.ContentUrl = Constants.NoContentImageUrl;
+
+                    post.HasMediaContent = false;
+
+                    post.IsVideo = false;
+
                     await _postService.AddPostAsync(post);
                 }
                 else
@@ -51,26 +63,54 @@ namespace Zust.Web.Controllers.ApiControllers
                     {
                         var isVideoFile = _mediaService.IsVideoFile(mediaFile);
 
-                        var post = new Post()
-                        {
-                            Id = Guid.NewGuid().ToString(),
-                            ContentUrl = mediaUrl,
-                            CreatedAt = DateTime.Now,
-                            Description = model.Description,
-                            HasMediaContent = true,
-                            IsVideo = isVideoFile,
-                            UserId = currentUser.Id
-                        };
+                        post.ContentUrl = mediaUrl;
+
+                        post.HasMediaContent = true;
+
+                        post.IsVideo = isVideoFile;
+
                         await _postService.AddPostAsync(post);
                     }
                     else
                     {
                         return BadRequest(Errors.ImageUploadError);
                     }
-
                 }
-                return Ok();
+                post.User = await _userService.GetUserByIdAsync(post.UserId);
+                return Ok(post);
 
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(Routes.GetAllPosts)]
+        public async Task<ActionResult<IEnumerable<User>>> GetAllPosts()
+        {
+            try
+            {
+                var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
+
+                var posts = await _postService.GetAllPostsForNewsFeedAsync(currentUser.Id);
+
+                return Ok(posts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(Routes.GetAllPostsOfUser)]
+        public async Task<ActionResult<IEnumerable<User>>> GetAllPostsOfUser(string userId)
+        {
+            try
+            {
+                var posts = await _postService.GetAllPostsOfUserAsync(userId);
+
+                return Ok(posts);
             }
             catch (Exception ex)
             {

@@ -20,9 +20,26 @@
     }
 
     .profile-image {
-        width: 250px !important; 
-        height: 250px !important; 
+        width: 250px !important;
+        height: 250px !important;
         object-fit: cover !important; /* Maintain aspect ratio and cover the container */
+    }
+
+    #posts {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #posts-area {
+        width: 40%;
+    }
+
+    .fit-image {
+        max-width: 100%;
+        max-height: 650px; /* Adjust the height as per your requirement */
+        object-fit: contain;
     }
 </style>
 
@@ -76,7 +93,7 @@
                     <a class="nav-link active" id="about-tab" data-bs-toggle="tab" href="#about" role="tab" aria-controls="about">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="photos-tab" data-bs-toggle="tab" href="#photos" role="tab" aria-controls="photos">Photos</a>
+                    <a class="nav-link" id="photos-tab" data-bs-toggle="tab" href="#posts" role="tab" aria-controls="photos">My Posts</a>
                 </li>
             </ul>
         </div>
@@ -254,391 +271,38 @@
         </div>
     </div>
 
-    <div class="tab-pane fade" id="photos" role="tabpanel">
-        <div class="photos-inner-box-style d-flex justify-content-between align-items-center">
-            <div class="title">
-                <h3>Photos</h3>
-                <span>855</span>
-            </div>
+    <div class="tab-pane fade" id="posts" role="tabpanel">
 
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="all-photos-tab" data-bs-toggle="tab" href="#all-photos" role="tab" aria-controls="all-photos">All Photos</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" id="photos-albums-tab" data-bs-toggle="tab" href="#photos-albums" role="tab" aria-controls="photos-albums">Photos Albums</a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="all-photos" role="tabpanel">
-                <div class="row justify-content-center">
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-1.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-2.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-3.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-4.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-5.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-6.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-7.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-8.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-9.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-10.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-11.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-12.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-13.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-14.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-15.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-16.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="load-more-posts-btn">
-                    <a href="#"><i class="flaticon-loading"></i> Load More</a>
-                </div>
-            </div>
-
-            <div class="tab-pane fade" id="photos-albums" role="tabpanel">
-                <div class="row justify-content-center">
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-16.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-15.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-14.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-13.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-12.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-11.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-10.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-9.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-8.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-7.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-6.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-5.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-4.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-3.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-2.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-photos-card">
-                            <a href=""><img src="~/assets/images/photos/photos-1.jpg" alt="image"></a>
-
-                            <div class="icon">
-                                <a href="#"><i class="flaticon-remove-user"></i></a>
-                                <a href="#"><i class="flaticon-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="load-more-posts-btn">
-                    <a href="#"><i class="flaticon-loading"></i> Load More</a>
-                </div>
-            </div>
-        </div>
+        <div class="news-feed-area" id="posts-area"></div>
     </div>
 </div>
 
+<link rel="stylesheet" href="~/assets//css/main.css" />
 <script src="~/assets/js/functions.js"></script>
 <script src="~/assets/js/jquery.min.js"></script>
 <script>
-     var currentUserId = '@user.Id.ToString()';
+    var currentUserId = '@user.Id.ToString()';
 
     setSocialCounts("follower-count", "following-count", "post-like-count", currentUserId);
-    
+
     // HTML template for the save button
     var btnHtml = `
-                                        <button id="saveBtn" class="btn btn-primary" disabled onclick="save()">
-                                            Save Changes
-                                        </button>`;
+                                            <button id="saveBtn" class="btn btn-primary" disabled onclick="save()">
+                                                Save Changes
+                                            </button>`;
 
     // HTML template for the save button
     var cancelHtml = `
-                                            <button class="btn btn-secondary" onclick="cancel()">
-                                                Cancel Changes
-                                            </button>`;
+                                                <button class="btn btn-secondary" onclick="cancel()">
+                                                    Cancel Changes
+                                                </button>`;
 
 
     // HTML template for the edit link
     var editHtml = `
-                                        <a id="editText" class="dropdown-item d-flex align-items-center" onclick="openEdit()" style="cursor:pointer;">
-                                            <i class="flaticon-edit"></i> Edit Information
-                                        </a>`;
+                                            <a id="editText" class="dropdown-item d-flex align-items-center" onclick="openEdit()" style="cursor:pointer;">
+                                                <i class="flaticon-edit"></i> Edit Information
+                                            </a>`;
 
     // Get the dropdown element and set its content to the edit link
     var dropdown = document.getElementById("dropdown");
@@ -735,4 +399,85 @@
     function enableSaveButton() {
         saveButton.disabled = false;
     }
+
+
+    // Get My Posts
+    function getMyPosts() {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: '/api/Post/GetAllPostsOfUser?userId=' + currentUserId,
+                type: 'GET',
+                success: function (response) {
+                    resolve(response);
+                },
+                error: function (xhr, status, error) {
+                    reject(new Error(xhr.responseText));
+                }
+            });
+        });
+    }
+
+    function createPostHtml(post) {
+        var content = '';
+
+        if (post.hasMediaContent && !post.IsVide) {
+            content = `
+                                <div class="image-post" style="display:flex; justify-content: center;">
+                                    <img src="${post.contentUrl}" alt="image" class="fit-image">
+                                </div>
+                            `;
+        }
+        else if (post.hasMediaContent && post.IsVideo) {
+            content = `
+                              <div class="post-video">
+                                   <video src="${post.contentUrl}" controls></video>
+                              </div>
+                            `;
+        }
+
+        var dateDiff = getDateTimeDifference(post.createdAt);
+
+        var html = `
+                            <div class="news-feed news-feed-post">
+                                <div class="post-header d-flex justify-content-between align-items-center">
+                                    <div class="image">
+                                        <a href="/home/users?id=${post.userId}"><img src="${post.user.imageUrl}" class="rounded-circle" alt="image"></a>
+                                    </div>
+                                    <div class="info ms-3">
+                                        <span class="name"><a href="/home/users?id=${post.userId}">${post.user.userName}</a></span>
+                                        <span class="small-text"><a>${dateDiff}</a></span>
+                                    </div>
+                                </div>
+
+                                <div class="post-body">
+                                    <p>${post.description}</p>
+                                    ${content}
+                                </div>
+                            </div>
+
+                            <hr/>`;
+        return html;
+    }
+
+    var container = document.getElementById("posts-area");
+    async function addPostsToView() {
+        var posts = await getMyPosts();
+        console.log(posts);
+        if (posts != null && posts.length > 0) {
+            posts.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)).reverse();
+            var content = '';
+            for (var i = 0; i < posts.length; i++) {
+                var post = posts[i];
+                var html = createPostHtml(post);
+                content += html;
+            }
+            container.innerHTML = content;
+        }
+        else {
+            var noResult = getNoResultHtml("Oops! No posts found.", "Start sharing your amazing posts for others to enjoy!")
+            container.innerHTML = noResult;
+        }
+    }
+
+    addPostsToView();
 </script>

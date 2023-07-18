@@ -79,12 +79,13 @@
         0% {
             opacity: 0;
         }
+
         100% {
             opacity: 1;
         }
     }
 
-    .button-group{
+    .button-group {
         gap: 20px;
     }
 
@@ -94,17 +95,28 @@
         font-size: 17px !important;
     }
 
-    @@media only screen and (max-width: 767px){
+    @@media only screen and (max-width: 767px) {
         .photo-btn,
-        .tag-btn{
+        .tag-btn {
             margin-bottom: 10px;
         }
+    }
+
+    .image-post {
+        background-color: #fcfcfc;
+    }
+
+    .fit-image {
+        max-width: 100%;
+        max-height: 650px; /* Adjust the height as per your requirement */
+        object-fit: contain;
     }
 </style>
 
 <div class="row">
     <div class="col-lg-3 col-md-12">
         <aside class="widget-area">
+            @*View Profile*@
             <div class="widget widget-view-profile">
                 <div class="profile-box d-flex justify-content-between align-items-center">
                     <a href="/home/my-profile"><img src="@user.ImageUrl" alt="image" class="profile-image"></a>
@@ -137,6 +149,8 @@
                     <a href="/home/my-profile" class="default-btn">View Profile</a>
                 </div>
             </div>
+
+            @*Page You Like*@
             <div class="widget widget-page-you-like">
                 <h3 class="widget-title">Page You Like</h3>
 
@@ -201,33 +215,17 @@
                     </div>
                 </article>
             </div>
+
+            @*Static Watch Videos*@
             <div class="widget widget-watch-video">
                 <h3 class="widget-title">Watch Video</h3>
 
-                <div class="watch-video-slides owl-carousel owl-theme">
-                    <div class="video-item">
-                        <img src="~/assets/images/watch-video/video-1.jpg" alt="image">
-
-                        <a href="https://www.youtube.com/watch?v=ODfy2YIKS1M" class="video-btn popup-youtube">
-                            <i class="ri-play-fill"></i>
-                        </a>
-                    </div>
-                    <div class="video-item">
-                        <img src="~/assets/images/watch-video/video-2.jpg" alt="image">
-
-                        <a href="https://www.youtube.com/watch?v=ODfy2YIKS1M" class="video-btn popup-youtube">
-                            <i class="ri-play-fill"></i>
-                        </a>
-                    </div>
-                    <div class="video-item">
-                        <img src="~/assets/images/watch-video/video-3.jpg" alt="image">
-
-                        <a href="https://www.youtube.com/watch?v=ODfy2YIKS1M" class="video-btn popup-youtube">
-                            <i class="ri-play-fill"></i>
-                        </a>
-                    </div>
+                <div class="watch-video-slides owl-carousel owl-theme" id="watch-videos">
+                   
+                    
                 </div>
             </div>
+
             <div class="widget widget-advertisement">
                 <h3 class="widget-title">Advertisement</h3>
 
@@ -235,6 +233,7 @@
                     <a href="#"><img src="~/assets/images/advertisement.jpg" alt="image"></a>
                 </div>
             </div>
+
             <div class="widget widget-suggested-groups">
                 <h3 class="widget-title">Suggested Groups</h3>
                 <article class="item">
@@ -283,149 +282,25 @@
     <div class="col-lg-6 col-md-12">
         <div class="news-feed-area">
             <div id="spinner-container">
-              
             </div>
 
             <div class="news-feed news-feed-form" id="post-form">
-
             </div>
 
             <div class="news-feed news-feed-stories">
                 <div class="stories-title d-flex justify-content-between align-items-center">
-                    <h3>Stories</h3>
-                    <span><a href="#">See All</a></span>
+                    <h3>Statuses</h3>
                 </div>
 
-                <div class="row">
-                    <div class="col-lg-2 col-sm-4 col-4">
-                        <div class="stories-item">
-                            <div class="stories-image">
-                                <a href="#">
-                                    <img src="~/assets/images/user/user-1.jpg" alt="image">
-                                </a>
-                                <div class="add-icon">
-                                    <a href="#"><i class="flaticon-add"></i></a>
-                                </div>
-                            </div>
-                            <span><a href="#">Add Story</a></span>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-sm-4 col-4">
-                        <div class="stories-item">
-                            <a href="#">
-                                <img src="~/assets/images/user/user-28.jpg" alt="image">
-                            </a>
-                            <span><a href="#">Jimenez</a></span>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-sm-4 col-4">
-                        <div class="stories-item">
-                            <a href="#">
-                                <img src="~/assets/images/user/user-29.jpg" alt="image">
-                            </a>
-                            <span><a href="#">Lolita</a></span>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-sm-4 col-4">
-                        <div class="stories-item">
-                            <a href="#">
-                                <img src="~/assets/images/user/user-13.jpg" alt="image">
-                            </a>
-                            <span><a href="#">Matthew</a></span>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-sm-4 col-4">
-                        <div class="stories-item">
-                            <a href="#">
-                                <img src="~/assets/images/user/user-30.jpg" alt="image">
-                            </a>
-                            <span><a href="#">Russell</a></span>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-sm-4 col-4">
-                        <div class="stories-item">
-                            <a href="#">
-                                <img src="~/assets/images/user/user-31.jpg" alt="image">
-                            </a>
-                            <span><a href="#">Katzman</a></span>
-                        </div>
-                    </div>
+                <div class="row" id="statuses">
                 </div>
             </div>
 
-            <div class="news-feed news-feed-post">
-                <div class="post-header d-flex justify-content-between align-items-center">
-                    <div class="image">
-                        <a href="/home/my-profile"><img src="~/assets/images/user/user-35.jpg" class="rounded-circle" alt="image"></a>
-                    </div>
-                    <div class="info ms-3">
-                        <span class="name"><a href="/home/my-profile">William Fenton</a></span>
-                        <span class="small-text"><a href="#">50 Mins Ago</a></span>
-                    </div>
-                    <div class="dropdown">
-                        <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="flaticon-menu"></i></button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item d-flex align-items-center" href="#"><i class="flaticon-edit"></i> Edit Post</a></li>
-                            <li><a class="dropdown-item d-flex align-items-center" href="#"><i class="flaticon-private"></i> Hide Post</a></li>
-                            <li><a class="dropdown-item d-flex align-items-center" href="#"><i class="flaticon-trash"></i> Delete Post</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="post-body">
-                    <p>💗</p>
-                    <div class="post-image">
-                        <img src="~/assets/images/news-feed-post/post-2.jpg" alt="image">
-                    </div>
-                    <ul class="post-meta-wrap d-flex justify-content-between align-items-center">
-                        <li class="post-react">
-                            <a href="#"><i class="flaticon-like"></i><span>Like</span> <span class="number">3 </span></a>
-
-                            <ul class="react-list">
-                                <li>
-                                    <a href="#"><img src="~/assets/images/react/react-1.png" alt="Like"></a>
-                                </li>
-                                <li>
-                                    <a href="#"><img src="~/assets/images/react/react-2.png" alt="Like"></a>
-                                </li>
-                                <li>
-                                    <a href="#"><img src="~/assets/images/react/react-3.png" alt="Like"></a>
-                                </li>
-                                <li>
-                                    <a href="#"><img src="~/assets/images/react/react-4.png" alt="Like"></a>
-                                </li>
-                                <li>
-                                    <a href="#"><img src="~/assets/images/react/react-5.png" alt="Like"></a>
-                                </li>
-                                <li>
-                                    <a href="#"><img src="~/assets/images/react/react-6.png" alt="Like"></a>
-                                </li>
-                                <li>
-                                    <a href="#"><img src="~/assets/images/react/react-7.png" alt="Like"></a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="post-comment">
-                            <a href="#"><i class="flaticon-comment"></i><span>Comment</span> <span class="number">0 </span></a>
-                        </li>
-                        <li class="post-share">
-                            <a href="#"><i class="flaticon-share"></i><span>Share</span> <span class="number">0 </span></a>
-                        </li>
-                    </ul>
-                    <form class="post-footer">
-                        <div class="footer-image">
-                            <a href="#"><img src="~/assets/images/user/user-2.jpg" class="rounded-circle" alt="image"></a>
-                        </div>
-                        <div class="form-group">
-                            <textarea name="message" class="form-control" placeholder="Write a comment..."></textarea>
-                            <label><a href="#"><i class="flaticon-photo-camera"></i></a></label>
-                        </div>
-                    </form>
-                </div>
+            <div id="posts-container">
             </div>
 
-            <div class="load-more-posts-btn">
-                <a href="#"><i class="flaticon-loading"></i> Load More Posts</a>
+            <div class="load-more-posts-btn" id="loader">
+                <a onclick="loadPosts()" style="cursor:pointer;"><i class="flaticon-loading"></i> Load More Posts</a>
             </div>
         </div>
     </div>
@@ -583,48 +458,46 @@
 <script src="~/assets/js/functions.js"></script>
 <script src="~/assets/js/jquery.min.js"></script>
 <script>
+    // Create Post Region
     var spinnerContainer = document.getElementById("spinner-container");
     var container = document.getElementById("post-form");
 
-    function startSpinner(){
+    function startSpinner() {
         spinnerContainer.innerHTML = `
-          <div class="spinner-border custom-spinner-color" role="status" id="followers-spinner">
-                    <span class="sr-only"></span>
-          </div>
-          <p class="loading-text mt-3">Post is being created . . .</p>
-        `;
+                              <div class="spinner-border custom-spinner-color" role="status" id="followers-spinner">
+                                        <span class="sr-only"></span>
+                              </div>
+                              <p class="loading-text mt-3">Post is being created . . .</p>
+                            `;
     }
 
-    function stopSpinner(){
+    function stopSpinner() {
         spinnerContainer.innerHTML = '';
     }
 
     function setPostForm() {
         container.innerHTML = `
-                <h3 class="news-feed-title">Create New Post</h3>
+                                    <h3 class="news-feed-title">Create New Post</h3>
 
-                <form onsubmit="handleSubmit(event)">
-                    <div class="form-group">
-                        <textarea id="text-area" asp-for="Description" class="form-control" placeholder="Write something here..." required></textarea>
+                                    <form onsubmit="handleSubmit(event)">
+                                        <div class="form-group">
+                                            <textarea id="text-area" asp-for="Description" class="form-control" placeholder="Write something here..." required></textarea>
 
-                        <input type="file" id="file-upload" asp-for="MediaFile" accept="video/*,image/*" style="display: none;">
-                        <div id="media-preview"></div>
-                    </div>
-                    <ul class="button-group d-flex justify-content-between align-items-center">
-                        <li class="photo-btn">
-                            <button onclick="chooseMedia(event)"><i class="flaticon-gallery"></i> Choose Media</button>
-                        </li>
-                        <li class="tag-btn">
-                            <button type="submit"><i class="flaticon-tag"></i> Tag Friends</button>
-                        </li>
-                        <section id="btn-container">
-                            <li>
-                                <button type="submit" class="btn btn-success">Post</button>
-                            </li>
-                        </section>
-                    </ul>
-                </form>
-            `;
+                                            <input type="file" id="file-upload" asp-for="MediaFile" accept="video/*,image/*" style="display: none;">
+                                            <div id="media-preview"></div>
+                                        </div>
+                                        <ul class="button-group d-flex justify-content-between align-items-center">
+                                            <li class="photo-btn">
+                                                <button onclick="chooseMedia(event)"><i class="flaticon-gallery"></i> Choose Media</button>
+                                            </li>
+                                            <section id="btn-container">
+                                                <li>
+                                                    <button type="submit" class="btn btn-success">Post</button>
+                                                </li>
+                                            </section>
+                                        </ul>
+                                    </form>
+                                `;
     }
 
     setPostForm();
@@ -644,25 +517,37 @@
 
         startSpinner();
         container.innerHTML = '';
-        setTimeout(function(){
-        // Send the form data using jQuery Ajax
-        $.ajax({
-            url: 'api/Post/CreatePost',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                stopSpinner();
-                setPostForm();
-                showToast("Post was shared successfully!", "green");
-            },
-            error: function (xhr, status, error) {
-                stopSpinner();
-                setPostForm();
-                showToast("An error occured while sharing the post!", "red");
-            }
-        });
+        setTimeout(function () {
+            // Send the form data using jQuery Ajax
+            $.ajax({
+                url: 'api/Post/CreatePost',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (responsePost) {
+                    stopSpinner();
+                    setPostForm();
+                    var newPost = {
+                        id: responsePost.id,
+                        description: responsePost.description,
+                        hasMediaContent: responsePost.hasMediaContent,
+                        contentUrl: responsePost.contentUrl,
+                        isVideo: responsePost.isVideo,
+                        createdAt: responsePost.createdAt,
+                        userId: responsePost.userId,
+                        user: responsePost.user
+                    };
+                    postsToLoad.unshift(newPost);
+                    addPostsToView(postsToLoad, true);
+                    showToast("Post was shared successfully!", "green");
+                },
+                error: function (xhr, status, error) {
+                    stopSpinner();
+                    setPostForm();
+                    showToast("An error occured while sharing the post!", "red");
+                }
+            });
         }, 5000);
     }
 
@@ -686,16 +571,12 @@
                     mediaPreview.innerHTML = '';
                     mediaPreview.appendChild(mediaElement);
                     mediaPreview.style.padding = "0px";
-
-                    console.log('Media type: Video');
                 } else if (file.type.includes('image')) {
                     mediaElement = document.createElement('img');
                     mediaElement.src = e.target.result;
                     mediaPreview.innerHTML = '';
                     mediaPreview.appendChild(mediaElement);
                     mediaPreview.style.padding = "10px";
-
-                    console.log('Media type: Image');
                 }
 
                 mediaPreview.style.border = "2px dashed var(--black-color)";
@@ -707,9 +588,260 @@
 
         fileUpload.click();
     }
+    // Create Post Region
 
+    // Others Region
     var currentUserId = '@user.Id.ToString()';
     setSocialCounts("follower-count", "following-count", "post-like-count", currentUserId);
 
     localStorage.setItem('activeMenuItem', '#1');
+    // Others region
+
+    var currentUserProfile = '@user.ImageUrl.ToString()';
+
+    // Get Posts Region
+    function createPostHtml(post) {
+        var content = '';
+
+        if (post.hasMediaContent && !post.IsVide) {
+            content = `
+                            <div class="image-post" style="display:flex; justify-content: center;">
+                                    <img src="${post.contentUrl}" alt="image" class="fit-image">
+                            </div>
+                        `;
+        }
+        else if (post.hasMediaContent && post.IsVideo) {
+            content = `
+                          <div class="post-video">
+                               <video src="${post.contentUrl}" controls></video>
+                          </div>
+                        `;
+        }
+
+        var dateDiff = getDateTimeDifference(post.createdAt);
+
+        var html = `
+                        <div class="news-feed news-feed-post">
+                            <div class="post-header d-flex justify-content-between align-items-center">
+                                <div class="image">
+                                    <a href="/home/users?id=${post.userId}"><img src="${post.user.imageUrl}" class="rounded-circle" alt="image"></a>
+                                </div>
+                                <div class="info ms-3">
+                                    <span class="name"><a href="/home/users?id=${post.userId}">${post.user.userName}</a></span>
+                                    <span class="small-text"><a>${dateDiff}</a></span>
+                                </div>
+                            </div>
+
+                            <div class="post-body">
+                                <p>${post.description}</p>
+                                ${content}
+                                <ul class="post-meta-wrap d-flex justify-content-between align-items-center">
+                                    <li class="post-react">
+                                        <a href="#">
+                                            <i class="flaticon-like"></i>
+                                            <span>Like</span>
+                                            <span class="number">0</span>
+                                        </a>
+                                    </li>
+                                    <li class="post-comment">
+                                        <a href="#">
+                                            <i class="flaticon-comment"></i>
+                                            <span>Comment</span>
+                                            <span class="number">0</span>
+                                        </a>
+                                    </li>
+                                    <li class="post-share">
+                                        <a href="#">
+                                            <i class="flaticon-share"></i>
+                                            <span>Share</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <form class="post-footer">
+                                    <div class="footer-image">
+                                        <a href="/home/my-profile"><img src="${currentUserProfile}" class="rounded-circle" alt="image"></a>
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea name="message" class="form-control" placeholder="Write a comment..."></textarea>
+                                        <label><a href="#"><i class="flaticon-send"></i></a></label>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <hr/>`;
+        return html;
+    }
+
+    // Fisher-Yates shuffle algorithm
+    function shuffleArray(array) {
+        var currentIndex = array.length;
+        var temporaryValue, randomIndex;
+
+        // While there remain elements to shuffle
+        while (currentIndex !== 0) {
+            // Pick a remaining element
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            // Swap the current element with a random element
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+
+        return array;
+    }
+
+    function getAllPosts() {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: '/api/Post/GetAllPosts',
+                type: 'GET',
+                success: function (response) {
+                    resolve(response);
+                },
+                error: function (xhr, status, error) {
+                    reject(new Error(xhr.responseText));
+                }
+            });
+        });
+    }
+
+    var postCountInView = 0;
+    var allPosts = [];
+
+    function startLoaderSpinner() {
+        var spinner = `
+                <div class="spinner-border custom-spinner-color" role="status">
+                    <span class="sr-only"></span>
+                </div>`;
+        $('#loader').prop('disabled', true);
+        $('#loader').html(spinner);
+    }
+
+    function stopLoaderSpinner() {
+        $('#loader').prop('disabled', false);
+        $('#loader').html('<a onclick="loadPosts()" style="cursor:pointer;"><i class="flaticon-loading"></i> Load More Posts</a>');
+    }
+
+    var postsToLoad;
+
+    async function loadPosts() {
+        startLoaderSpinner();
+        try {
+            if (allPosts.length === 0) {
+                allPosts = await getAllPosts();
+                allPosts = shuffleArray(allPosts);
+            }
+            postsToLoad = allPosts.slice(postCountInView, postCountInView + 10);
+            postCountInView += postsToLoad.length;
+            addPostsToView(postsToLoad)
+            stopLoaderSpinner();
+        } catch (error) {
+            alert("Error occurred: " + error.responseText);
+            stopLoaderSpinner();
+        }
+    }
+
+    function addPostsToView(posts, reset = false) {
+        if (reset) {
+            document.getElementById("posts-container").innerHTML = "";
+        }
+        posts.forEach(function (post) {
+            var postHtml = createPostHtml(post);
+            // Append the postHtml to container
+            $('#posts-container').append(postHtml);
+        });
+    }
+
+    function getRandomImagePaths() {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: '/api/Static/GetRandomStatusImagePaths',
+                type: 'GET',
+                success: function (response) {
+                    resolve(response);
+                },
+                error: function (error) {
+                    reject(new Error(xhr.responseText));
+                }
+            });
+        });
+    }
+
+    function createStatusHtml(statusImagePath, author) {
+        var content = `
+             <div class="col-lg-2 col-sm-4 col-4">
+                <div class="stories-item">
+                    <a>
+                        <img src="${statusImagePath}" alt="image">
+                    </a>
+                    <span><a>${author}</a></span>
+                </div>
+            </div>`;
+        return content;
+    }
+
+    const statusCount = 6;
+
+    function getRandomAuthorNames(count) {
+        const authorNames = [
+            "John",
+            "Emily",
+            "David",
+            "Sophia",
+            "James",
+            "Olivia",
+            "Daniel",
+            "Emma",
+            "Michael",
+            "Isabella",
+            "Joseph",
+            "Ava",
+            "William",
+            "Garcia",
+            "Alexander",
+            "Charlotte",
+            "Benjamin",
+            "Amelia",
+            "Matthew",
+            "Sofia"
+        ];
+
+        const randomAuthorNames = [];
+
+        while (randomAuthorNames.length < count) {
+            const randomIndex = Math.floor(Math.random() * authorNames.length);
+            const randomAuthorName = authorNames[randomIndex];
+
+            if (!randomAuthorNames.includes(randomAuthorName)) {
+                randomAuthorNames.push(randomAuthorName);
+            }
+        }
+
+        return randomAuthorNames;
+    }
+
+    async function setStatuses() {
+        var statusesContainer = document.getElementById("statuses");
+        var statusImages = await getRandomImagePaths();
+        if (statusImages === null || statusImages.count === 0) {
+            statusImages = Array(statusCount).fill("https://res.cloudinary.com/dax9yhk8g/image/upload/v1689665492/noContentFound_m74is3.png"); // no content image
+        }
+
+        const randomAuthors = getRandomAuthorNames(statusCount);
+
+        var htmlContainer = '';
+        for (var i = 0; i < statusImages.length; i++) {
+            var html = createStatusHtml(statusImages[i], randomAuthors[i]);
+            htmlContainer += html;
+        }
+        statusesContainer.innerHTML = htmlContainer;
+    }
+
+    setStatuses();
+    // Call the loadPosts function to start loading posts
+    loadPosts();
 </script>
+

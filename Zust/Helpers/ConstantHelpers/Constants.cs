@@ -45,20 +45,17 @@
         /// </summary>
         public const string StringEmpty = "";
 
-        /// <summary>
-        /// Represents the folder path for files.
-        /// </summary>
-        public const string FilesFolderPath = "~/../Files";
 
         /// <summary>
         /// Represents the file name for covers.
         /// </summary>
-        public const string CoversFile = "covers.txt";
 
         public const string CloudinarySettings = "CloudinarySettings";
         public const string ImageFileType = "image/";
         public const string VideoFileType = "video/";
 
         public const string NoContentImageUrl = "https://res.cloudinary.com/dax9yhk8g/image/upload/v1689665492/noContentFound_m74is3.png";
+        public const int StatusCountInNewsFeed = 6;
+
     }
 }
