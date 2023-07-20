@@ -13,7 +13,10 @@
         public const string CoversFile = "covers.txt";
 
         public const string WatchVideoUrlsFile = "watchVideoUrls.json";
+            
         public const string AdvertisementsFile = "advertisements.json";
+
+        public const string SpecialUsersFile = "specialUsers.txt";
 
     }
 }

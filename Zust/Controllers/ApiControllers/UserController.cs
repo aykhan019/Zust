@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using Zust.Business.Abstract;
 using Zust.Business.Concrete;
 using Zust.Entities.Models;
@@ -302,6 +303,71 @@ namespace Zust.Web.Controllers.ApiControllers
                 }
 
                 return BadRequest(Errors.InvalidRequestData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(Routes.GetUsersWithTodayBirthday)]
+        public async Task<IActionResult> GetUsersWithTodayBirthday()
+        {
+            try
+            {
+                var users = await _userService.GetAllUsersAsync();
+
+                var today = DateTime.Today;
+
+                var todayBirthdayUsers = users.Where(user => user.Birthday.Day == today.Day && user.Birthday.Month == today.Month);
+
+                return Ok(todayBirthdayUsers);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(Routes.GetUsersWithRecentBirthday)]
+        public async Task<IActionResult> GetUsersWithRecentBirthday()
+        {
+            try
+            {
+                var users = await _userService.GetAllUsersAsync();
+
+                var today = DateTime.Today;
+
+                DateTime startDate = today.AddDays(-Constants.BirthdayRange); // 7 days ago (excluding today)
+
+                DateTime endDate = today.AddDays(-1);   // Yesterday (excluding today)
+
+                var birthdayUsersInRange = users.Where(user => user.Birthday >= startDate && user.Birthday <= endDate);
+
+                return Ok(birthdayUsersInRange);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(Routes.GetUsersWithComingBirthday)]
+        public async Task<IActionResult> GetUsersWithComingBirthday()
+        {
+            try
+            {
+                var users = await _userService.GetAllUsersAsync();
+
+                var today = DateTime.Today;
+
+                DateTime startDate = today.AddDays(1);   // Tomorrow (excluding today)
+
+                DateTime endDate = today.AddDays(Constants.BirthdayRange);     // 7 days forward
+
+                var birthdayUsersInRange = users.Where(user => user.Birthday >= startDate && user.Birthday <= endDate);
+
+                return Ok(birthdayUsersInRange);
             }
             catch (Exception ex)
             {

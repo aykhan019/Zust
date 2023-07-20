@@ -15,5 +15,6 @@ namespace Zust.Business.Abstract
         Task<User?> GetUserByIdAsync(string id);
         Task UpdateAsync(User user); 
         Task<IEnumerable<User>> GetAllUsersAsync();
+        Task<IEnumerable<User>> GetAllUsersOtherThanAsync(string userId);
     }
 }

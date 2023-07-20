@@ -1,4 +1,7 @@
-﻿using Zust.Web.Abstract;
+﻿using System.IO;
+using Zust.Business.Abstract;
+using Zust.Entities.Models;
+using Zust.Web.Abstract;
 using Zust.Web.Entities;
 using Zust.Web.Extensions;
 using Zust.Web.Helpers.ConstantHelpers;
@@ -8,6 +11,13 @@ namespace Zust.Web.Concrete
 {
     public class StaticService : IStaticService
     {
+        private readonly IUserService _userService;
+
+        public StaticService(IUserService userService)
+        {
+            _userService = userService;
+        }
+
         public List<Advertisement?> GetAdvertisements(string path)
         {
             var advertisements = FileHelper<Advertisement>.Deserialize(path);
@@ -49,6 +59,24 @@ namespace Zust.Web.Concrete
             }
 
             return randomImages;
+        }
+
+        public async Task<List<User>> GetSpecialUsersAsync()
+        {
+            string filepath = Path.Combine(FileConstants.FilesFolderPath, FileConstants.SpecialUsersFile);
+
+            var ids = FileHelper<string>.ReadTextFile(filepath);
+
+            var specialUsers = new List<User>();
+
+            foreach ( var id in ids)
+            {
+                var specialUser = await _userService.GetUserByIdAsync(id);
+
+                specialUsers.Add(specialUser);
+            }
+
+            return specialUsers;
         }
 
         public List<Video?> GetWatchVideos(string path)

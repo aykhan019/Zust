@@ -7,6 +7,8 @@
     ViewData["Title"] = "Zust - My Profile";
 }
 
+<link rel="stylesheet" href="~/assets//css/main.css" />
+
 <style>
     .personal-information[contenteditable="true"] {
         outline: none;
@@ -157,7 +159,7 @@
                         <li>
                             <span>Birthday:</span>
                             <span class="personal-information">
-                                @(string.IsNullOrEmpty(user.Birthday) ? Constants.NoData : user.Birthday)
+                                @user.Birthday
                             </span>
                         </li>
                         <li>
@@ -285,9 +287,8 @@
     </div>
 </div>
 
-<link rel="stylesheet" href="~/assets//css/main.css" />
-<script src="~/assets/js/functions.js"></script>
 <script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/functions.js"></script>
 <script>
     localStorage.setItem('activeMenuItem', '#7');
 
@@ -474,7 +475,6 @@
     var container = document.getElementById("posts-area");
     async function addPostsToView() {
         var posts = await getMyPosts();
-        console.log(posts);
         if (posts != null && posts.length > 0) {
             posts.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)).reverse();
             var content = '';

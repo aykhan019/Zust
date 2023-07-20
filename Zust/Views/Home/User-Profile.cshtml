@@ -115,7 +115,7 @@
                         <li>
                             <span>Birthday:</span>
                             <span class="personal-information">
-                                @(string.IsNullOrEmpty(Model.Birthday) ? Constants.NoData : Model.Birthday)
+                                @Model.Birthday
                             </span>
                         </li>
                         <li>
@@ -605,8 +605,9 @@
     </div>
 </div>
 
-<script src="~/assets/js/functions.js"></script>
 <script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/functions.js"></script>
+
 <script>
     var currentUserId = '@Model.Id.ToString()';
 

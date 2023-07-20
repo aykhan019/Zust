@@ -245,3 +245,18 @@ async function setSocialCounts(followerElementId, followingElementId, postLikeEl
     document.getElementById(followingElementId).innerHTML = await getAllFollowingsCount(currentUserId);
     document.getElementById(postLikeElementId).innerHTML = await getAllPostLikeCount(currentUserId);
 }
+
+function makeAjaxRequest(url, type) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: url,
+            type: type,
+            success: function (response) {
+                resolve(response);
+            },
+            error: function (error) {
+                reject(new Error(xhr.responseText));
+            }
+        });
+    });
+}

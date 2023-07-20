@@ -90,5 +90,10 @@
         public const string GetWatchVideos = "GetWatchVideos";
 
         public const string UpdateProfileImage = "UpdateProfileImage";
+
+        public const string GetSpecialUsers = "GetSpecialUsers";
+        public const string GetUsersWithTodayBirthday = "GetUsersWithTodayBirthday";
+        public const string GetUsersWithRecentBirthday = "GetUsersWithRecentBirthday";
+        public const string GetUsersWithComingBirthday = "GetUsersWithComingBirthday";
     }
 }

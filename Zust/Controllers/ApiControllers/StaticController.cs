@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Zust.Entities.Models;
 using Zust.Web.Abstract;
 using Zust.Web.Helpers.ConstantHelpers;
 
@@ -43,6 +44,21 @@ namespace Zust.Web.Controllers.ApiControllers
                 var videos = _staticService.GetWatchVideos(path);
 
                 return Ok(videos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(Routes.GetSpecialUsers)]
+        public async Task<ActionResult<List<User>>> GetSpecialUsers()
+        {
+            try
+            {
+                var specialUsers = await _staticService.GetSpecialUsersAsync();
+
+                return Ok(specialUsers);
             }
             catch (Exception ex)
             {

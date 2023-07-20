@@ -11,7 +11,7 @@ namespace Zust.Entities.Models
 
         public string? CoverImage { get; set; } 
 
-        public string? Birthday { get; set; }
+        public DateTime Birthday { get; set; }
 
         public string? Occupation { get; set; }
 

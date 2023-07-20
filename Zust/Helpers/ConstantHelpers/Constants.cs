@@ -58,6 +58,7 @@
         public const int StatusCountInNewsFeed = 6;
         public const int VideoCountInNewsFeed = 9;
         public const int AdvertisementCountInNewsFeed = 2;
+        public const int BirthdayRange = 7;
 
     }
 }

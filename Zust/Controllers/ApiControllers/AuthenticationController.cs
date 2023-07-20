@@ -84,13 +84,17 @@ namespace Zust.Web.Controllers.ApiControllers
             }
 
             // Create a new User object and populate its properties
+            var filePath = Path.Combine(FileConstants.FilesFolderPath, FileConstants.CoversFile);
+
             var user = new User
             {
-                UserName = model.Username,
+                UserName = model.Username.Trim(),
 
-                Email = model.Email,
+                Email = model.Email.Trim(),
 
-                CoverImage = _staticService.GetRandomCoverImage(FileConstants.CoversFile)
+                CoverImage = _staticService.GetRandomCoverImage(filePath),
+
+                ImageUrl = Constants.DefaultProfileImagePath
             };
 
             // Register the user with the provided password
@@ -134,7 +138,7 @@ namespace Zust.Web.Controllers.ApiControllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(model.Username.Trim(), model.Password.Trim(), model.RememberMe, lockoutOnFailure: false);
 
                 if (result.Succeeded)
                 {
