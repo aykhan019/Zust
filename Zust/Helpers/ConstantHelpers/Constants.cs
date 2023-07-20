@@ -56,7 +56,7 @@
 
         public const string NoContentImageUrl = "https://res.cloudinary.com/dax9yhk8g/image/upload/v1689665492/noContentFound_m74is3.png";
         public const int StatusCountInNewsFeed = 6;
-        public const int VideoCountInNewsFeed = 9;
+        public const int VideoCountInNewsFeed = 6;
         public const int AdvertisementCountInNewsFeed = 2;
         public const int BirthdayRange = 7;
 

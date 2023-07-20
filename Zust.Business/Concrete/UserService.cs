@@ -51,5 +51,16 @@ namespace Zust.Business.Concrete
         {
             return await _userDal.GetAllAsync();
         }
+
+        public async Task<IEnumerable<User>> GetAllUsersOtherThanAsync(string userId)
+        {
+            var users =await GetAllUsersAsync();
+
+            var list = users.ToList();
+
+            list.RemoveAll(u => u.Id == userId);
+
+            return list;
+        }
     }
 }

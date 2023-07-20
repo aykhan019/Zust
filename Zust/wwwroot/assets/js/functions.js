@@ -255,7 +255,7 @@ function makeAjaxRequest(url, type) {
                 resolve(response);
             },
             error: function (error) {
-                reject(new Error(xhr.responseText));
+                reject(error);
             }
         });
     });

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 using Zust.Business.Abstract;
 using Zust.Business.Concrete;
@@ -311,12 +312,12 @@ namespace Zust.Web.Controllers.ApiControllers
         }
 
         [HttpGet(Routes.GetUsersWithTodayBirthday)]
-        public async Task<IActionResult> GetUsersWithTodayBirthday()
+        public async Task<IActionResult> GetUsersWithTodayBirthday(string userId)
         {
             try
             {
-                var users = await _userService.GetAllUsersAsync();
-
+                var users = await _userService.GetAllUsersOtherThanAsync(userId);
+               
                 var today = DateTime.Today;
 
                 var todayBirthdayUsers = users.Where(user => user.Birthday.Day == today.Day && user.Birthday.Month == today.Month);
@@ -330,11 +331,11 @@ namespace Zust.Web.Controllers.ApiControllers
         }
 
         [HttpGet(Routes.GetUsersWithRecentBirthday)]
-        public async Task<IActionResult> GetUsersWithRecentBirthday()
+        public async Task<IActionResult> GetUsersWithRecentBirthday(string userId)
         {
             try
             {
-                var users = await _userService.GetAllUsersAsync();
+                var users = await _userService.GetAllUsersOtherThanAsync(userId);
 
                 var today = DateTime.Today;
 
@@ -353,11 +354,11 @@ namespace Zust.Web.Controllers.ApiControllers
         }
 
         [HttpGet(Routes.GetUsersWithComingBirthday)]
-        public async Task<IActionResult> GetUsersWithComingBirthday()
+        public async Task<IActionResult> GetUsersWithComingBirthday(string userId)
         {
             try
             {
-                var users = await _userService.GetAllUsersAsync();
+                var users = await _userService.GetAllUsersOtherThanAsync(userId);
 
                 var today = DateTime.Today;
 

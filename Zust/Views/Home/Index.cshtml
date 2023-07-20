@@ -340,107 +340,29 @@
                     <a href="#"><img src="~/assets/images/weather/weather.jpg" alt="image"></a>
                 </div>
             </div>
+
             <div class="widget widget-birthday">
                 <div class="birthday-title d-flex justify-content-between align-items-center">
                     <h3>Today Birthdays</h3>
                 </div>
 
                 <div id="today-birthdays">
-                    <article class="item">
-                        <a href="#" class="thumb">
-                            <span class="fullimage bg1" role="img"></span>
-                        </a>
-
-                        <div class="info">
-                            <h4 class="title">
-                                <a href="#">Earline Benally</a>
-                            </h4>
-                            <span>Today</span>
-                        </div>
-                    </article>
-                    <article class="item">
-                        <a href="#" class="thumb">
-                            <span class="fullimage bg2" role="img"></span>
-                        </a>
-
-                        <div class="info">
-                            <h4 class="title">
-                                <a href="#">Jack Gulley</a>
-                            </h4>
-                            <span>Today</span>
-                        </div>
-                    </article>
                 </div>
+
 
                 <div class="birthday-title d-flex justify-content-between align-items-center">
                     <h3>Recent Birthdays</h3>
-                    <span><a href="#">See All</a></span>
                 </div>
-                <article class="item">
-                    <a href="#" class="thumb">
-                        <span class="fullimage bg3" role="img"></span>
-                    </a>
 
-                    <div class="info">
-                        <h4 class="title">
-                            <a href="#">Lolita Benally</a>
-                        </h4>
-                        <span>May 18</span>
-                    </div>
-                </article>
-                <article class="item">
-                    <a href="#" class="thumb">
-                        <span class="fullimage bg4" role="img"></span>
-                    </a>
-
-                    <div class="info">
-                        <h4 class="title">
-                            <a href="#">Russell Gulley</a>
-                        </h4>
-                        <span>May 20</span>
-                    </div>
-                </article>
+                <div id="recent-birthdays">
+                </div>
 
                 <div class="birthday-title d-flex justify-content-between align-items-center">
                     <h3>Coming Birthdays</h3>
-                    <span><a href="#">See All</a></span>
                 </div>
-                <article class="item">
-                    <a href="#" class="thumb">
-                        <span class="fullimage bg5" role="img"></span>
-                    </a>
 
-                    <div class="info">
-                        <h4 class="title">
-                            <a href="#">Cindy L. Wilson</a>
-                        </h4>
-                        <span>July 18</span>
-                    </div>
-                </article>
-                <article class="item">
-                    <a href="#" class="thumb">
-                        <span class="fullimage bg6" role="img"></span>
-                    </a>
-
-                    <div class="info">
-                        <h4 class="title">
-                            <a href="#">Patricia E. Looney</a>
-                        </h4>
-                        <span>July 20</span>
-                    </div>
-                </article>
-                <article class="item">
-                    <a href="#" class="thumb">
-                        <span class="fullimage bg7" role="img"></span>
-                    </a>
-
-                    <div class="info">
-                        <h4 class="title">
-                            <a href="#">James G. Nelson</a>
-                        </h4>
-                        <span>July 21</span>
-                    </div>
-                </article>
+                <div id="coming-birthdays">
+                </div>
             </div>
             <div class="widget widget-explore-events">
                 <h3 class="widget-title">Explore Events</h3>
@@ -452,35 +374,14 @@
                     <a href="#"><img src="~/assets/images/explore-events/explore-2.jpg" alt="image"></a>
                 </article>
             </div>
-            @*       <div class="widget widget-who-following">
-            <h3 class="widget-title">Who's Following</h3>
+            <div class="widget widget-who-following">
+                <h3 class="widget-title">Who's Following</h3>
 
-            <div class="following-item d-flex justify-content-between align-items-center">
-            <a href="#"><img src="~/assets/images/user/user-42.jpg" class="rounded-circle" alt="image"></a>
-            <span class="name"><a href="#">Shawn Lynch</a></span>
-            <span class="add-friend"><a href="#">Add</a></span>
+               <div id="who-is-following">
+
+
+               </div>
             </div>
-            <div class="following-item d-flex justify-content-between align-items-center">
-            <a href="#"><img src="~/assets/images/user/user-43.jpg" class="rounded-circle" alt="image"></a>
-            <span class="name"><a href="#">Kenneth Perry</a></span>
-            <span class="add-friend"><a href="#">Add</a></span>
-            </div>
-            <div class="following-item d-flex justify-content-between align-items-center">
-            <a href="#"><img src="~/assets/images/user/user-44.jpg" class="rounded-circle" alt="image"></a>
-            <span class="name"><a href="#">Janet Suarez</a></span>
-            <span class="add-friend"><a href="#">Add</a></span>
-            </div>
-            <div class="following-item d-flex justify-content-between align-items-center">
-            <a href="#"><img src="~/assets/images/user/user-45.jpg" class="rounded-circle" alt="image"></a>
-            <span class="name"><a href="#">Brian Mingo</a></span>
-            <span class="add-friend"><a href="#">Add</a></span>
-            </div>
-            <div class="following-item d-flex justify-content-between align-items-center">
-            <a href="#"><img src="~/assets/images/user/user-46.jpg" class="rounded-circle" alt="image"></a>
-            <span class="name"><a href="#">Julia Ramos</a></span>
-            <span class="add-friend"><a href="#">Add</a></span>
-            </div>
-            </div>*@
         </aside>
     </div>
 </div>
@@ -496,5 +397,537 @@
 <script src="~/assets/js/owl.carousel.min.js"></script>
 <script src="~/assets/js/wow.min.js"></script>
 <script src="~/assets/js/main.js"></script>
-<script src="~/assets/js/view/index.js"></script>
+<script>
+    function advertisementHoverHandle(element, newSource) {
+        element.dataset.originalWidth = element.offsetWidth;
+        element.dataset.originalHeight = element.offsetHeight;
+
+        var parentWidth = element.parentNode.offsetWidth;
+        var parentHeight = element.parentNode.offsetHeight;
+
+        var aspectRatio = element.naturalWidth / element.naturalHeight;
+
+        if (aspectRatio > parentWidth / parentHeight) {
+            element.style.maxWidth = parentWidth + "px";
+            element.style.maxHeight = (parentWidth / aspectRatio) + "px";
+        } else {
+            element.style.maxWidth = (parentHeight * aspectRatio) + "px";
+            element.style.maxHeight = parentHeight + "px";
+        }
+
+        element.addEventListener('transitionend', function () {
+            element.src = newSource;
+            element.style.opacity = 1;
+        });
+
+        element.src = newSource;
+    }
+
+    function restoreOriginalSize(element, oldSource) {
+        if (element.dataset.originalWidth && element.dataset.originalHeight) {
+            element.style.maxWidth = element.dataset.originalWidth + "px";
+            element.style.maxHeight = element.dataset.originalHeight + "px";
+            element.src = oldSource;
+        }
+    }
+
+    // Create Post Region
+    var spinnerContainer = document.getElementById("spinner-container");
+    var container = document.getElementById("post-form");
+
+    function startSpinner() {
+        spinnerContainer.innerHTML = `
+                                                              <div class="spinner-border custom-spinner-color" role="status" id="followers-spinner">
+                                                                        <span class="sr-only"></span>
+                                                              </div>
+                                                              <p class="loading-text mt-3">Post is being created . . .</p>
+                                                            `;
+    }
+
+    function stopSpinner() {
+        spinnerContainer.innerHTML = '';
+    }
+
+    function setPostForm() {
+        container.innerHTML = `
+                                                                    <h3 class="news-feed-title">Create New Post</h3>
+
+                                                                    <form onsubmit="handleSubmit(event)">
+                                                                        <div class="form-group">
+                                                                            <textarea id="text-area" asp-for="CreatePostViewModel.Description" class="form-control" placeholder="Write something here..." required></textarea>
+
+                                                                            <input type="file" id="file-upload" asp-for="CreatePostViewModel.MediaFile" accept="video/*,image/*" style="display: none;">
+                                                                            <div id="media-preview"></div>
+                                                                        </div>
+                                                                        <ul class="button-group d-flex justify-content-between align-items-center">
+                                                                            <li class="photo-btn">
+                                                                                <button onclick="chooseMedia(event)"><i class="flaticon-gallery"></i> Choose Media</button>
+                                                                            </li>
+                                                                            <section id="btn-container">
+                                                                                <li>
+                                                                                    <button type="submit" class="btn btn-success">Post</button>
+                                                                                </li>
+                                                                            </section>
+                                                                        </ul>
+                                                                    </form>
+                                                                `;
+    }
+
+    setPostForm();
+
+    function handleSubmit(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Get the input values
+        var description = $('#text-area').val().trim();
+        var fileInput = $('#file-upload')[0];
+        var file = fileInput.files[0];
+
+        // Create FormData object to send the data
+        var formData = new FormData();
+        formData.append('Description', description);
+        formData.append('MediaFile', file);
+
+        startSpinner();
+        container.innerHTML = '';
+
+        // Send the form data using jQuery Ajax
+        $.ajax({
+            url: '/api/Post/CreatePost',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (responsePost) {
+                stopSpinner();
+                setPostForm();
+                var newPost = {
+                    id: responsePost.id,
+                    description: responsePost.description,
+                    hasMediaContent: responsePost.hasMediaContent,
+                    contentUrl: responsePost.contentUrl,
+                    isVideo: responsePost.isVideo,
+                    createdAt: responsePost.createdAt,
+                    userId: responsePost.userId,
+                    user: responsePost.user
+                };
+                postsToLoad.unshift(newPost);
+                addPostsToView(postsToLoad, true);
+                showToast("Post was shared successfully!", "green");
+            },
+            error: function (xhr, status, error) {
+                stopSpinner();
+                setPostForm();
+                showToast("An error occured while sharing the post!", "red");
+            }
+        });
+
+    }
+
+    function chooseMedia(event) {
+        event.preventDefault();
+
+        const fileUpload = document.getElementById('file-upload');
+        const mediaPreview = document.getElementById('media-preview');
+
+        fileUpload.onchange = function (event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                let mediaElement;
+
+                if (file.type.includes('video')) {
+                    mediaElement = document.createElement('video');
+                    mediaElement.setAttribute('controls', true);
+                    mediaElement.src = e.target.result;
+                    mediaPreview.innerHTML = '';
+                    mediaPreview.appendChild(mediaElement);
+                    mediaPreview.style.padding = "0px";
+                } else if (file.type.includes('image')) {
+                    mediaElement = document.createElement('img');
+                    mediaElement.src = e.target.result;
+                    mediaPreview.innerHTML = '';
+                    mediaPreview.appendChild(mediaElement);
+                    mediaPreview.style.padding = "10px";
+                }
+
+                mediaPreview.style.border = "2px dashed var(--black-color)";
+
+            };
+
+            reader.readAsDataURL(file);
+        };
+
+        fileUpload.click();
+    }
+    // Create Post Region
+
+    // Others Region
+    var currentUserId = '@user.Id.ToString()';
+    setSocialCounts("follower-count", "following-count", "post-like-count", currentUserId);
+
+    localStorage.setItem('activeMenuItem', '#1');
+    // Others region
+
+    var currentUserProfile = '@user.ImageUrl.ToString()';
+
+    // Get Posts Region
+    function createPostHtml(post) {
+        var content = '';
+
+        if (post.hasMediaContent && !post.isVideo) {
+            content = `
+                                                            <div class="image-post" style="display:flex; justify-content: center;">
+                                                                    <img src="${post.contentUrl}" alt="image" class="fit-image">
+                                                            </div>
+                                                        `;
+        }
+        else if (post.hasMediaContent && post.isVideo) {
+            content = `
+                                                          <div class="post-video">
+                                                               <video src="${post.contentUrl}" controls></video>
+                                                          </div>
+                                                        `;
+        }
+
+        var dateDiff = getDateTimeDifference(post.createdAt);
+
+        var html = `
+                                                        <div class="news-feed news-feed-post">
+                                                            <div class="post-header d-flex justify-content-between align-items-center">
+                                                                <div class="image">
+                                                                    <a href="/home/users?id=${post.userId}"><img src="${post.user.imageUrl}" class="rounded-circle" alt="image"></a>
+                                                                </div>
+                                                                <div class="info ms-3">
+                                                                    <span class="name"><a href="/home/users?id=${post.userId}">${post.user.userName}</a></span>
+                                                                    <span class="small-text"><a>${dateDiff}</a></span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="post-body">
+                                                                <p>${post.description}</p>
+                                                                ${content}
+                                                                <ul class="post-meta-wrap d-flex justify-content-between align-items-center">
+                                                                    <li class="post-react">
+                                                                        <a href="#">
+                                                                            <i class="flaticon-like"></i>
+                                                                            <span>Like</span>
+                                                                            <span class="number">0</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="post-comment">
+                                                                        <a href="#">
+                                                                            <i class="flaticon-comment"></i>
+                                                                            <span>Comment</span>
+                                                                            <span class="number">0</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="post-share">
+                                                                        <a href="#">
+                                                                            <i class="flaticon-share"></i>
+                                                                            <span>Share</span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                                <form class="post-footer">
+                                                                    <div class="footer-image">
+                                                                        <a href="/home/my-profile"><img src="${currentUserProfile}" class="rounded-circle" alt="image"></a>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <textarea name="message" class="form-control" placeholder="Write a comment..."></textarea>
+                                                                            <label><a href="#"><i class="ri-send-plane-line"></i></a></label>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+
+                                                        <hr/>`;
+        return html;
+    }
+
+    // Fisher-Yates shuffle algorithm
+    function shuffleArray(array) {
+        var currentIndex = array.length;
+        var temporaryValue, randomIndex;
+
+        // While there remain elements to shuffle
+        while (currentIndex !== 0) {
+            // Pick a remaining element
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            // Swap the current element with a random element
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+
+        return array;
+    }
+
+    function getAllPosts() {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: '/api/Post/GetAllPosts',
+                type: 'GET',
+                success: function (response) {
+                    resolve(response);
+                },
+                error: function (xhr, status, error) {
+                    reject(new Error(xhr.responseText));
+                }
+            });
+        });
+    }
+
+    var postCountInView = 0;
+    var allPosts = [];
+
+    function startLoaderSpinner() {
+        var spinner = `
+                                                <div class="spinner-border custom-spinner-color" role="status">
+                                                    <span class="sr-only"></span>
+                                                </div>`;
+        $('#loader').prop('disabled', true);
+        $('#loader').html(spinner);
+    }
+
+    function stopLoaderSpinner() {
+        $('#loader').prop('disabled', false);
+        $('#loader').html('<a onclick="loadPosts()" style="cursor:pointer;"><i class="flaticon-loading"></i> Load More Posts</a>');
+    }
+
+    var postsToLoad;
+
+    async function loadPosts() {
+        startLoaderSpinner();
+        try {
+            if (allPosts.length === 0) {
+                allPosts = await getAllPosts();
+                allPosts = shuffleArray(allPosts);
+            }
+            postsToLoad = allPosts.slice(postCountInView, postCountInView + 10);
+            postCountInView += postsToLoad.length;
+            addPostsToView(postsToLoad)
+            stopLoaderSpinner();
+        } catch (error) {
+            alert("Error occurred: " + error.responseText);
+            stopLoaderSpinner();
+        }
+    }
+
+    function addPostsToView(posts, reset = false) {
+        var container = document.getElementById("posts-container");
+        if (reset) {
+            container.innerHTML = "";
+        }
+        posts.forEach(function (post) {
+            var postHtml = createPostHtml(post);
+            // Append the postHtml to container
+            container.innerHTML += postHtml;
+        });
+    }
+
+    function getRandomImagePaths() {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: '/api/Static/GetRandomStatusImagePaths',
+                type: 'GET',
+                success: function (response) {
+                    resolve(response);
+                },
+                error: function (error) {
+                    reject(new Error(xhr.responseText));
+                }
+            });
+        });
+    }
+
+    function createStatusHtml(statusImagePath, author) {
+        var content = `
+                                             <div class="col-lg-2 col-sm-4 col-4">
+                                                <div class="stories-item">
+                                                    <a>
+                                                        <img src="${statusImagePath}" alt="image">
+                                                    </a>
+                                                    <span><a>${author}</a></span>
+                                                </div>
+                                            </div>`;
+        return content;
+    }
+
+    const statusCount = 6;
+
+    function getRandomAuthorNames(count) {
+        const authorNames = [
+            "John",
+            "Emily",
+            "David",
+            "Sophia",
+            "James",
+            "Olivia",
+            "Daniel",
+            "Emma",
+            "Michael",
+            "Isabella",
+            "Joseph",
+            "Ava",
+            "William",
+            "Garcia",
+            "Alexander",
+            "Charlotte",
+            "Benjamin",
+            "Amelia",
+            "Matthew",
+            "Sofia"
+        ];
+
+        const randomAuthorNames = [];
+
+        while (randomAuthorNames.length < count) {
+            const randomIndex = Math.floor(Math.random() * authorNames.length);
+            const randomAuthorName = authorNames[randomIndex];
+
+            if (!randomAuthorNames.includes(randomAuthorName)) {
+                randomAuthorNames.push(randomAuthorName);
+            }
+        }
+
+        return randomAuthorNames;
+    }
+
+    async function setStatuses() {
+        var statusImages = await getRandomImagePaths();
+        if (statusImages === null || statusImages.count === 0) {
+            statusImages = Array(statusCount).fill("https://res.cloudinary.com/dax9yhk8g/image/upload/v1689665492/noContentFound_m74is3.png"); // no content image
+        }
+
+        const randomAuthors = getRandomAuthorNames(statusCount);
+
+        var htmlContainer = '';
+        for (var i = 0; i < statusImages.length; i++) {
+            var html = createStatusHtml(statusImages[i], randomAuthors[i]);
+            htmlContainer += html;
+        }
+        var statusesContainer = document.getElementById("statuses");
+        statusesContainer.innerHTML = htmlContainer;
+    }
+
+    async function setSpecialUsers() {
+        var specialUsers = await getSpecialUsers();
+        if (specialUsers != null && specialUsers.count > 0) {
+            for (var i = 0; i < specialUsers.length; i++) {
+                var specialUser = specialUsers[i]
+                var html = createStatusHtml(statusImages[i], randomAuthors[i]);
+                htmlContainer += html;
+            }
+        }
+
+    }
+
+    function createBirthdayHtml(user, date) {
+        var content = `
+                        <article class="item">
+                            <a href="/home/users?id=${user.id}" class="thumb">
+                                <img class="rounded-circle" src="${user.imageUrl}"/>
+                            </a>
+
+                            <div class="info">
+                                <h4 class="title">
+                                    <a href="/home/users?id=${user.id}">${user.userName}</a>
+                                </h4>
+                                <span>${date}</span>
+                            </div>
+                        </article>
+                    `;
+
+        return content;
+    }
+
+    async function setBirthdays() {
+        var todayBirthdaysUsers = await makeAjaxRequest("/api/User/GetUsersWithTodayBirthday?userId=" + currentUserId, "GET");
+        var containerToday = document.getElementById("today-birthdays");
+        containerToday.style.marginBottom = "25px";
+        if (todayBirthdaysUsers != null && todayBirthdaysUsers.length > 0) {
+            for (var i = 0; i < todayBirthdaysUsers.length; i++) {
+                var user = todayBirthdaysUsers[i];
+                var html = createBirthdayHtml(user, "Today");
+                containerToday.innerHTML += html;
+            }
+        }
+        else {
+            containerToday.innerHTML = "Today, there are no birthdays among the users.";
+        }
+
+        var recentBirthdaysUsers = await makeAjaxRequest("/api/User/GetUsersWithRecentBirthday?userId=" + currentUserId, "GET");
+        var containerRecent = document.getElementById("recent-birthdays");
+        containerRecent.style.marginBottom = "25px";
+        if (recentBirthdaysUsers != null && recentBirthdaysUsers.length > 0) {
+
+            for (var i = 0; i < recentBirthdaysUsers.length; i++) {
+                var user = recentBirthdaysUsers[i];
+                var html = createBirthdayHtml(user, user.birthday);
+                containerRecent.innerHTML += html;
+            }
+        }
+        else {
+            containerRecent.innerHTML = "Recently, there haven't been any birthdays among the users."
+        }
+
+        var comingBirthdaysUsers = await makeAjaxRequest("/api/User/GetUsersWithComingBirthday?userId=" + currentUserId, "GET");
+        var containerComing = document.getElementById("coming-birthdays");
+        containerComing.style.marginBottom = "25px";
+        if (comingBirthdaysUsers != null && comingBirthdaysUsers.length > 0) {
+            for (var i = 0; i < comingBirthdaysUsers.length; i++) {
+                var user = comingBirthdaysUsers[i];
+                var html = createBirthdayHtml(user, user.birthday);
+                containerComing.innerHTML += html;
+            }
+        }
+        else {
+            containerComing.innerHTML = "There are no upcoming birthdays among the users.";
+        }
+    }
+
+    // Function to generate the HTML for each follower
+    function generateFollowerHTML(follower) {
+        var redirectPage = `/home/users?id=${follower.id}`;
+        var html = `
+          <div class="following-item d-flex justify-content-between align-items-center">
+            <a href="${redirectPage}">
+                <img src="${follower.imageUrl}" class="rounded-circle" alt="image">
+            </a>
+            <span class="name">
+                <a href="${redirectPage}">${follower.userName}</a>
+            </span>
+          </div>
+        `;
+        return html;
+    }
+
+    // Function to add followers to the container
+    function addFollowersToContainer(followers) {
+        var container = document.getElementById('who-is-following');
+        for (var i = 0; i < followers.length; i++) {
+            var follower = followers[i];
+            var followerHTML = generateFollowerHTML(follower);
+            container.innerHTML += followerHTML;
+        }
+    }
+
+    getAllFollowers(currentUserId)
+        .then(function (followers) {
+            var shuffledFollowers = shuffleArray(followers);
+            var selectedFollowers = shuffledFollowers.slice(0, 5);
+            addFollowersToContainer(selectedFollowers);
+        })
+        .catch(function (error) {
+            alert("Error fetching followers: ", error);
+        });
+
+    setStatuses();
+    setBirthdays();
+    loadPosts();
+</script>
 
