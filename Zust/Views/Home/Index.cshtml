@@ -671,14 +671,14 @@
     function createPostHtml(post) {
         var content = '';
 
-        if (post.hasMediaContent && !post.IsVide) {
+        if (post.hasMediaContent && !post.isVideo) {
             content = `
                                     <div class="image-post" style="display:flex; justify-content: center;">
                                             <img src="${post.contentUrl}" alt="image" class="fit-image">
                                     </div>
                                 `;
         }
-        else if (post.hasMediaContent && post.IsVideo) {
+        else if (post.hasMediaContent && post.isVideo) {
             content = `
                                   <div class="post-video">
                                        <video src="${post.contentUrl}" controls></video>

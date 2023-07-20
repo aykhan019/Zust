@@ -57,5 +57,9 @@
         public const string FileTypeNotSupportedError = "File type not supported";
 
         public const string ImageUploadError = "An error occurred while uploading the image";
+
+        public const string InvalidRequestData = "Invalid request data";
+
+        public const string UserNotFound = "User Not Found";
     }
 }

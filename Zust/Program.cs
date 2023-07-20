@@ -62,6 +62,18 @@ builder.Services.Configure<CookieAuthenticationOptions>(options =>
     options.ExpireTimeSpan = TimeSpan.FromDays(Constants.CookieExpireTimeSpan);
 });
 
+// Add CORS policy to allow requests from localhost:7009
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("https://localhost:7009")
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
+// Configure the FormOptions to increase value and file size limits
 builder.Services.Configure<FormOptions>(o => {
     o.ValueLengthLimit = int.MaxValue;
     o.MultipartBodyLengthLimit = int.MaxValue;
@@ -89,6 +101,9 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Use the CORS policy
+app.UseCors(); 
 
 // Configure routes
 app.UseEndpoints(endpoints =>

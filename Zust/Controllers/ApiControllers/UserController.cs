@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.AspNetCore.Mvc;
 using Zust.Business.Abstract;
 using Zust.Business.Concrete;
 using Zust.Entities.Models;
+using Zust.Web.Abstract;
 using Zust.Web.Helpers.ConstantHelpers;
 using Zust.Web.Helpers.Utilities;
+using Zust.Web.Migrations;
 
 namespace Zust.Web.Controllers.ApiControllers
 {
@@ -21,16 +24,18 @@ namespace Zust.Web.Controllers.ApiControllers
 
         private readonly IFriendRequestService _friendRequestService;
 
+        private readonly IMediaService _mediaService;
 
         /// <summary>
         /// Initializes a new instance of the UserController class.
         /// </summary>
         /// <param name="userService">The user service used for user-related operations.</param>
-        public UserController(IUserService userService, IFriendshipService friendshipService, IFriendRequestService friendRequestService)
+        public UserController(IUserService userService, IFriendshipService friendshipService, IFriendRequestService friendRequestService, IMediaService mediaService)
         {
             _userService = userService;
             _friendshipService = friendshipService;
             _friendRequestService = friendRequestService;
+            _mediaService = mediaService;
         }
 
         /// <summary>
@@ -69,6 +74,11 @@ namespace Zust.Web.Controllers.ApiControllers
 
                 var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
 
+                if (currentUser == null)
+                {
+                    return NotFound(Errors.UserNotFound);
+                }
+
                 // Excluded the current user to avoid displaying it among Zust Users, as the current user is the one viewing the user list.
                 list.RemoveAll(u => u.Id == currentUser.Id);
 
@@ -94,6 +104,11 @@ namespace Zust.Web.Controllers.ApiControllers
             {
                 var user = await _userService.GetUserByIdAsync(id);
 
+                if (user == null)
+                {
+                    return NotFound(Errors.UserNotFound);
+                }
+
                 return Ok(user);
             }
             catch (Exception ex)
@@ -112,6 +127,11 @@ namespace Zust.Web.Controllers.ApiControllers
                 var list = users.ToList();
 
                 var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
+
+                if (currentUser == null)
+                {
+                    return NotFound(Errors.UserNotFound);
+                }
 
                 // Excluded the current user to avoid displaying it among Zust Users, as the current user is the one viewing the user list.
                 list.RemoveAll(u => u.Id == currentUser.Id);
@@ -196,13 +216,18 @@ namespace Zust.Web.Controllers.ApiControllers
             {
                 var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
 
+                if (currentUser == null)
+                {
+                    return NotFound(Errors.UserNotFound);
+                }
+
                 var currentUserId = currentUser.Id;
 
                 var friendRequest = await _friendRequestService.GetAsync(fr => fr.SenderId == currentUserId && fr.ReceiverId == friendId);
 
                 if (friendRequest == null)
                 {
-                    return BadRequest(Errors.FriendRequestNotFound);
+                    return NotFound(Errors.FriendRequestNotFound);
                 }
 
                 await _friendRequestService.DeleteAsync(friendRequest);
@@ -228,8 +253,50 @@ namespace Zust.Web.Controllers.ApiControllers
             try
             {
                 var user = await UserHelper.GetCurrentUserAsync(HttpContext);
-                
+
+                if (user == null)
+                {
+                    return NotFound(Errors.UserNotFound);
+                }
+
                 return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost(Routes.UpdateProfileImage)]
+        public async Task<IActionResult> UpdateProfileImage(IFormFile imageFile, string userId)
+        {
+            try
+            {
+                // Check if the file and userId exist and are valid
+                if (imageFile != null && imageFile.Length > 0 && !string.IsNullOrEmpty(userId))
+                {
+                    var mediaUrl = await _mediaService.UploadMediaAsync(imageFile);
+
+                    if (mediaUrl != string.Empty)
+                    {
+                        var user = await _userService.GetUserByIdAsync(userId);
+
+                        if (user != null)
+                        {
+                            user.ImageUrl = mediaUrl;
+
+                            await _userService.UpdateAsync(user);
+
+                            return Ok();
+                        }
+
+                        return NotFound(Errors.UserNotFound);
+                    }
+
+                    return BadRequest(Errors.ImageUploadError);
+                }
+
+                return BadRequest(Errors.InvalidRequestData);
             }
             catch (Exception ex)
             {

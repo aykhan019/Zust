@@ -59,6 +59,7 @@ namespace Zust.Web.Controllers.ApiControllers
                 else
                 {
                     var mediaUrl = await _mediaService.UploadMediaAsync(mediaFile);
+
                     if (mediaUrl != string.Empty)
                     {
                         var isVideoFile = _mediaService.IsVideoFile(mediaFile);

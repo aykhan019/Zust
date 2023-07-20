@@ -88,5 +88,7 @@
         public const string GetRandomStatusImagePaths = "GetRandomStatusImagePaths";
 
         public const string GetWatchVideos = "GetWatchVideos";
+
+        public const string UpdateProfileImage = "UpdateProfileImage";
     }
 }
