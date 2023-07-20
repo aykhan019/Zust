@@ -33,7 +33,13 @@
     }
 
     #posts-area {
-        width: 40%;
+        width: 45%;
+    }
+
+    @@media only screen and (max-width: 1000px){
+        #posts-area{
+            width: 100%;
+        }
     }
 
     .fit-image {
@@ -283,6 +289,8 @@
 <script src="~/assets/js/functions.js"></script>
 <script src="~/assets/js/jquery.min.js"></script>
 <script>
+    localStorage.setItem('activeMenuItem', '#7');
+
     var currentUserId = '@user.Id.ToString()';
 
     setSocialCounts("follower-count", "following-count", "post-like-count", currentUserId);
@@ -442,8 +450,10 @@
         var html = `
                             <div class="news-feed news-feed-post">
                                 <div class="post-header d-flex justify-content-between align-items-center">
-                                    <div class="image">
-                                        <a href="/home/users?id=${post.userId}"><img src="${post.user.imageUrl}" class="rounded-circle" alt="image"></a>
+                                    <div>
+                                        <a href="/home/users?id=${post.userId}">
+                                            <img src="${post.user.imageUrl}" alt="image" class="profile-image" style="max-height: 80px !important; max-width: 80px !important; border-radius: 50%;">
+                                        </a>
                                     </div>
                                     <div class="info ms-3">
                                         <span class="name"><a href="/home/users?id=${post.userId}">${post.user.userName}</a></span>
@@ -491,20 +501,31 @@
             const file = event.target.files[0];
             const reader = new FileReader();
 
+            // Input validation
+            if (!file) {
+                showToast("Please select an image to upload.", "red");
+                return;
+            }
+
+            // Check if the selected file is an image
+            if (!file.type.startsWith('image/')) {
+                showToast("Please select an image file.", "red");
+                return;
+            }
+
             reader.onload = function (e) {
                 // Display the selected image in the preview
                 const profileImage = document.getElementById('profile-image');
-                // Display the selected image in the preview
                 profileImage.src = e.target.result;
 
                 // Create FormData object to send the image and the userId as data
                 const formData = new FormData();
-                formData.append('imageFile', file);
-                formData.append('userId', currentUserId);
+                formData.append('MediaFile', file);
+                formData.append('UserId', currentUserId);
 
                 // Send the data using jQuery Ajax
                 $.ajax({
-                    url: '/api/User/UpdateProfileImage',
+                    url: '/api/User/UpdateProfileImage', // Update this URL with the correct API endpoint
                     type: 'POST',
                     data: formData,
                     processData: false,
@@ -513,7 +534,7 @@
                         showToast("Profile image updated successfully!", "green");
                     },
                     error: function (xhr, status, error) {
-                        showToast("Error updating profile image : " + error, "red");
+                        showToast("Error updating profile image: " + error, "red");
                     }
                 });
             };
@@ -523,6 +544,7 @@
 
         fileUpload.click();
     }
+
 
 
     addPostsToView();

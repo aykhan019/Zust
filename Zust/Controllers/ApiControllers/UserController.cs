@@ -8,6 +8,7 @@ using Zust.Web.Abstract;
 using Zust.Web.Helpers.ConstantHelpers;
 using Zust.Web.Helpers.Utilities;
 using Zust.Web.Migrations;
+using Zust.Web.Models;
 
 namespace Zust.Web.Controllers.ApiControllers
 {
@@ -268,10 +269,14 @@ namespace Zust.Web.Controllers.ApiControllers
         }
 
         [HttpPost(Routes.UpdateProfileImage)]
-        public async Task<IActionResult> UpdateProfileImage(IFormFile imageFile, string userId)
+        public async Task<IActionResult> UpdateProfileImage([FromForm] UpdateProfileViewModel model)
         {
             try
             {
+                var imageFile = model.MediaFile;
+
+                var userId = model.UserId;
+
                 // Check if the file and userId exist and are valid
                 if (imageFile != null && imageFile.Length > 0 && !string.IsNullOrEmpty(userId))
                 {

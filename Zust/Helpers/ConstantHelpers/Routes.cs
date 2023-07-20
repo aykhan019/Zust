@@ -39,7 +39,7 @@
 
         public const string UpdateProfile = "UpdateProfile";
 
-        public const string UserController = "api/user";
+        public const string UserController = "api/User";
 
         public const string GetUsers = "GetUsers";
 
