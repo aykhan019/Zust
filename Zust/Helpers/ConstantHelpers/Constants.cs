@@ -51,14 +51,20 @@
         /// </summary>
 
         public const string CloudinarySettings = "CloudinarySettings";
+
         public const string ImageFileType = "image/";
+
         public const string VideoFileType = "video/";
 
         public const string NoContentImageUrl = "https://res.cloudinary.com/dax9yhk8g/image/upload/v1689665492/noContentFound_m74is3.png";
+
         public const int StatusCountInNewsFeed = 6;
+
         public const int VideoCountInNewsFeed = 6;
+
         public const int AdvertisementCountInNewsFeed = 2;
+
         public const int BirthdayRange = 7;
 
     }
-}
+}       
