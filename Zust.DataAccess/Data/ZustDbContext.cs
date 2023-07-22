@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -36,5 +37,6 @@ namespace Zust.Core.Concrete.EntityFramework
         public DbSet<Post>? Posts{ get; set; }
         public DbSet<FriendRequest>? FriendRequest { get; set; }
         public DbSet<Notification>? Notifications { get; set; }
+        public DbSet<Like>? Likes { get; set; }
     }
 }

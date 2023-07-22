@@ -37,6 +37,8 @@
 
         public const string ProfileController = "api/profile";
 
+        public const string LikeController = "api/like";
+
         public const string UpdateProfile = "UpdateProfile";
 
         public const string UserController = "api/User";
@@ -101,5 +103,12 @@
 
         public const string Post = "post";
 
+        public const string GetPostLikeCount = "GetPostLikeCount";
+
+        public const string LikePost = "LikePost";
+
+        public const string UnlikePost = "UnlikePost";
+
+        public const string GetPostIdsLiked = "GetPostIdsLiked";
     }
 }

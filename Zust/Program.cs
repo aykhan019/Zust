@@ -39,6 +39,8 @@ builder.Services.AddScoped<IMediaService, MediaService>();
 builder.Services.AddScoped<IPostDal, EFPostDal>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IStaticService, StaticService>();
+builder.Services.AddScoped<ILikeDal, EFLikeDal>();
+builder.Services.AddScoped<ILikeService, LikeService>();
 
 // Register Session
 builder.Services.AddSession();
