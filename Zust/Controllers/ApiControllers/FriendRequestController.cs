@@ -125,7 +125,7 @@ namespace Zust.Web.Controllers.ApiControllers
 
                 if (friendRequests != null)
                     return Ok(friendRequests);
-                else 
+                else
                     return BadRequest(Errors.AnErrorOccured);
             }
             catch (Exception ex)

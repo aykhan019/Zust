@@ -7,6 +7,7 @@ using Zust.Business.Abstract;
 using Zust.Business.Concrete;
 using Zust.Entities.Models;
 using Zust.Web.Abstract;
+using Zust.Web.Extensions;
 using Zust.Web.Helpers.ConstantHelpers;
 using Zust.Web.Helpers.Utilities;
 using Zust.Web.Migrations;
@@ -29,16 +30,19 @@ namespace Zust.Web.Controllers.ApiControllers
 
         private readonly IMediaService _mediaService;
 
+        private readonly INotificationService _notificationService;
+
         /// <summary>
         /// Initializes a new instance of the UserController class.
         /// </summary>
         /// <param name="userService">The user service used for user-related operations.</param>
-        public UserController(IUserService userService, IFriendshipService friendshipService, IFriendRequestService friendRequestService, IMediaService mediaService)
+        public UserController(IUserService userService, IFriendshipService friendshipService, IFriendRequestService friendRequestService, IMediaService mediaService, INotificationService notificationService)
         {
             _userService = userService;
             _friendshipService = friendshipService;
             _friendRequestService = friendRequestService;
             _mediaService = mediaService;
+            _notificationService = notificationService;
         }
 
         /// <summary>
@@ -93,6 +97,114 @@ namespace Zust.Web.Controllers.ApiControllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        private async Task addRandom()
+        {
+            var random = new Random();
+            var list = await _userService.GetAllUsersAsync();
+
+            foreach (var user in list)
+            {
+                var allUsers = list.Where(u => u.Id != user.Id).ToList();
+                var userCount = random.Next(0, allUsers.Count());
+                var pendingRequestCount = (int)(userCount * 0.07);
+                var friendCount = userCount - pendingRequestCount;
+
+                var users = allUsers.ToList().GetRandomElements(userCount);
+
+                for (int i = 0; i < friendCount; i++)
+                {
+                    var friendToSendRequest = users[i];
+
+                    var requestDate = GenerateRandomDate(new DateTime(2023, 1, 1));
+
+                    var fr = new FriendRequest()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        SenderId = user.Id,
+                        ReceiverId = friendToSendRequest.Id,
+                        RequestDate = GenerateRandomDate(new DateTime(2023, 1, 1)),
+                        Status = Status.Accepted,
+                    };
+
+                    await _friendRequestService.AddAsync(fr);
+
+                    var ntfc = new Notification()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Date = requestDate,
+                        IsRead = true,
+                        Title = NotificationType.NewFriendRequest,
+                        Message = NotificationType.GetNewFriendRequestMessage(user.UserName),
+                        UserId = friendToSendRequest.Id,
+                    };
+
+                    await _notificationService.AddAsync(ntfc);
+
+                    var friendShip = new Friendship()
+                    {
+                        FriendshipId = Guid.NewGuid().ToString(),
+
+                        FriendId = fr.ReceiverId,
+
+                        UserId = fr.SenderId
+                    };
+
+                    await _friendshipService.AddFriendship(friendShip);
+
+                    var ntfc2 = new Notification()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Date = requestDate.AddDays(random.Next(35)),
+                        IsRead = true,
+                        Title = NotificationType.FriendRequestAccepted,
+                        Message = NotificationType.GetFriendRequestAcceptedMessage(user.UserName),
+                        UserId = user.Id,
+                    };
+
+                    await _notificationService.AddAsync(ntfc2);
+                }
+
+                for (int i = 0; i < pendingRequestCount; i++)
+                {
+                    var friendToSendRequest = users[i + friendCount];
+
+                    var requestDate = GenerateRandomDate(new DateTime(2023, 1, 1));
+
+                    var fr = new FriendRequest()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        SenderId = user.Id,
+                        ReceiverId = friendToSendRequest.Id,
+                        RequestDate = requestDate,
+                        Status = Status.Pending,
+                    };
+
+                    await _friendRequestService.AddAsync(fr);
+
+                    var ntfc = new Notification()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Date = requestDate,
+                        IsRead = true,
+                        Title = NotificationType.NewFriendRequest,
+                        Message = NotificationType.GetNewFriendRequestMessage(user.UserName),
+                        UserId = friendToSendRequest.Id,
+                    };
+
+                    await _notificationService.AddAsync(ntfc);
+                }
+            }
+        }
+
+        private static DateTime GenerateRandomDate(DateTime startDate)
+        {
+            DateTime endDate = DateTime.Today;
+            Random random = new Random();
+            int range = (endDate - startDate).Days;
+
+            return startDate.AddDays(random.Next(range));
         }
 
         /// <summary>
@@ -317,7 +429,7 @@ namespace Zust.Web.Controllers.ApiControllers
             try
             {
                 var users = await _userService.GetAllUsersOtherThanAsync(userId);
-               
+
                 var today = DateTime.Today;
 
                 var todayBirthdayUsers = users.Where(user => user.Birthday.Day == today.Day && user.Birthday.Month == today.Month);

@@ -221,24 +221,64 @@ function removeFriend(friendId) {
 
 
 function getButtonHtml(sentFriendRequests, user) {
-    if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Pending')) {
+    console.log(sentFriendRequests);
+
+    let followRequestExists = false;
+    let acceptedFriendExists = false;
+
+    for (const request of sentFriendRequests) {
+        if (request.receiverId === user.id) {
+            if (request.status === 'Pending') {
+                followRequestExists = true;
+            } else if (request.status === 'Accepted') {
+                acceptedFriendExists = true;
+            }
+        }
+
+        // If both conditions are true, we can break the loop early.
+        if (followRequestExists && acceptedFriendExists) {
+            break;
+        }
+    }
+
+    if (followRequestExists) {
         return `<button onclick="callCancelFriendRequest('${user.id}')" class="cancel-btn">Cancel Follow Request</button>`;
-    } else if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Accepted')) {
+    } else if (acceptedFriendExists) {
         return `<button title="Click to stop following" onClick="callRemoveFriend('${user.id}')" class="remove-friend-btn">Unfollow</button>`;
     } else {
         return `<button onclick="callSendFriendRequest('${user.id}')" type="submit" class="send-request-btn">Follow</button>`;
     }
 }
 
+
 function getButtonText(sentFriendRequests, user) {
-    if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Pending')) {
+    let followRequestExists = false;
+    let acceptedFriendExists = false;
+
+    for (const request of sentFriendRequests) {
+        if (request.receiverId === user.id) {
+            if (request.status === 'Pending') {
+                followRequestExists = true;
+            } else if (request.status === 'Accepted') {
+                acceptedFriendExists = true;
+            }
+        }
+
+        // If both conditions are true, we can break the loop early.
+        if (followRequestExists && acceptedFriendExists) {
+            break;
+        }
+    }
+
+    if (followRequestExists) {
         return 'Cancel Follow Request';
-    } else if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Accepted')) {
+    } else if (acceptedFriendExists) {
         return 'Unfollow';
-    } else {    
+    } else {
         return 'Follow';
     }
 }
+
 
 function getIconClass(sentFriendRequests, user) {
     if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Pending')) {
@@ -250,10 +290,17 @@ function getIconClass(sentFriendRequests, user) {
     }
 }
 
-async function setSocialCounts(followerElementId, followingElementId, postLikeElementId, currentUserId) {
-    document.getElementById(followerElementId).innerHTML = await getAllFollowersCount(currentUserId);
-    document.getElementById(followingElementId).innerHTML = await getAllFollowingsCount(currentUserId);
-    document.getElementById(postLikeElementId).innerHTML = await getAllPostLikeCount(currentUserId);
+async function setSocialCounts(followerElementId, followingElementId, postLikeElementId, currentUserId, wait = true) {
+    if (wait) {
+        document.getElementById(followerElementId).innerHTML = await getAllFollowersCount(currentUserId);
+        document.getElementById(followingElementId).innerHTML = await getAllFollowingsCount(currentUserId);
+        //document.getElementById(postLikeElementId).innerHTML = await getAllPostLikeCount(currentUserId);
+    }
+    else {
+        getAllFollowersCount(currentUserId).then(data => document.getElementById(followerElementId).innerHTML = data);
+        getAllFollowingsCount(currentUserId).then(data => document.getElementById(followingElementId).innerHTML = data);
+        //getAllPostLikeCount(currentUserId).then(data => document.getElementById(postLikeElementId).innerHTML = data);
+    }
 }
 
 function makeAjaxRequest(url, type) {
