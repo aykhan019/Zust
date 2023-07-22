@@ -316,8 +316,8 @@
     //                                        </a>`;
 
     // Get the dropdown element and set its content to the edit link
-    var dropdown = document.getElementById("dropdown");
-    dropdown.innerHTML = editHtml;
+    //var dropdown = document.getElementById("dropdown");
+    //dropdown.innerHTML = editHtml;
 
     // Get all the elements with the "personal-information" class
     //const editableElements = document.getElementsByClassName("personal-information");
@@ -449,15 +449,15 @@
         var dateDiff = getDateTimeDifference(post.createdAt);
 
         var html = `
-                            <div class="news-feed news-feed-post">
+                                <div class="news-feed news-feed-post" onclick="window.location.href = '/home/posts?id=${post.id}'" style="cursor: pointer;">
                                 <div class="post-header d-flex justify-content-between align-items-center">
                                     <div>
-                                        <a href="/home/users?id=${post.userId}">
+                                        <a href="/home/my-profile">
                                             <img src="${post.user.imageUrl}" alt="image" class="profile-image" style="max-height: 80px !important; max-width: 80px !important; border-radius: 50%;">
                                         </a>
                                     </div>
                                     <div class="info ms-3">
-                                        <span class="name"><a href="/home/users?id=${post.userId}">${post.user.userName}</a></span>
+                                        <span class="name"><a href="/home/my-profile">${post.user.userName}</a></span>
                                         <span class="small-text"><a>${dateDiff}</a></span>
                                     </div>
                                 </div>

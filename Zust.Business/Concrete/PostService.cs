@@ -47,5 +47,10 @@ namespace Zust.Business.Concrete
 
             return allPosts;
         }
+
+        public Task<Post?> GetPostByIdAsync(string postId)
+        {
+            return _postDal.GetAsync(p => p.Id == postId);
+        }
     }
 }

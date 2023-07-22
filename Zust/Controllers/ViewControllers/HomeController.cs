@@ -22,14 +22,17 @@ namespace Zust.Web.Controllers.ViewControllers
         /// </summary>
         private readonly IUserService _userService;
 
+        private readonly IPostService _postService;
+
         /// <summary>
         /// Initializes a new instance of the HomeController class with the specified user service.
         /// </summary>
         /// <param name="userService">The user service to be used by the controller.</param>
-        public HomeController(IUserService userService, IStaticService staticService)
+        public HomeController(IUserService userService, IStaticService staticService, IPostService postService)
         {
             _userService = userService;
             _staticService = staticService;
+            _postService = postService;
         }
 
         /// <summary>
@@ -59,6 +62,21 @@ namespace Zust.Web.Controllers.ViewControllers
                 return NotFound();
             }
             return View(Routes.UserProfile, user);
+        }
+
+        public async Task<IActionResult> Posts(string id = Constants.StringEmpty)
+        {
+            if (id == Constants.StringEmpty)
+            {
+                return NotFound();
+            }
+
+            var post = await _postService.GetPostByIdAsync(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            return View(Routes.Post, post);
         }
 
         /// <summary>

@@ -27,7 +27,7 @@
 
         /// <summary>
         /// Represents the default file path for user profile images.
-        /// </summary>
+        /// </summary>  
         public const string DefaultProfileImagePath = "/assets/images/user/defaultUserImage.png";
 
         /// <summary>

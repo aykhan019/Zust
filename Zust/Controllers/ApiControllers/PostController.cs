@@ -10,7 +10,7 @@ using Zust.Web.Models;
 
 namespace Zust.Web.Controllers.ApiControllers
 {
-    [Route(Routes.Post)]
+    [Route(Routes.PostAPI)]
     [Controller]
     public class PostController : ControllerBase
     {

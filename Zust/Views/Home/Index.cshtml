@@ -15,6 +15,13 @@
         object-fit: cover;
     }
 
+
+    .post-profile-image {
+        width: 250px !important;
+        height: 250px !important;
+        object-fit: cover !important; /* Maintain aspect ratio and cover the container */
+    }
+
     #file-upload {
         display: none;
     }
@@ -585,10 +592,10 @@
         var dateDiff = getDateTimeDifference(post.createdAt);
 
         var html = `
-                                                        <div class="news-feed news-feed-post">
+                                                        <div class="news-feed news-feed-post" >
                                                             <div class="post-header d-flex justify-content-between align-items-center">
-                                                                <div class="image">
-                                                                    <a href="/home/users?id=${post.userId}"><img src="${post.user.imageUrl}" class="rounded-circle" alt="image"></a>
+                                                                    <div class="image">
+                                                                        <a href="/home/users?id=${post.userId}"><img src="${post.user.imageUrl}" class="post-profile-image" style="background-color: gray !important; max-height: 80px !important; max-width: 80px !important; border-radius: 50%;" alt="image"></a>
                                                                 </div>
                                                                 <div class="info ms-3">
                                                                     <span class="name"><a href="/home/users?id=${post.userId}">${post.user.userName}</a></span>
@@ -608,9 +615,9 @@
                                                                         </a>
                                                                     </li>
                                                                     <li class="post-comment">
-                                                                        <a href="#">
+                                                                        <a href="/home/posts?id=${post.id}">
                                                                             <i class="flaticon-comment"></i>
-                                                                            <span>Comment</span>
+                                                                            <span>Comments</span>
                                                                             <span class="number">0</span>
                                                                         </a>
                                                                     </li>
@@ -623,9 +630,9 @@
                                                                 </ul>
                                                                 <form class="post-footer">
                                                                     <div class="footer-image">
-                                                                        <a href="/home/my-profile"><img src="${currentUserProfile}" class="rounded-circle" alt="image"></a>
+                                                                                <a href="/home/my-profile"><img src="${currentUserProfile}" class="post-profile-image" style="background-color: gray !important; max-height: 80px !important; max-width: 80px !important; border-radius: 50%;"  alt="image"></a>
                                                                     </div>
-                                                                    <div class="form-group">
+                                                                    <div class="form-group" style="margin-left: 5px;">
                                                                         <textarea name="message" class="form-control" placeholder="Write a comment..."></textarea>
                                                                             <label><a href="#"><i class="ri-send-plane-line"></i></a></label>
                                                                     </div>

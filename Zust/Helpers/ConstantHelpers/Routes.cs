@@ -75,7 +75,7 @@
 
         public const string GetCurrentUser = "GetCurrentUser";
 
-        public const string Post = "api/Post";
+        public const string PostAPI = "api/Post";
 
         public const string CreatePost = "CreatePost";
 
@@ -92,8 +92,14 @@
         public const string UpdateProfileImage = "UpdateProfileImage";
 
         public const string GetSpecialUsers = "GetSpecialUsers";
+
         public const string GetUsersWithTodayBirthday = "GetUsersWithTodayBirthday";
+
         public const string GetUsersWithRecentBirthday = "GetUsersWithRecentBirthday";
+
         public const string GetUsersWithComingBirthday = "GetUsersWithComingBirthday";
+
+        public const string Post = "post";
+
     }
 }

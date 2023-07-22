@@ -230,6 +230,16 @@ function getButtonHtml(sentFriendRequests, user) {
     }
 }
 
+function getButtonText(sentFriendRequests, user) {
+    if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Pending')) {
+        return 'Cancel Follow Request';
+    } else if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Accepted')) {
+        return 'Unfollow';
+    } else {    
+        return 'Follow';
+    }
+}
+
 function getIconClass(sentFriendRequests, user) {
     if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Pending')) {
         return 'yellow-icon';
