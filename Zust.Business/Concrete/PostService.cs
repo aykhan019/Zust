@@ -13,11 +13,13 @@ namespace Zust.Business.Concrete
     {
         private readonly IPostDal _postDal;
         private readonly IUserService _userService;
+        private readonly ILikeService _likeService;
 
-        public PostService(IPostDal postDal, IUserService userService)
+        public PostService(IPostDal postDal, IUserService userService, ILikeService likeService)
         {
             _postDal = postDal;
             _userService = userService;
+            _likeService = likeService;
         }
 
         public async Task AddPostAsync(Post post)
@@ -52,5 +54,19 @@ namespace Zust.Business.Concrete
         {
             return _postDal.GetAsync(p => p.Id == postId);
         }
+
+        public async Task<int> GetAllPostsLikeCountAsync(string userId)
+        {
+            var posts = await GetAllPostsOfUserAsync(userId);
+
+            var tasks = posts.Select(p => _likeService.GetPostLikeCountAsync(p.Id));
+
+            int[] likeCounts = await Task.WhenAll(tasks);
+
+            int totalLikesCount = likeCounts.Sum();
+
+            return totalLikesCount;
+        }
     }
 }
+

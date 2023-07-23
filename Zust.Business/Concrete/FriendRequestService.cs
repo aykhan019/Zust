@@ -45,6 +45,13 @@ namespace Zust.Business.Concrete
             return filter == null ? items : items.Where(filter);
         }
 
+        public async Task<bool> HasRequestPendingAsync(string senderId, string receiverId)
+        {
+            var friendRequest = await _friendRequestDal.GetAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId);
+
+            return friendRequest != null;
+        }
+
         public Task<FriendRequest?> GetAsync(Expression<Func<FriendRequest, bool>> filter)
         {
             return _friendRequestDal.GetAsync(filter);

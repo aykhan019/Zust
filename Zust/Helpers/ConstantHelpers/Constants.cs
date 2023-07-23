@@ -66,5 +66,6 @@
 
         public const int BirthdayRange = 7;
 
+        public const int RandomFollowerCount = 5;
     }
 }       

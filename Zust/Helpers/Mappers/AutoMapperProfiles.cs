@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Zust.Entities.Models;
+using Zust.Web.DTOs;
 using Zust.Web.Entities;
 
 namespace Zust.Web.Helpers.Mappers
@@ -15,6 +16,7 @@ namespace Zust.Web.Helpers.Mappers
         public AutoMapperProfiles   ()
         {
             CreateMap<User, UserProfile>().ReverseMap();
+            CreateMap<User, UserDTO>().ReverseMap();
         }
     }
 }

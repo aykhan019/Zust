@@ -25,7 +25,7 @@ namespace Zust.Business.Concrete
             await _friendshipDal.AddAsync(friendship);
         }
 
-        public async Task<IEnumerable<User?>> GetAllFollowersOfUserAsync    (string userId)
+        public async Task<IEnumerable<User?>> GetAllFollowersOfUserAsync(string userId)
         {
             var friendships = await _friendshipDal.GetAllAsync();
 
@@ -59,12 +59,21 @@ namespace Zust.Business.Concrete
         public async Task<bool> DeleteFriendshipAsync(string userId, string friendId)
         {
             var friendship = await GetFriendshipAsync(userId, friendId);
+
             if (friendId != null)
             {
                 await _friendshipDal.DeleteAsync(friendship);
+
                 return true;
             }
             return false;
+        }
+
+        public async Task<bool> IsFriendAsync(string userId, string friendId)
+        {
+            var friendship = await GetFriendshipAsync(userId, friendId);
+
+            return friendship != null;
         }
     }
 }

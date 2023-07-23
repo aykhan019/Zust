@@ -12,10 +12,12 @@ namespace Zust.Business.Concrete
     public class LikeService : ILikeService
     {
         private readonly ILikeDal _likeDal;
+        private readonly IUserService _userService;
 
-        public LikeService(ILikeDal likeDal)
+        public LikeService(ILikeDal likeDal, IUserService userService)
         {
             _likeDal = likeDal;
+            _userService = userService;
         }
 
         public async Task AddLikeToPostAsync(Like like)

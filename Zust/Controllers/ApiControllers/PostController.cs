@@ -118,5 +118,20 @@ namespace Zust.Web.Controllers.ApiControllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet(Routes.GetAllPostsLikeCount)]
+        public async Task<ActionResult<int>> GetAllPostsLikeCount(string userId)
+        {
+            try
+            {
+                var postLikeCount = await _postService.GetAllPostsLikeCountAsync(userId);
+
+                return Ok(postLikeCount);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

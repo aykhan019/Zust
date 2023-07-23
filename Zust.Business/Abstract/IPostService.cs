@@ -14,5 +14,6 @@ namespace Zust.Business.Abstract
         Task<IEnumerable<Post>> GetAllPostsForNewsFeedAsync(string currentUserId);
         Task<IEnumerable<Post>> GetAllPostsOfUserAsync(string userId);
         Task<Post> GetPostByIdAsync(string postId);
+        Task<int> GetAllPostsLikeCountAsync(string userId);
     }
 }

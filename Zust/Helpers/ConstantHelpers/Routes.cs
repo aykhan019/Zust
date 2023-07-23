@@ -110,5 +110,9 @@
         public const string UnlikePost = "UnlikePost";
 
         public const string GetPostIdsLiked = "GetPostIdsLiked";
+
+        public const string GetRandomFollowers = "GetRandomFollowers";
+
+        public const string GetAllPostsLikeCount = "GetAllPostsLikeCount";
     }
 }

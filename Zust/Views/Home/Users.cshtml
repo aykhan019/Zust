@@ -114,7 +114,7 @@
     var usersInView = [];
     var takeUserCount = @TakeUserCount;
     var container = document.getElementById("users");
-
+    var allUserCountInView = 0;
 
     function startSpinner() {
         var spinner = `
@@ -153,9 +153,9 @@
             url: '/api/User/GetUsersByText/' + text,
             method: 'GET',
             success: function (data) {
-                console.log(data);
-                usersInView = data;
-                ShowUsersAsync();
+                allUserCountInView = data.length;
+                container.innerHTML = '';
+                ShowUsersAsync(data);
             },
             error: function (error) {
                 alert("Error occurred: " + error.responseText);
@@ -163,7 +163,7 @@
         });
     }
 
-    var sentFriendRequests;
+    var sentFriendRequests = [];
 
     async function callGetSentFriendRequests() {
         try {
@@ -200,13 +200,13 @@
             url: '/api/User/GetUsers',
             method: 'GET',
             data: {
-                startIndex: usersInView.length,
+                startIndex: allUserCountInView,
                 userCount: takeUserCount
             },
             success: async function (data) {
-                usersInView.push(...data);
-                console.log(data);
-                await ShowUsersAsync();
+                allUserCountInView += data.length;
+                //usersInView.push(...data);
+                await ShowUsersAsync(data);
             },
             error: function (error) {
                 alert("Error occurred: " + error.responseText);
@@ -214,25 +214,35 @@
         });
     }
 
-    async function ShowUsersAsync() {
-        if (usersInView.length === 0) {
+    async function ShowUsersAsync(newUsers) {
+        //console.log('USERS');
+        //console.log(newUsers);
+        if (newUsers.length === 0) {
             container.innerHTML = getNoResultHtml("No results found", "Sorry! We couldn't find any results.");
         }
         else {
-            sentFriendRequests = await getSentFriendRequests(currentUserId);
+            if (sentFriendRequests.length === 0){
+                //alert("GOT REQUESTS");
+                sentFriendRequests = await getSentFriendRequests(currentUserId);
+                //alert(sentFriendRequests);
+            }
             var allUsersCount = await GetAllUsersCount();
-            if (usersInView.length == allUsersCount - 1) { // Current User Subtracted
+            if (allUserCountInView == allUsersCount - 1) { // Current User Subtracted
                 document.querySelector(".load-more-posts-btn").style.display = "none";
             }
-            container.innerHTML = '';
-            for (var i = 0; i < usersInView.length; i++) {
-                var user = usersInView[i];
-                console.log(user.id);
+            //container.innerHTML = '';
+            for (var i = 0; i < newUsers.length; i++) {
+                var user = newUsers[i];
                 var btnContent = getButtonHtml(sentFriendRequests, user);
                 var iconClass = getIconClass(sentFriendRequests, user);
                 var followerCount =  '0';
                 var followingCount = '0';
                 var postLikeCount =  '0';
+                
+                var postLikeCountId = `post-like-count-${user.id}`;
+                var followingCountId = `following-${user.id}`;
+                var followerCountId = `follower-${user.id}`;
+
                 var subContent = `
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="single-friends-card">
@@ -257,19 +267,19 @@
                                             <ul class="statistics">
                                                 <li>
                                                     <a>
-                                                        <span class="item-number" id='post-like-count-${user.id}'>${postLikeCount}</span>
+                                                        <span class="item-number" id='${postLikeCountId}'>${postLikeCount}</span>
                                                         <span class="item-text">Likes</span>
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a>
-                                                            <span class="item-number" id='following-count-${user.id}'>${followingCount}</span>
+                                                        <span class="item-number" id='${followingCountId}'>${followingCount}</span>
                                                         <span class="item-text">Following</span>
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a>
-                                                        <span class="item-number" id='follower-count-${user.id}'>${followerCount}</span>
+                                                        <span class="item-number" id='${followerCountId}'>${followerCount}</span>
                                                         <span class="item-text">Followers</span>
                                                     </a>
                                                 </li>
@@ -286,10 +296,21 @@
 
                 container.innerHTML += subContent;
 
-                setSocialCounts(`follower-count-${user.id}`, `following-${user.id}`, `post-like-count-${user.id}`, user.id, false);
             }
-            stopSpinner();
+             setSocialData(newUsers);
+          
         }
+    }
+
+    async function setSocialData(newUsers) {
+        for (var i = 0; i < newUsers.length; i++) {
+            var user = newUsers[i];
+            var postLikeCountId = `post-like-count-${user.id}`;
+            var followingCountId = `following-${user.id}`;
+            var followerCountId = `follower-${user.id}`;
+            await setSocialCounts(followerCountId, followingCountId, postLikeCountId, user.id);
+        }
+        stopSpinner();
     }
 
     function truncateText(text, maxLength) {

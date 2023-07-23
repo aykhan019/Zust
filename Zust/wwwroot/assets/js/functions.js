@@ -135,6 +135,21 @@ function getAllFollowers(currentUserId) {
     });
 }
 
+function getRandomFollowers(currentUserId) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: `/api/User/GetRandomFollowers?userId=` + currentUserId,
+            method: 'GET',
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+    });
+}
+
 
 function getAllFollowersCount(currentUserId) {
     return new Promise(function (resolve, reject) {
@@ -152,7 +167,18 @@ function getAllFollowersCount(currentUserId) {
 }
 
 function getAllPostLikeCount(currentUserId) {
-    return 0;
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: `/api/Post/GetAllPostsLikeCount?userId=` + currentUserId,
+            method: 'GET',
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (error) {
+                reject(error);
+            }
+        });
+    });
 }
 
 async function getSentFriendRequests(id) {
@@ -221,7 +247,7 @@ function removeFriend(friendId) {
 
 
 function getButtonHtml(sentFriendRequests, user) {
-    console.log(sentFriendRequests);
+    return 'Helli';
 
     let followRequestExists = false;
     let acceptedFriendExists = false;
@@ -290,17 +316,35 @@ function getIconClass(sentFriendRequests, user) {
     }
 }
 
-async function setSocialCounts(followerElementId, followingElementId, postLikeElementId, currentUserId, wait = true) {
-    if (wait) {
-        document.getElementById(followerElementId).innerHTML = await getAllFollowersCount(currentUserId);
-        document.getElementById(followingElementId).innerHTML = await getAllFollowingsCount(currentUserId);
-        //document.getElementById(postLikeElementId).innerHTML = await getAllPostLikeCount(currentUserId);
-    }
-    else {
-        getAllFollowersCount(currentUserId).then(data => document.getElementById(followerElementId).innerHTML = data);
-        getAllFollowingsCount(currentUserId).then(data => document.getElementById(followingElementId).innerHTML = data);
-        //getAllPostLikeCount(currentUserId).then(data => document.getElementById(postLikeElementId).innerHTML = data);
-    }
+async function setSocialCounts(followerElementId, followingElementId, postLikeElementId, currentUserId) {
+    var followerElement = document.getElementById(followerElementId);
+    var followingElement = document.getElementById(followingElementId);
+    var postLikeElement = document.getElementById(postLikeElementId);
+
+    var spinnerHtml = `
+        <div class="spinner-border text-primary" role="status" style="color:var(--main-color) !important; width:1.1rem; height:1.1rem; ">
+            <span class="sr-only"></span>
+        </div>
+    `;
+
+    followerElement.innerHTML = spinnerHtml;
+    followingElement.innerHTML = spinnerHtml;
+    postLikeElement.innerHTML = spinnerHtml;
+
+    getAllFollowersCount(currentUserId)
+        .then(data => {
+            followerElement.innerHTML = data;
+        });
+
+    getAllFollowingsCount(currentUserId)
+        .then(data => {
+            followingElement.innerHTML = data;
+        });
+
+    getAllPostLikeCount(currentUserId)
+        .then(data => {
+            postLikeElement.innerHTML = data;
+        });
 }
 
 function makeAjaxRequest(url, type) {
