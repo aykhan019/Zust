@@ -166,19 +166,8 @@ function getAllFollowersCount(currentUserId) {
     });
 }
 
-function getAllPostLikeCount(currentUserId) {
-    return new Promise(function (resolve, reject) {
-        $.ajax({
-            url: `/api/Post/GetAllPostsLikeCount?userId=` + currentUserId,
-            method: 'GET',
-            success: function (data) {
-                resolve(data);
-            },
-            error: function (error) {
-                reject(error);
-            }
-        });
-    });
+async function getAllPostLikeCount(currentUserId) {
+    return makeAjaxRequest("/api/Post/GetAllPostsLikeCount?userId=" + currentUserId, "GET");
 }
 
 async function getSentFriendRequests(id) {
@@ -245,36 +234,43 @@ function removeFriend(friendId) {
     });
 }
 
-
-function getButtonHtml(sentFriendRequests, user) {
-    return 'Helli';
-
-    let followRequestExists = false;
-    let acceptedFriendExists = false;
-
-    for (const request of sentFriendRequests) {
-        if (request.receiverId === user.id) {
-            if (request.status === 'Pending') {
-                followRequestExists = true;
-            } else if (request.status === 'Accepted') {
-                acceptedFriendExists = true;
-            }
-        }
-
-        // If both conditions are true, we can break the loop early.
-        if (followRequestExists && acceptedFriendExists) {
-            break;
-        }
-    }
-
-    if (followRequestExists) {
-        return `<button onclick="callCancelFriendRequest('${user.id}')" class="cancel-btn">Cancel Follow Request</button>`;
-    } else if (acceptedFriendExists) {
-        return `<button title="Click to stop following" onClick="callRemoveFriend('${user.id}')" class="remove-friend-btn">Unfollow</button>`;
+function getButtonHtml(user){
+    if (user.hasFriendRequestPending) {
+        return `<button id='cancel-${user.id}' onclick="callCancelFriendRequest('${user.id}')" class="cancel-btn">Cancel Follow Request</button>`;
+    } else if (user.isFriend) {
+        return `<button id='unfollow-${user.id}' title="Click to stop following" onClick="callRemoveFriend('${user.id}')" class="remove-friend-btn">Unfollow</button>`;
     } else {
-        return `<button onclick="callSendFriendRequest('${user.id}')" type="submit" class="send-request-btn">Follow</button>`;
+        return `<button id='follow-${user.id}' onclick="callSendFriendRequest('${user.id}')" type="submit" class="send-request-btn">Follow</button>`;
     }
 }
+
+//function getButtonHtml(sentFriendRequests, user) {
+//    let followRequestExists = false;
+//    let acceptedFriendExists = false;
+//
+//    for (const request of sentFriendRequests) {
+//        if (request.receiverId === user.id) {
+//            if (request.status === 'Pending') {
+//                followRequestExists = true;
+//            } else if (request.status === 'Accepted') {
+//                acceptedFriendExists = true;
+//            }
+//        }
+//
+//        // If both conditions are true, we can break the loop early.
+//        if (followRequestExists && acceptedFriendExists) {
+//            break;
+//        }
+//    }
+//
+//    if (followRequestExists) {
+//        return `<button onclick="callCancelFriendRequest('${user.id}')" class="cancel-btn">Cancel Follow Request</button>`;
+//    } else if (acceptedFriendExists) {
+//        return `<button title="Click to stop following" onClick="callRemoveFriend('${user.id}')" class="remove-friend-btn">Unfollow</button>`;
+//    } else {
+//        return `<button onclick="callSendFriendRequest('${user.id}')" type="submit" class="send-request-btn">Follow</button>`;
+//    }
+//}
 
 
 function getButtonText(sentFriendRequests, user) {
@@ -316,7 +312,8 @@ function getIconClass(sentFriendRequests, user) {
     }
 }
 
-async function setSocialCounts(followerElementId, followingElementId, postLikeElementId, currentUserId) {
+
+ async function setSocialCounts(followerElementId, followingElementId, postLikeElementId, currentUserId) {
     var followerElement = document.getElementById(followerElementId);
     var followingElement = document.getElementById(followingElementId);
     var postLikeElement = document.getElementById(postLikeElementId);
@@ -327,24 +324,38 @@ async function setSocialCounts(followerElementId, followingElementId, postLikeEl
         </div>
     `;
 
-    followerElement.innerHTML = spinnerHtml;
+    followerElement.innerHTML=  spinnerHtml;
     followingElement.innerHTML = spinnerHtml;
     postLikeElement.innerHTML = spinnerHtml;
 
-    getAllFollowersCount(currentUserId)
-        .then(data => {
-            followerElement.innerHTML = data;
-        });
 
-    getAllFollowingsCount(currentUserId)
-        .then(data => {
-            followingElement.innerHTML = data;
-        });
-
-    getAllPostLikeCount(currentUserId)
-        .then(data => {
-            postLikeElement.innerHTML = data;
-        });
+    const followerCount = await getAllFollowersCount(currentUserId);
+    followerElement.innerHTML = followerCount;
+    
+    const followingCount = await getAllFollowingsCount(currentUserId);
+    followingElement.innerHTML = followingCount;
+    
+    const postLikeCount = await getAllPostLikeCount(currentUserId);
+    postLikeElement.innerHTML = postLikeCount;
+    //getAllFollowersCount(currentUserId)
+    //.then(data => {
+    //    alert(data);
+    //    followerElement.innerHTML = data;
+    //});
+    //
+    //    getAllFollowingsCount(currentUserId)
+    //.then(data => {
+    //    alert(data);
+    //
+    //    followingElement.innerHTML = data;
+    //});
+    //
+    //    getAllPostLikeCount(currentUserId)
+    //.then(data => {
+    //    alert(data);
+    //
+    //    postLikeElement.innerHTML = data;
+    //});
 }
 
 function makeAjaxRequest(url, type) {
