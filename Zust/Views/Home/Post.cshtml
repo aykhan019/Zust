@@ -1,151 +1,215 @@
 ﻿@model Zust.Entities.Models.Post;
+@using Microsoft.AspNetCore.Identity;
+@using Zust.Entities.Models;
+@using Zust.Web.Helpers.ConstantHelpers;
 @{
+    var userManager = Context.RequestServices.GetService<UserManager<User>>();
+    var currentUser = await userManager.GetUserAsync(Context.User);
     ViewData["Title"] = $"Zust - Post - ${Model.Description}";
 }
 
-<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-<link rel="stylesheet" href="assets/css/animate.min.css">
-<link rel="stylesheet" href="assets/css/remixicon.css">
-<link rel="stylesheet" href="assets/css/flaticon.css">
-<link rel="stylesheet" href="assets/css/jquery-ui.min.css">
-<link rel="stylesheet" href="assets/css/magnific-popup.min.css">
-<link rel="stylesheet" href="assets/css/simplebar.min.css">
-<link rel="stylesheet" href="assets/css/metismenu.min.css">
-<link rel="stylesheet" href="assets/css/owl.carousel.min.css">
-<link rel="stylesheet" href="assets/css/owl.theme.default.min.css">
-<link rel="stylesheet" href="assets/css/style.css">
-<link rel="stylesheet" href="assets/css/responsive.css">
+<!-- Links of CSS files -->
+<link rel="stylesheet" href="~/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="~/assets/css/animate.min.css">
+<link rel="stylesheet" href="~/assets/css/remixicon.css">
+<link rel="stylesheet" href="~/assets/css/flaticon.css">
+<link rel="stylesheet" href="~/assets/css/jquery-ui.min.css">
+<link rel="stylesheet" href="~/assets/css/magnific-popup.min.css">
+<link rel="stylesheet" href="~/assets/css/simplebar.min.css">
+<link rel="stylesheet" href="~/assets/css/metismenu.min.css">
+<link rel="stylesheet" href="~/assets/css/owl.carousel.min.css">
+<link rel="stylesheet" href="~/assets/css/owl.theme.default.min.css">
+<link rel="stylesheet" href="~/assets/css/style.css">
+<link rel="stylesheet" href="~/assets/css/responsive.css">
 
-<div class="news-feed news-feed-post">
-    <div class="post-header d-flex justify-content-between align-items-center">
+
+<style>
+    #post-area {
+        width: 35%;
+        align-self: center;
+    }
+
+    @@media only screen and (max-width: 1000px) {
+        #post-area {
+            width: 100%;
+        }
+    }
+
+    ul {
+        list-style: none;
+    }
+
+    .number{
+        margin-left : 4px;
+    }
+
+    .icon{
+        margin-right: 5px;
+    }
+
+    .form-group,
+    .post-footer{
+        display: flex;
+    }
+
+    #like-button {
+        cursor: pointer !important;
+    }
+</style>    
+
+<div class="news-feed justify-content-between news-feed-post" id="post-area">
+    <div class="post-header d-flex align-items-center">
         <div class="image">
-            <a href="my-profile.html"><img src="assets/images/user/user-32.jpg" class="rounded-circle" alt="image"></a>
+            <a href="/home/users?id=@Model.UserId"><img src="@Model.User.ImageUrl" style="max-height: 80px; max-width: 80px;" class="rounded-circle" alt="image"></a>
         </div>
-        <div class="info ms-3">
-            <span class="name"><a href="my-profile.html">Julie R. Morleyv</a></span>
-            <span class="small-text"><a href="#">10 Mins Ago</a></span>
-        </div>
-        <div class="dropdown">
-            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="flaticon-menu"></i></button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item d-flex align-items-center" href="#"><i class="flaticon-edit"></i> Edit Post</a></li>
-                <li><a class="dropdown-item d-flex align-items-center" href="#"><i class="flaticon-private"></i> Hide Post</a></li>
-                <li><a class="dropdown-item d-flex align-items-center" href="#"><i class="flaticon-trash"></i> Delete Post</a></li>
-            </ul>
+        <div class="info ms-3" style="display: flex !important; flex-direction: column !important; justify-content: start !important;">
+            <span class="name"><a href="/home/users?id=@Model.UserId">@Model.User.UserName</a></span>
+            <span class="small-text"><a id="dateDiff">0</a></span>
         </div>
     </div>
 
     <div class="post-body">
-        <p>Donec rutrum congue leo eget malesuada. Nulla quis lorem ut libero malesuada feugiat. Donec rutrum congue leo eget malesuada. Donec rutrum congue leo eget malesuada. Praesent sapien massa convallis a pellentesque nec egestas non nisi. Curabitur non nulla sit amet nisl tempus convallis quis.</p>
-        <div class="post-image">
-            <img src="assets/images/news-feed-post/post-1.jpg" alt="image">
+        <p class="mt-3">@Model.Description</p>
+        <div class="post-image" style="display: flex; justify-content: center;">
+            <img src="@Model.ContentUrl" alt="image" style="max-height: 600px; align-self: center;">
         </div>
-        <ul class="post-meta-wrap d-flex justify-content-between align-items-center">
+        <ul class="post-meta-wrap d-flex justify-content-between align-items-center mt-4">
             <li class="post-react">
-                <a href="#"><i class="flaticon-like"></i><span>Like</span> <span class="number">1499 </span></a>
-
-                <ul class="react-list">
-                    <li>
-                        <a href="#"><img src="assets/images/react/react-1.png" alt="Like"></a>
-                    </li>
-                    <li>
-                        <a href="#"><img src="assets/images/react/react-2.png" alt="Like"></a>
-                    </li>
-                    <li>
-                        <a href="#"><img src="assets/images/react/react-3.png" alt="Like"></a>
-                    </li>
-                    <li>
-                        <a href="#"><img src="assets/images/react/react-4.png" alt="Like"></a>
-                    </li>
-                    <li>
-                        <a href="#"><img src="assets/images/react/react-5.png" alt="Like"></a>
-                    </li>
-                    <li>
-                        <a href="#"><img src="assets/images/react/react-6.png" alt="Like"></a>
-                    </li>
-                    <li>
-                        <a href="#"><img src="assets/images/react/react-7.png" alt="Like"></a>
-                    </li>
-                </ul>
+                <a id="like-button" onclick="likePost()">
+                    <i class="icon flaticon-like"></i>
+                    <span id="like-text"></span> 
+                    <span class="number" id="like-count">0</span>
+                </a>
             </li>
             <li class="post-comment">
-                <a href="#"><i class="flaticon-comment"></i><span>Comment</span> <span class="number">599 </span></a>
+                <a><i class="icon flaticon-comment"></i><span>Comment</span> <span class="number" id="comment-count">0</span></a>
             </li>
             <li class="post-share">
-                <a href="#"><i class="flaticon-share"></i><span>Share</span> <span class="number">24 </span></a>
+                <a><i class="icon flaticon-share"></i><span>Share</span> <span class="number"></span></a>
             </li>
         </ul>
+
+        <hr />
+
         <div class="post-comment-list">
-            <div class="comment-list">
-                <div class="comment-image">
-                    <a href="my-profile.html"><img src="assets/images/user/user-33.jpg" class="rounded-circle" alt="image"></a>
-                </div>
-                <div class="comment-info">
-                    <h3>
-                        <a href="my-profile.html">David Moore</a>
-                    </h3>
-                    <span>5 Mins Ago</span>
-                    <p>Donec rutrum congue leo eget malesuada nulla quis lorem ut libero malesuada feugiat donec rutrum congue leo eget malesuada donec rutrum congue leo eget malesuada. Praesent sapien massa convallis a pellentesque non nisi curabitur non nulla sit amet nisl tempus convallis lectus.</p>
-                    <ul class="comment-react">
-                        <li><a href="#" class="like">Like(2)</a></li>
-                        <li><a href="#">Reply</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="comment-list">
-                <div class="comment-image">
-                    <a href="my-profile.html"><img src="assets/images/user/user-34.jpg" class="rounded-circle" alt="image"></a>
-                </div>
-                <div class="comment-info">
-                    <h3>
-                        <a href="my-profile.html">Claire P. Toy</a>
-                    </h3>
-                    <span>45 Mins Ago</span>
-                    <p>Donec rutrum congue leo eget malesuada praesent sapien massa convallis a pellentesque nec egestas non nisi curabitur non nulla sit amet nisl tempus convallis quis ac lectus.</p>
-                    <ul class="comment-react">
-                        <li><a href="#" class="like">Like(12)</a></li>
-                        <li><a href="#">Reply</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="comment-list">
-                <div class="comment-image">
-                    <a href="my-profile.html"><img src="assets/images/user/user-8.jpg" class="rounded-circle" alt="image"></a>
-                </div>
-                <div class="comment-info">
-                    <h3>
-                        <a href="my-profile.html">Karen Williams</a>
-                    </h3>
-                    <span>5 Mins Ago</span>
-                    <p>Donec rutrum congue leo eget malesuada nulla quis lorem ut libero malesuada feugiat donec rutrum congue leo eget.</p>
-                    <ul class="comment-react">
-                        <li><a href="#" class="like">Like(2)</a></li>
-                        <li><a href="#">Reply</a></li>
-                    </ul>
-                </div>
-            </div>
+
             <div class="more-comments">
                 <a href="#">More Comments+</a>
             </div>
         </div>
+
         <form class="post-footer">
             <div class="footer-image">
-                <a href="#"><img src="assets/images/user/user-1.jpg" class="rounded-circle" alt="image"></a>
+                <a href="/home/my-profile"><img src="@currentUser.ImageUrl" style="max-height: 80px; max-width: 80px;" class="rounded-circle" alt="image"></a>
             </div>
             <div class="form-group">
                 <textarea name="message" class="form-control" placeholder="Write a comment..."></textarea>
-                <label><a href="#"><i class="flaticon-photo-camera"></i></a></label>
+                @*<label><a href="#"><i class="flaticon-photo-camera"></i></a></label>*@
             </div>
         </form>
     </div>
 </div>
 
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/jquery.magnific-popup.min.js"></script>
-<script src="assets/js/jquery-ui.min.js"></script>
-<script src="assets/js/simplebar.min.js"></script>
-<script src="assets/js/metismenu.min.js"></script>
-<script src="assets/js/owl.carousel.min.js"></script>
-<script src="assets/js/wow.min.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="~/assets/js/functions.js"></script>
+<script src="~/assets/js/bootstrap.bundle.min.js"></script>
+<script src="~/assets/js/jquery.magnific-popup.min.js"></script>
+<script src="~/assets/js/jquery-ui.min.js"></script>
+<script src="~/assets/js/simplebar.min.js"></script>
+<script src="~/assets/js/metismenu.min.js"></script>
+<script src="~/assets/js/owl.carousel.min.js"></script>
+<script src="~/assets/js/wow.min.js"></script>
+<script src="~/assets/js/main.js"></script>
+
+<script>
+
+    var item = document.getElementById("dateDiff");
+    var createdAt = '@Model.CreatedAt';
+    item.innerHTML = getDateTimeDifference(createdAt);
+
+    var postId = '@Model.Id.ToString()';
+    async function setLikeCount() {
+        var likeCount = await makeAjaxRequest("/api/Like/GetPostLikeCount?postId=" + postId);
+        document.getElementById("like-count").innerHTML = likeCount;
+    }
+    setLikeCount();
+
+    var currentUserId = '@currentUser.Id.ToString()';
+    async function setIsLiked(){
+        var isLiked = await makeAjaxRequest(`/api/Like/UserLikedPost?userId=${currentUserId}&postId=${postId}`, "GET");
+     
+        var element = document.getElementById("like-text");
+        if (isLiked){
+            element.innerHTML = "Unlike";
+        }
+        else{
+            element.innerHTML = "Like";
+        }
+    }
+    setIsLiked();
+
+    function createCommentHtml() {
+        var content = `
+                 <div class="comment-list">
+                        <div class="comment-image">
+                            <a href="my-profile.html"><img src="assets/images/user/user-33.jpg" class="rounded-circle" alt="image"></a>
+                        </div>
+                        <div class="comment-info">
+                            <h3>
+                                <a href="my-profile.html">David Moore</a>
+                            </h3>
+                            <span>5 Mins Ago</span>
+                            <p>Donec rutrum congue leo eget malesuada nulla quis lorem ut libero malesuada feugiat donec rutrum congue leo eget malesuada donec rutrum congue leo eget malesuada. Praesent sapien massa convallis a pellentesque non nisi curabitur non nulla sit amet nisl tempus convallis lectus.</p>
+                            <ul class="comment-react">
+                                <li><a href="#" class="like">Like(2)</a></li>
+                                <li><a href="#">Reply</a></li>
+                            </ul>
+                        </div>
+                    </div>`;
+
+        return content;
+    }
+
+    function likePost() {
+        const likeButton = document.getElementById(`like-button`);
+
+        likeButton.classList.add('liked');
+
+        const likeCountElement = document.getElementById(`like-count`);
+
+        var text = document.getElementById("like-text");
+
+        if (text) {
+            if (text.innerText === 'Like') {
+                makeAjaxRequest(`/api/Like/LikePost?postId=${postId}`, 'POST')
+                    .then(updatedLikeCount => {
+                        if (likeCountElement) {
+                            likeCountElement.textContent = updatedLikeCount;
+                        }
+                    })
+                    .catch(error => {
+                        alert('Error liking the post:', error);
+                        likeButton.classList.toggle('liked');
+                    });
+
+                text.innerText = 'Unlike';
+            } else {
+                makeAjaxRequest(`/api/Like/UnlikePost?postId=${postId}`, 'POST')
+                    .then(updatedLikeCount => {
+                        if (likeCountElement) {
+                            likeCountElement.textContent = updatedLikeCount;
+                        }
+                    })
+                    .catch(error => {
+                        alert('Error unliking the post:', error);
+                        likeButton.classList.toggle('liked');
+                    });
+                likeButton.classList.remove("liked");
+                text.innerText = 'Like';
+            }
+        }
+    }
+
+
+</script>

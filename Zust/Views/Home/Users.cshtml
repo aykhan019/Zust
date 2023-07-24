@@ -163,7 +163,7 @@
                 if (data.length === 0){
                     var html = getNoResultHtml("No Users Found", "Sorry, we couldn't find any users matching your search criteria.");
                     container.innerHTML = html;
-            document.getElementById("loadMoreSearchUsers").style.visibility = "hidden";
+                    document.getElementById("loadMoreSearchUsers").style.visibility = "hidden";
                 }
                 else{
                     allUserCountInView = data.length;
@@ -249,19 +249,19 @@
         var items = searchResultUsers.splice(searchResultUsersCountInView, takeUserCount);
         createUserHtml(items);
         //alert(items.length);
-        searchResultUsersCountInView += takeUserCount;
+        searchResultUsersCountInView += items.length
         console.log(searchResultUsers);
         var allUsersCount = searchResultUsers.length
         //alert(searchResultUsersCountInView);
         //alert(allUsersCount);
-        if (searchResultUsersCountInView === allUsersCount) { // Current User Subtracted
-            //alert("HIDE");
-            document.getElementById("loadMoreSearchUsers").style.display = "none";
-        }
-
         await setSocialData(items);
-        $('#loadMoreSearchUsers').prop('disabled', false);
-        $('#loadMoreSearchUsers').html('<i class="flaticon-loading"></i> Load More');
+        if (searchResultUsersCountInView === allUsersCount) { // Current User Subtracted
+            alert("HIDE");
+            document.getElementById("loadMoreSearchUsers").style.display = "none";
+        }else{
+            $('#loadMoreSearchUsers').prop('disabled', false);
+            $('#loadMoreSearchUsers').html('<i class="flaticon-loading"></i> Load More');
+        }
     }
 
     function createUserHtml(newUsers) {

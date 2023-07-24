@@ -22,5 +22,10 @@ namespace Zust.Business.Concrete
         {
             await _notificationDal.AddAsync(notification);
         }
+
+        public async Task<IEnumerable<Notification>> GetAllNotificationsOfUserAsync(string userId)
+        {
+            return await _notificationDal.GetAllAsync(n => n.UserId == userId);
+        }
     }
 }

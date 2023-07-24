@@ -1,71 +1,135 @@
+@using Zust.Web.Helpers.ConstantHelpers
+@using Microsoft.AspNetCore.Identity;
+@using Zust.Entities.Models;
 @{
+    var userManager = Context.RequestServices.GetService<UserManager<User>>();
+    var user = await userManager.GetUserAsync(Context.User);
     ViewData["Title"] = "Zust - Notifications";
 }
 
-<div class="all-notifications-body" style="margin-top: 0px; margin-bottom: 0px;">
+<style>
+    .item {
+        width: 600px; /* Increase the width to your desired value */
+    }
+
+    @@media only screen and (max-width: 700px) {
+        .item {
+            width: 100%;
+            /*background-color: red;*/
+        }
+
+        #notificationsBody {
+            width: 100%;
+            /*background-color: green;*/
+            margin: 0px;
+        }
+
+        .all-notifications-body {
+            padding: 0px;
+            margin: 0px;
+            width: 100%;
+            /*background-color: yellow;*/
+        }
+    }
+
+    /*    .icon a {
+            margin-right: 10px;
+        }*/
+
+    .custom-spinner-color {
+        color: var(--main-color);
+    }
+
+    #spinner {
+        margin: auto;
+        margin-top: 10px;
+    }
+
+    #container {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+</style>
+
+<div class="all-notifications-body" id="container">
 
     <div class="all-notifications-header d-flex justify-content-between align-items-center">
-        <h3>Notifications</h3>
-
-        <div class="dropdown">
-            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="flaticon-menu"></i></button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item d-flex align-items-center" href="#"><i class="flaticon-edit"></i> Edit Notifications</a></li>
-                <li><a class="dropdown-item d-flex align-items-center" href="#"><i class="flaticon-private"></i> Hide Notifications</a></li>
-                <li><a class="dropdown-item d-flex align-items-center" href="#"><i class="flaticon-trash"></i> Delete Notifications</a></li>
-            </ul>
-        </div>
+        <h3 class="text-center w-100">Notifications</h3>
     </div>
 
-    <div class="item d-flex justify-content-between align-items-center">
-        <div class="figure">
-            <a href="my-profile.html"><img src="~/assets/images/user/user-53.jpg" class="rounded-circle" alt="image"></a>
-        </div>
-        <div class="text">
-            <h4><a href="my-profile.html">Howard Harris</a></h4>
-            <span>Added a Photo in Graphic Design Group</span>
-            <span class="main-color">7 Days Ago</span>
-        </div>
-        <div class="icon">
-            <a href="#"><i class="flaticon-x-mark"></i></a>
-        </div>
+    <div id="notificationsBody">
     </div>
-    <div class="item d-flex justify-content-between  align-items-center">
-        <div class="figure">
-            <a href="my-profile.html"><img src="~/assets/images/user/user-30.jpg" class="rounded-circle" alt="image"></a>
-        </div>
-        <div class="text">
-            <h4><a href="my-profile.html">David Gibson</a></h4>
-            <span>Commented on Your Newstatus</span>
-            <span class="main-color">1 Month Ago</span>
-        </div>
-        <div class="icon">
-            <a href="#"><i class="flaticon-x-mark"></i></a>
-        </div>
+
+    <div class="load-more-posts-btn">
+        <button id="loadMore" style="visibility: hidden;" class="transparent-button" onclick="showNotifications()"><i class="flaticon-loading"></i> Load More</button>
     </div>
 </div>
 
 <script src="~/assets/js/jquery.min.js"></script>
 <script src="~/assets/js/functions.js"></script>
 <script>
+    var currentUserId = '@user.Id.ToString()';
+
     localStorage.setItem('activeMenuItem', '#4');
 
-    function createNotificationHtml(notification){
+    function createNotificationHtml(notification) {
+        var dateDiff = getDateTimeDifference(notification.date);
         var content = `
-            <div class="item d-flex justify-content-between align-items-center">
-                <div class="figure">
-                    <a href="my-profile.html"><img src="~/assets/images/user/user-52.jpg" class="rounded-circle" alt="image"></a>
-                </div>
-                <div class="text">
-                    <h4><a href="my-profile.html">Martha Wilkes</a></h4>
-                    <span>Reacted To Your Comment "Happy Birthday"</span>
-                    <span class="main-color">3 Days Ago</span>
-                </div>
-                <div class="icon">
-                    <a href="#"><i class="flaticon-x-mark"></i></a>
-                </div>
-            </div>
-        `;
+                    <div class="item d-flex justify-content-between align-items-center">
+                        <div class="figure">
+                                <a href="/home/users?id=${notification.user.id}"><img src="${notification.user.imageUrl}" class="rounded-circle" alt="image"></a>
+                        </div>
+                        <div class="text">
+                            <h4><a href="/home/users?id=${notification.user.id}">${notification.user.userName}</a></h4>
+                            <span>${notification.message}</span>
+                            <span class="main-color">${dateDiff}</span>
+                        </div>
+                        <div class="icon">
+                            <a onClick=removeNotification()><i class="flaticon-x-mark"></i></a>
+                        </div>
+                    </div>
+                `;
         return content;
     }
+
+    var allNotifications = null;
+
+    async function setAllNotifications() {
+        var result = await makeAjaxRequest("/api/Notification/GetNotificationsOfUser?userId=" + currentUserId, "GET");
+        result.sort((a, b) => new Date(a.date) - new Date(b.date)).reverse();
+        allNotifications = result;
+        console.log(allNotifications);
+    }
+
+    var contaier = document.getElementById("notificationsBody");
+    var notificationCountInView = 0;
+    var takeCount = 25;
+
+    async function showNotifications() {
+        if (allNotifications === null) {
+            await setAllNotifications();
+        }
+
+        if (allNotifications.length === 0) {
+            var html = getNoResultHtml("No Notifications", "You haven't received any notifications.");
+        }
+        else {
+            var notifications = allNotifications.splice(notificationCountInView, takeCount);
+            notificationCountInView += notifications.length;
+            for (var i = 0; i < notifications.length; i++) {
+                var notification = notifications[i];
+                var notificationHtml = createNotificationHtml(notification);
+                contaier.innerHTML += notificationHtml;
+            }
+        }
+
+        if (allNotifications.length === notificationCountInView){
+            document.getElementById("loadMore").style.display = 'none';
+        }
+    }
+
+    showNotifications();
 </script>

@@ -76,6 +76,7 @@ namespace Zust.Web.Controllers.ViewControllers
             {
                 return NotFound();
             }
+            post.User = await _userService.GetUserByIdAsync(post.UserId);
             return View(Routes.Post, post);
         }
 

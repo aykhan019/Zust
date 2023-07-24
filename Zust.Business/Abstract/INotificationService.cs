@@ -10,5 +10,6 @@ namespace Zust.Business.Abstract
     public interface INotificationService
     {
         Task AddAsync(Notification notification);
+        Task<IEnumerable<Notification>> GetAllNotificationsOfUserAsync(string userId);
     }
 }

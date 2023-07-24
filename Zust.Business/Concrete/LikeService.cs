@@ -45,5 +45,12 @@ namespace Zust.Business.Concrete
             var like = await _likeDal.GetAsync(l => l.UserId == userId && l.PostId == postId);
             await RemoveLikeAsync(like);
         }
+
+        public async Task<bool> UserLikedPost(string userId, string postId)
+        {
+            var result = await _likeDal.GetAsync(l => l.UserId == userId && l.PostId == postId);
+
+            return result != null;
+        }
     }
 }

@@ -104,5 +104,19 @@ namespace Zust.Web.Controllers.ApiControllers
 
         }
 
+        [HttpGet(Routes.UserLikedPost)]
+        public async Task<ActionResult<bool>> UserLikedPost(string userId, string postId)
+        {
+            try
+            {
+                var result = await _likeService.UserLikedPost(userId, postId);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

@@ -120,5 +120,11 @@
         public const string GetFollowersInRange = "GetFollowersInRange";
 
         public const string GetFollowingsInRange = "GetFollowingsInRange";
+
+        public const string NotificationAPI = "api/Notification";
+
+        public const string GetNotificationsOfUser = "GetNotificationsOfUser";
+
+        public const string UserLikedPost = "UserLikedPost";
     }
 }
