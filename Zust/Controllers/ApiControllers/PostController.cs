@@ -17,12 +17,14 @@ namespace Zust.Web.Controllers.ApiControllers
         private readonly IMediaService _mediaService;
         private readonly IPostService _postService;
         private readonly IUserService _userService;
+        private readonly ICommentService _commentService;
 
-        public PostController(IMediaService mediaService, IPostService postService, IUserService userService)
+        public PostController(IMediaService mediaService, IPostService postService, IUserService userService, ICommentService commentService)
         {
             _mediaService = mediaService;
             _postService = postService;
             _userService = userService;
+            _commentService = commentService;
         }
 
         [HttpPost(Routes.CreatePost)]
@@ -127,6 +129,25 @@ namespace Zust.Web.Controllers.ApiControllers
                 var postLikeCount = await _postService.GetAllPostsLikeCountAsync(userId);
 
                 return Ok(postLikeCount);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet(Routes.GetCommentsOfPost)]
+        public async Task<ActionResult<IEnumerable<Comment>>> GetAllCommentsOfPost(string postId)
+        {
+            try
+            {
+                var comments = (await _commentService.GetCommentsOfPostAsync(postId)).ToList();
+
+                comments.ForEach(async comment =>
+                {
+                    comment.User = await _userService.GetUserByIdAsync(comment.Id);
+                });
+
+                return Ok(comments);
             }
             catch (Exception ex)
             {

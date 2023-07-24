@@ -41,6 +41,8 @@ builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IStaticService, StaticService>();
 builder.Services.AddScoped<ILikeDal, EFLikeDal>();
 builder.Services.AddScoped<ILikeService, LikeService>();
+builder.Services.AddScoped<ICommentDal, EFCommentDal>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
 // Register Session
 builder.Services.AddSession();

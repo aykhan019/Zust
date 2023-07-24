@@ -115,6 +115,7 @@
 
         if (allNotifications.length === 0) {
             var html = getNoResultHtml("No Notifications", "You haven't received any notifications.");
+            contaier.innerHTML = html;
         }
         else {
             var notifications = allNotifications.splice(notificationCountInView, takeCount);

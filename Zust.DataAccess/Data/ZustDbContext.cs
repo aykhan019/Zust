@@ -10,6 +10,7 @@ using System.Reflection.Emit;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Zust.Entities.Models;
 
 namespace Zust.Core.Concrete.EntityFramework
@@ -38,5 +39,6 @@ namespace Zust.Core.Concrete.EntityFramework
         public DbSet<FriendRequest>? FriendRequest { get; set; }
         public DbSet<Notification>? Notifications { get; set; }
         public DbSet<Like>? Likes { get; set; }
+        public DbSet<Comment>? Comments { get; set; }
     }
 }

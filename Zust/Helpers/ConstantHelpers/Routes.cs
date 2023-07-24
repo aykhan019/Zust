@@ -126,5 +126,7 @@
         public const string GetNotificationsOfUser = "GetNotificationsOfUser";
 
         public const string UserLikedPost = "UserLikedPost";
+
+        public const string GetCommentsOfPost = "GetCommentsOfPost";
     }
 }
