@@ -30,7 +30,7 @@ namespace Zust.Business.Concrete
         }
 
         public async Task DeleteAsync(FriendRequest friendRequest)
-        {
+            {
             await _friendRequestDal.DeleteAsync(friendRequest);
         }
 
@@ -45,9 +45,9 @@ namespace Zust.Business.Concrete
             return filter == null ? items : items.Where(filter);
         }
 
-        public async Task<bool> HasRequestPendingAsync(string senderId, string receiverId)
+        public async Task<bool> HasRequestPendingAsync(string senderId, string receiverId, string status)
         {
-            var friendRequest = await _friendRequestDal.GetAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId);
+            var friendRequest = await _friendRequestDal.GetAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId && fr.Status == status);
 
             return friendRequest != null;
         }

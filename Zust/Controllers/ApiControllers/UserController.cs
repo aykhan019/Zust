@@ -98,7 +98,7 @@ namespace Zust.Web.Controllers.ApiControllers
                     user.IsFriend = await _friendshipService.IsFriendAsync(currentUserId, user.Id);
                     if (!user.IsFriend)
                     {
-                        user.HasFriendRequestPending = await _friendRequestService.HasRequestPendingAsync(currentUserId, user.Id);
+                        user.HasFriendRequestPending = await _friendRequestService.HasRequestPendingAsync(currentUserId, user.Id, Status.Pending);
                     }
                 });
 
@@ -226,10 +226,17 @@ namespace Zust.Web.Controllers.ApiControllers
         /// <param name="id">The ID of the user to retrieve.</param>
         /// <returns>The user with the specified ID.</returns>
         [HttpGet(Routes.GetUser)]
-        public async Task<ActionResult<IEnumerable<User>>> GetUser(string id)
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUser(string id)
         {
             try
             {
+                var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
+
+                if (currentUser == null)
+                {
+                    return NotFound(Errors.UserNotFound);
+                }
+
                 var user = await _userService.GetUserByIdAsync(id);
 
                 if (user == null)
@@ -237,7 +244,16 @@ namespace Zust.Web.Controllers.ApiControllers
                     return NotFound(Errors.UserNotFound);
                 }
 
-                return Ok(user);
+                var userDTO = _mapper.Map<UserDTO>(user);
+
+                userDTO.IsFriend = await _friendshipService.IsFriendAsync(currentUser.Id, user.Id);
+
+                if (!userDTO.IsFriend)
+                {
+                    userDTO.HasFriendRequestPending = await _friendRequestService.HasRequestPendingAsync(currentUser.Id, user.Id, Status.Pending);
+                }
+
+                return Ok(userDTO);
             }
             catch (Exception ex)
             {
@@ -246,7 +262,7 @@ namespace Zust.Web.Controllers.ApiControllers
         }
 
         [HttpGet(Routes.GetUsersByText)]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsersByText(string text)
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsersByText(string text)
         {
             try
             {
@@ -261,7 +277,18 @@ namespace Zust.Web.Controllers.ApiControllers
 
                 var filteredUsers = users.Where(u => u.UserName.ToLower().Contains(text.ToLower()));
 
-                return Ok(filteredUsers);
+                var userDTOs = _mapper.Map<List<UserDTO>>(filteredUsers);
+
+                userDTOs.ForEach(async user =>
+                {
+                    user.IsFriend = await _friendshipService.IsFriendAsync(currentUser.Id, user.Id);
+                    if (!user.IsFriend)
+                    {
+                        user.HasFriendRequestPending = await _friendRequestService.HasRequestPendingAsync(currentUser.Id, user.Id, Status.Pending);
+                    }
+                });
+
+                return Ok(userDTOs);
             }
             catch (Exception ex)
             {
@@ -277,6 +304,34 @@ namespace Zust.Web.Controllers.ApiControllers
                 var followers = await _friendshipService.GetAllFollowersOfUserAsync(userId);
 
                 return Ok(followers.ToList());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(Routes.GetFollowersInRange)]
+        public async Task<ActionResult<IEnumerable<User>>> GetFollowersInRange(int startIndex, int takeCount)
+        {
+            try
+            {
+                var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
+
+                if (currentUser == null)
+                {
+                    return NotFound(Errors.UserNotFound);
+                }
+
+                var currentUserId = currentUser.Id;
+
+                var followers = await _friendshipService.GetAllFollowersOfUserAsync(currentUserId);
+
+                var userDTOs = _mapper.Map<List<UserDTO>>(followers);
+
+                var range = new Range(startIndex, startIndex + takeCount);
+
+                return Ok(followers.Take(range));
             }
             catch (Exception ex)
             {
@@ -331,6 +386,34 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        [HttpGet(Routes.GetFollowingsInRange)]
+        public async Task<ActionResult<IEnumerable<User>>> GetFollowingsInRange(int startIndex, int takeCount)
+        {
+            try
+            {
+                var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
+
+                if (currentUser == null)
+                {
+                    return NotFound(Errors.UserNotFound);
+                }
+
+                var currentUserId = currentUser.Id;
+
+                var followings = await _friendshipService.GetAllFollowingsOfUserAsync(currentUserId);
+
+                var userDTOs = _mapper.Map<List<UserDTO>>(followings);
+
+                var range = new Range(startIndex, startIndex + takeCount);
+
+                return Ok(followings.Take(range));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet(Routes.GetFollowingsCount)]
         public async Task<ActionResult<int>> GetFollowingsCount(string userId)
         {
@@ -364,14 +447,48 @@ namespace Zust.Web.Controllers.ApiControllers
 
                 var friendRequest = await _friendRequestService.GetAsync(fr => fr.SenderId == currentUserId && fr.ReceiverId == friendId);
 
-                if (friendRequest == null)
+                if (friendRequest != null)
                 {
-                    return NotFound(Errors.FriendRequestNotFound);
+                    await _friendRequestService.DeleteAsync(friendRequest);
                 }
 
-                await _friendRequestService.DeleteAsync(friendRequest);
-
                 var deleted = await _friendshipService.DeleteFriendshipAsync(currentUserId, friendId);
+
+                if (!deleted)
+                {
+                    return BadRequest(Errors.FriendRequestNotFound);
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost(Routes.RemoveFollower)]
+        public async Task<IActionResult> RemoveFollower(string friendId)
+        {
+            try
+            {
+                var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
+
+                if (currentUser == null)
+                {
+                    return NotFound(Errors.UserNotFound);
+                }
+
+                var currentUserId = currentUser.Id;
+
+                var friendRequest = await _friendRequestService.GetAsync(fr => fr.SenderId == currentUserId && fr.ReceiverId == friendId);
+
+                if (friendRequest != null)
+                {
+                    await _friendRequestService.DeleteAsync(friendRequest);
+                }
+
+                var deleted = await _friendshipService.DeleteFriendshipAsync(friendId, currentUserId);
 
                 if (!deleted)
                 {

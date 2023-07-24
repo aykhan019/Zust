@@ -15,6 +15,21 @@
         object-fit: cover !important; /* Maintain aspect ratio and cover the container */
     }
 
+    .cancel-btn{
+        background-color: var(--yellow-color);
+        color: var(--black-color);
+    }
+
+    .remove-friend-btn{
+        background-color: var(--red-color);
+        color: var(--white-color);
+    }
+
+    .send-request-btn{
+        background-color: var(--main-color);
+        color: var(--white-color);
+    }
+
     #photos {
         display: flex;
         flex-direction: column;
@@ -53,8 +68,10 @@
 
                 <span><a id="emailElement" href="mailto:@Model.Email">@Model.Email</a></span>
 
-                <div style="display: flex; margin-top: 10px; margin-left: -15px" id="buttons">
-                </div>
+                <h3>
+                    <div style="display: flex; margin-top: 10px;" id="buttons">
+                    </div>
+                </h3>
             </div>
             <ul class="statistics">
                 <li>
@@ -274,58 +291,63 @@
 <script>
     var userId = '@Model.Id.ToString()';
 
+    var currentUserId = '@user.Id.ToString()';
     setSocialCounts("followers-count", "followings-count", "post-like-count", userId);
 
-    var sentFriendRequests;
+    //var sentFriendRequests;
 
-    var currentUserId = '@user.Id.ToString()';
-    async function callGetSentFriendRequests() {
-        try {
-            sentFriendRequests = await getSentFriendRequests(currentUserId);
-            console.log(sentFriendRequests);
-        } catch (error) {
-            alert("Error occurred: " + error.responseText);
-        }
-    }
+    //async function callGetSentFriendRequests() {
+    //    try {
+    //        sentFriendRequests = await getSentFriendRequests(currentUserId);
+    //        console.log(sentFriendRequests);
+    //    } catch (error) {
+    //        alert("Error occurred: " + error.responseText);
+    //    }
+    //}
+    var buttonsContainer = document.getElementById("buttons");
+
 
     async function addFollowAndMessageButtons() {
-        await callGetSentFriendRequests();
+        //await callGetSentFriendRequests();
 
         if (currentUserId == '@Model.Id')
             return;
 
-        var buttonsContainer = document.getElementById("buttons");
 
         var userModel = @Html.Raw(Json.Serialize(Model));
 
-        var btnText = getButtonText(sentFriendRequests, userModel);
+        var user = await makeAjaxRequest(`/api/User/GetUser/${userId}`, "GET");
+        console.log(user);
 
-        var bgcolor = 'var(--black-color)';
-        var color = 'var(--black-color)';
-        var func = '';
+        var btnHtml = getButtonHtml(user);
+        //var btnText = getButtonText(sentFriendRequests, userModel);
 
-        if (btnText == 'Cancel Follow Request') {
-            func = `callCancelFriendRequest('${userModel.id}')`;
-            bgcolor = 'var(--yellow-color)';
-        }
-        else if (btnText == 'Unfollow') {
-            func = `callRemoveFriend('${userModel.id}')`;
-            color = 'var(--white-color)'
-            bgcolor = 'var(--red-color)';
-        }
-        else if (btnText == 'Follow') {
-            func = `callSendFriendRequest('${userModel.id}')`;
-            color = 'var(--white-color)';
-            bgcolor = 'var(--main-color)';
-        }
+        //var bgcolor = 'var(--black-color)';
+        //var color = 'var(--black-color)';
+        //var func = '';
 
-        console.log(func);
-        var btnHtml = `
-                <div class="send-message-button ms-3">
-                        <a onclick="${func}" class="btn" style='background-color:${bgcolor} !important; color: ${color} !important;'>${btnText}</a>
-                    </div>
-            `;
-        console.log(btnHtml);
+        //if (btnText == 'Cancel Follow Request') {
+        //    func = `callCancelFriendRequest('${userModel.id}')`;
+        //    bgcolor = 'var(--yellow-color)';
+        //}
+        //else if (btnText == 'Unfollow') {
+        //    func = `callRemoveFriend('${userModel.id}')`;
+        //    color = 'var(--white-color)'
+        //    bgcolor = 'var(--red-color)';
+        //}
+        //else if (btnText == 'Follow') {
+        //    func = `callSendFriendRequest('${userModel.id}')`;
+        //    color = 'var(--white-color)';
+        //    bgcolor = 'var(--main-color)';
+        //}
+
+        //console.log(func);
+        //var btnHtml = `
+        //        <div class="send-message-button ms-3">
+        //                <a onclick="${func}" class="btn" style='background-color:${bgcolor} !important; color: ${color} !important;'>${btnText}</a>
+        //            </div>
+        //    `;
+        //console.log(btnHtml);
 
         buttonsContainer.innerHTML = btnHtml;
 
@@ -336,30 +358,56 @@
             `;
     }
 
-    async function reload() {
-        await callGetSentFriendRequests();
-        addFollowAndMessageButtons();
+    async function reload(userId, myHasFriendRequestPending, myIsFriend) {
+        var user = {
+            id: userId,
+            hasFriendRequestPending: myHasFriendRequestPending,
+            isFriend: myIsFriend
+        };
+        var btnHtml = getButtonHtml(user);
+
+        buttonsContainer.innerHTML = btnHtml;
+
+        buttonsContainer.innerHTML += `
+            <div class="send-message-button ms-3">
+                <a href="#" class="btn" style='background-color:var(--main-color); color: var(--white-color)'>Send Message</a>
+            </div>
+        `;
+
+        const buttons = document.querySelectorAll('.btn');
+        if (buttons.length > 0) {
+            // Disable the first button
+            buttons[0].disabled = true;
+
+            // Enable the first button after 1500 milliseconds (1.5 seconds)
+            setTimeout(() => {
+                buttons[0].disabled = false;
+            }, 1500);
+        }
+
+        //await callGetSentFriendRequests();
+        //addFollowAndMessageButtons();
         setSocialCounts("followers-count", "followings-count", "post-like-count", userId);
     }
 
     async function callCancelFriendRequest(userId) {
         var result = await cancelFriendRequest(userId);
         if (result) {
-            await reload();
+            await reload(userId, false, false);
         }
     }
 
     async function callRemoveFriend(friendId) {
         var result = await removeFriend(friendId);
         if (result) {
-            await reload();
+            await reload(userId, false, false);
         }
     }
 
     async function callSendFriendRequest(userId) {
         var result = await sendFriendRequest(userId);
         if (result) {
-            await reload();
+            await reload(userId, true, false);
         }
     }
 

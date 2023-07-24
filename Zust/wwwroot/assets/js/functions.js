@@ -236,17 +236,17 @@ function removeFriend(friendId) {
 
 function getButtonHtml(user){
     if (user.hasFriendRequestPending) {
-        return `<button id='cancel-${user.id}' onclick="callCancelFriendRequest('${user.id}')" class="cancel-btn">Cancel Follow Request</button>`;
+        return `<button id='cancel-${user.id}' onclick="callCancelFriendRequest('${user.id}')" class="cancel-btn btn">Cancel Follow Request</button>`;
     } else if (user.isFriend) {
-        return `<button id='unfollow-${user.id}' title="Click to stop following" onClick="callRemoveFriend('${user.id}')" class="remove-friend-btn">Unfollow</button>`;
+        return `<button id='unfollow-${user.id}' title="Click to stop following" onClick="callRemoveFriend('${user.id}')" class="remove-friend-btn btn">Unfollow</button>`;
     } else {
-        return `<button id='follow-${user.id}' onclick="callSendFriendRequest('${user.id}')" type="submit" class="send-request-btn">Follow</button>`;
+        return `<button id='follow-${user.id}' onclick="callSendFriendRequest('${user.id}')" type="submit" class="send-request-btn btn">Follow</button>`;
     }
 }
 
-//function getButtonHtml(sentFriendRequests, user) {
-//    let followRequestExists = false;
-//    let acceptedFriendExists = false;
+    //function getButtonHtml(sentFriendRequests, user) {
+    //    let followRequestExists = false;
+    //    let acceptedFriendExists = false;
 //
 //    for (const request of sentFriendRequests) {
 //        if (request.receiverId === user.id) {
@@ -302,15 +302,25 @@ function getButtonText(sentFriendRequests, user) {
 }
 
 
-function getIconClass(sentFriendRequests, user) {
-    if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Pending')) {
+function getIconClass(user) {
+    if (user.hasFriendRequestPending) {
         return 'yellow-icon';
-    } else if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Accepted')) { 
+    } else if (user.isFriend) {
         return 'red-icon';
     } else {
         return 'main-icon';
     }
 }
+
+//function getIconClass(sentFriendRequests, user) {
+//    if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Pending')) {
+//        return 'yellow-icon';
+//    } else if (sentFriendRequests.some(i => i.receiverId === user.id && i.status === 'Accepted')) { 
+//        return 'red-icon';
+//    } else {
+//        return 'main-icon';
+//    }
+//}
 
 
  async function setSocialCounts(followerElementId, followingElementId, postLikeElementId, currentUserId) {

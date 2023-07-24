@@ -75,6 +75,8 @@
 
         public const string RemoveFriend = "RemoveFriend";
 
+        public const string RemoveFollower = "RemoveFollower";
+
         public const string GetCurrentUser = "GetCurrentUser";
 
         public const string PostAPI = "api/Post";
@@ -114,5 +116,9 @@
         public const string GetRandomFollowers = "GetRandomFollowers";
 
         public const string GetAllPostsLikeCount = "GetAllPostsLikeCount";
+
+        public const string GetFollowersInRange = "GetFollowersInRange";
+
+        public const string GetFollowingsInRange = "GetFollowingsInRange";
     }
 }

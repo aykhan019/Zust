@@ -18,6 +18,6 @@ namespace Zust.Business.Abstract
         Task DeleteAsync(FriendRequest friendRequest);
         Task UpdateAsync(FriendRequest friendRequest);
         Task<bool> CheckFriendRequestExistsAsync(string senderId, string receiverId, string status);
-        Task<bool> HasRequestPendingAsync(string senderId, string receiverId);  
+        Task<bool> HasRequestPendingAsync(string senderId, string receiverId, string status);  
     }
 }

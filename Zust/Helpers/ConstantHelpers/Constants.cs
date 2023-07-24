@@ -38,7 +38,7 @@
         /// <summary>
         /// Represents the number of users to take in user-related operations.
         /// </summary>
-        public const int TakeUserCount = 8;
+        public const int TakeUserCount = 16;
 
         /// <summary>
         /// Represents an empty string.
