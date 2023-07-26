@@ -128,5 +128,7 @@
         public const string UserLikedPost = "UserLikedPost";
 
         public const string GetCommentsOfPost = "GetCommentsOfPost";
+
+        public const string GetCountOfCommentsOfPost = "GetCommentsOfPost/{postId}";
     }
 }

@@ -28,7 +28,8 @@ namespace Zust.Web.Controllers.ApiControllers
 
                 notifications.ToList().ForEach(async notification =>
                 {
-                    notification.User = await _userService.GetUserByIdAsync(notification.UserId);
+                    notification.ToUser = await _userService.GetUserByIdAsync(notification.ToUserId);
+                    notification.FromUser = await _userService.GetUserByIdAsync(notification.FromUserId);
                 });
 
                 return Ok(notifications);

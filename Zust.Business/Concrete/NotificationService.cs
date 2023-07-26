@@ -25,7 +25,7 @@ namespace Zust.Business.Concrete
 
         public async Task<IEnumerable<Notification>> GetAllNotificationsOfUserAsync(string userId)
         {
-            return await _notificationDal.GetAllAsync(n => n.UserId == userId);
+            return await _notificationDal.GetAllAsync(n => n.ToUserId == userId);
         }
     }
 }

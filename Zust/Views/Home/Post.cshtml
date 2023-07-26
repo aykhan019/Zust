@@ -94,6 +94,10 @@
         <div class="post-comment-list" id="comments">
         </div>
 
+        <div id="showMore" class="more-comments" style='text-align: center; margin-top: 5px; margin-bottom: 13px; cursor: pointer;'>
+            <a onClick='showComments()'>More Comments+</a>
+        </div>`
+
         <form class="post-footer">
             <div class="footer-image">
                 <a href="/home/my-profile"><img src="@currentUser.ImageUrl" style="max-height: 80px; max-width: 80px;" class="rounded-circle" alt="image"></a>
@@ -149,17 +153,17 @@
 
     function createCommentHtml(comment) {
         var content = `
-                         <div class="comment-list">
-                                <div class="comment-image">
-                                    <a href="/home/users?id=${comment}"><img src="${comment.user.imageUrl}" class="rounded - circle" alt="image"></a>
+                             <div class="comment-list mt-3">
+                                    <div class="comment-image">
+                                        <a href="/home/users?id=${comment}"><img src="${comment.user.imageUrl}" class="rounded-circle" alt="image" style="max-heigth:60px; max-width: 60px; background-color: gray;"></a>
+                                        <a href="/home/users?id=${comment}" class="padding-left: 10px;">${comment.user.userName}</a>
+                                    </div>
+                                    <div class="comment-info">
+                                        <p>${comment.text}</p>
+                                    </div>
                                 </div>
-                                <div class="comment-info">
-                                    <h3>
-                                            <a href="/home/users?id=${comment}">${comment.user.userName}</a>
-                                    </h3>
-                                    <p>${comment.text}</p>
-                                </div>
-                            </div>`;
+
+                                <hr/>`;
 
         return content;
     }
@@ -209,12 +213,13 @@
     async function setPostComments() {
         var result = await makeAjaxRequest("/api/Post/GetCommentsOfPost?postId=" + postId, "GET");
         postComments = result;
+        console.log(postComments);
     }
 
     var commentContainer = document.getElementById("comments");
-    var takeCount = 8;
+    var takeCount = 4;
     var postCountInView = 0;
-    
+
     async function showComments() {
         if (postComments === null) {
             await setPostComments();
@@ -224,12 +229,16 @@
             var html = getNoResultHtml("No Notifications", "You haven't received any notifications.");
         }
         else {
-            var comments = postComments.splice(0, notificationCountInView + takeCount);
-            postCountInView += comments.length;
+            var comments = postComments.splice(postCountInView, takeCount);
+            postCountInView += takeCount;
             for (var i = 0; i < comments.length; i++) {
                 var comment = comments[i];
                 var commentHtml = createCommentHtml(comment);
                 commentContainer.innerHTML += commentHtml;
+            }
+
+            if (postCountInView === postComments.length) {
+                document.getElementById("showMore").style.display = 'none';
             }
         }
     }

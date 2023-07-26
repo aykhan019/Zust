@@ -148,9 +148,11 @@ namespace Zust.Web.Controllers.ApiControllers
         //                Id = Guid.NewGuid().ToString(),
         //                Date = requestDate,
         //                IsRead = true,
-        //                Title = NotificationType.NewFriendRequest,
+        //                FromUser = user,
+        //                FromUserId = user.Id,
+        //                ToUser = friendToSendRequest,
+        //                ToUserId = friendToSendRequest.Id,
         //                Message = NotificationType.GetNewFriendRequestMessage(user.UserName),
-        //                UserId = friendToSendRequest.Id,
         //            };
 
         //            await _notificationService.AddAsync(ntfc);
@@ -171,9 +173,11 @@ namespace Zust.Web.Controllers.ApiControllers
         //                Id = Guid.NewGuid().ToString(),
         //                Date = requestDate.AddDays(random.Next(35)),
         //                IsRead = true,
-        //                Title = NotificationType.FriendRequestAccepted,
-        //                Message = NotificationType.GetFriendRequestAcceptedMessage(user.UserName),
-        //                UserId = user.Id,
+        //                Message = NotificationType.GetFriendRequestAcceptedMessage(friendToSendRequest.UserName),
+        //                FromUser = friendToSendRequest,
+        //                FromUserId = friendToSendRequest.Id,
+        //                ToUser = user,
+        //                ToUserId = user.Id
         //            };
 
         //            await _notificationService.AddAsync(ntfc2);
@@ -201,9 +205,11 @@ namespace Zust.Web.Controllers.ApiControllers
         //                Id = Guid.NewGuid().ToString(),
         //                Date = requestDate,
         //                IsRead = true,
-        //                Title = NotificationType.NewFriendRequest,
         //                Message = NotificationType.GetNewFriendRequestMessage(user.UserName),
-        //                UserId = friendToSendRequest.Id,
+        //                FromUser = user,
+        //                FromUserId = user.Id,
+        //                ToUser = friendToSendRequest,
+        //                ToUserId = friendToSendRequest.Id
         //            };
 
         //            await _notificationService.AddAsync(ntfc);

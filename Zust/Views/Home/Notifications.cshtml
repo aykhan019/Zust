@@ -76,14 +76,15 @@
     localStorage.setItem('activeMenuItem', '#4');
 
     function createNotificationHtml(notification) {
+        console.log(notification);
         var dateDiff = getDateTimeDifference(notification.date);
         var content = `
                     <div class="item d-flex justify-content-between align-items-center">
                         <div class="figure">
-                                <a href="/home/users?id=${notification.user.id}"><img src="${notification.user.imageUrl}" class="rounded-circle" alt="image"></a>
+                                <a href="/home/users?id=${notification.fromUser.id}"><img src="${notification.fromUser.imageUrl}" class="rounded-circle" alt="image"></a>
                         </div>
                         <div class="text">
-                            <h4><a href="/home/users?id=${notification.user.id}">${notification.user.userName}</a></h4>
+                            <h4><a href="/home/users?id=${notification.fromUser.id}">${notification.fromUser.userName}</a></h4>
                             <span>${notification.message}</span>
                             <span class="main-color">${dateDiff}</span>
                         </div>

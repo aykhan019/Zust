@@ -223,21 +223,23 @@ namespace Zust.Web.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FromUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
+                    b.Property<string>("ToUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("FromUserId");
+
+                    b.HasIndex("ToUserId");
 
                     b.ToTable("Notifications");
                 });
@@ -513,11 +515,17 @@ namespace Zust.Web.Migrations
 
             modelBuilder.Entity("Zust.Entities.Models.Notification", b =>
                 {
-                    b.HasOne("Zust.Entities.Models.User", "User")
+                    b.HasOne("Zust.Entities.Models.User", "FromUser")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("FromUserId");
 
-                    b.Navigation("User");
+                    b.HasOne("Zust.Entities.Models.User", "ToUser")
+                        .WithMany()
+                        .HasForeignKey("ToUserId");
+
+                    b.Navigation("FromUser");
+
+                    b.Navigation("ToUser");
                 });
 
             modelBuilder.Entity("Zust.Entities.Models.Post", b =>

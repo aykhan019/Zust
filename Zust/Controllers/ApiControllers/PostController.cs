@@ -135,6 +135,7 @@ namespace Zust.Web.Controllers.ApiControllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpGet(Routes.GetCommentsOfPost)]
         public async Task<ActionResult<IEnumerable<Comment>>> GetAllCommentsOfPost(string postId)
         {
@@ -144,10 +145,25 @@ namespace Zust.Web.Controllers.ApiControllers
 
                 comments.ForEach(async comment =>
                 {
-                    comment.User = await _userService.GetUserByIdAsync(comment.Id);
+                    comment.User = await _userService.GetUserByIdAsync(comment.UserId);
                 });
 
                 return Ok(comments);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(Routes.GetCountOfCommentsOfPost)]
+        public async Task<ActionResult<int>> GetCountOfCommentsOfPost(string postId)
+        {
+            try
+            {
+                var comments = await _commentService.GetCommentsOfPostAsync(postId);
+
+                return Ok(comments.Count());
             }
             catch (Exception ex)
             {

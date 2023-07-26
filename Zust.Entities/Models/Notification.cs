@@ -11,11 +11,13 @@ namespace Zust.Entities.Models
     {
         public string? Id { get; set; }
 
-        public string? UserId { get; set; }
+        public string? FromUserId { get; set; }
 
-        public virtual User? User { get; set; }
+        public virtual User? FromUser { get; set; }
 
-        public string? Title { get; set; }
+        public string? ToUserId { get; set; }
+
+        public virtual User? ToUser { get; set; }
 
         public string? Message { get; set; }
 
@@ -27,15 +29,6 @@ namespace Zust.Entities.Models
         public Notification()
         {
 
-        }
-
-        public Notification(string message, string userId)
-        {
-            Id = Guid.NewGuid().ToString();
-            UserId = userId;
-            Message = message;
-            Date = DateTime.Now;
-            IsRead = false;
         }
     }
 }

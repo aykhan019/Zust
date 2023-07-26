@@ -23,9 +23,9 @@ namespace Zust.Business.Concrete
             await _commentDal.AddAsync(comment);    
         }
 
-        public Task<IEnumerable<Comment>> GetCommentsOfPostAsync(string postId)
+        public async Task<IEnumerable<Comment>> GetCommentsOfPostAsync(string postId)
         {
-            return _commentDal.GetAllAsync(c => c.PostId == postId);
+            return await _commentDal.GetAllAsync(c => c.PostId == postId);
         }
     }
 }

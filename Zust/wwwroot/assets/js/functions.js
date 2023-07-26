@@ -47,7 +47,7 @@ function getDateTimeDifference(dateTime) {
     const currentTime = new Date();
 
     // Calculate the time difference in milliseconds
-    const difference = currentTime.getTime() - requestTime.getTime();
+    const difference = Math.abs(currentTime.getTime() - requestTime.getTime());
 
     // Convert milliseconds to seconds, minutes, hours, days, months, and years
     const seconds = Math.floor(difference / 1000);
