@@ -24,9 +24,9 @@ namespace Zust.Web.Controllers.ApiControllers
         {
             try
             {
-                var notifications = await _notificationService.GetAllNotificationsOfUserAsync(userId);
+                var notifications = (await _notificationService.GetAllNotificationsOfUserAsync(userId)).ToList();
 
-                notifications.ToList().ForEach(async notification =>
+                notifications.ForEach(async notification =>
                 {
                     notification.ToUser = await _userService.GetUserByIdAsync(notification.ToUserId);
                     notification.FromUser = await _userService.GetUserByIdAsync(notification.FromUserId);

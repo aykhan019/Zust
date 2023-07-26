@@ -25,17 +25,21 @@ namespace Zust.Web.Controllers.ApiControllers
 
         private readonly IFriendshipService _friendshipService;
 
+        private readonly INotificationService _notificationService;
+
         /// <summary>
         /// Initializes a new instance of the FriendRequestController class with the required dependencies.
         /// </summary>
         /// <param name="friendRequestService">The service for friend request-related operations.</param>
-        public FriendRequestController(IFriendRequestService friendRequestService, IUserService userService, IFriendshipService friendshipService)
+        public FriendRequestController(IFriendRequestService friendRequestService, IUserService userService, IFriendshipService friendshipService, INotificationService notificationService)
         {
             _friendRequestService = friendRequestService;
 
             _userService = userService;
 
             _friendshipService = friendshipService;
+
+            _notificationService = notificationService;
         }
 
         /// <summary>
@@ -71,6 +75,18 @@ namespace Zust.Web.Controllers.ApiControllers
                 };
 
                 await _friendRequestService.AddAsync(friendRequest);
+
+                var notification = new Notification()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Date = DateTime.Now,
+                    IsRead = false,
+                    FromUserId = currentUser.Id,
+                    ToUserId = receiverId,
+                    Message = NotificationType.GetNewFriendRequestMessage(currentUser.UserName),
+                };
+
+                await _notificationService.AddAsync(notification);
 
                 return Ok();
             }
@@ -170,6 +186,8 @@ namespace Zust.Web.Controllers.ApiControllers
             {
                 var friendRequest = await _friendRequestService.GetAsync(fr => fr.Id == requestId);
 
+                friendRequest.Receiver = await _userService.GetUserByIdAsync(friendRequest.ReceiverId);
+
                 if (friendRequest != null)
                 {
                     friendRequest.Status = Status.Accepted;
@@ -186,6 +204,18 @@ namespace Zust.Web.Controllers.ApiControllers
                     };
 
                     await _friendshipService.AddFriendship(friendShip);
+
+                    var notification = new Notification()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Date = DateTime.Now,
+                        IsRead = false,
+                        FromUserId = friendRequest.ReceiverId,
+                        ToUserId = friendRequest.SenderId,
+                        Message = NotificationType.GetFriendRequestAcceptedMessage(friendRequest.Receiver.UserName),
+                    };
+
+                    await _notificationService.AddAsync(notification);
 
                     return Ok();
                 }
@@ -212,6 +242,18 @@ namespace Zust.Web.Controllers.ApiControllers
                     friendRequest.Status = Status.Declined;
 
                     await _friendRequestService.UpdateAsync(friendRequest);
+
+                    var notification = new Notification()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Date = DateTime.Now,
+                        IsRead = false,
+                        FromUserId = friendRequest.ReceiverId,
+                        ToUserId = friendRequest.SenderId,
+                        Message = NotificationType.GetFriendRequestDeclinedMessage(friendRequest.Receiver.UserName),
+                    };
+
+                    await _notificationService.AddAsync(notification);
 
                     return Ok();
                 }

@@ -8,6 +8,11 @@
 }
 
 <style>
+    .transparent-button {
+        background-color: transparent;
+        border: 1px solid transparent;
+    }
+
     .item {
         width: 600px; /* Increase the width to your desired value */
     }
@@ -64,7 +69,7 @@
     </div>
 
     <div class="load-more-posts-btn">
-        <button id="loadMore" style="visibility: hidden;" class="transparent-button" onclick="showNotifications()"><i class="flaticon-loading"></i> Load More</button>
+        <button id="loadMore" class="transparent-button" onclick="showNotifications()"><i class="flaticon-loading"></i> Load More</button>
     </div>
 </div>
 
@@ -76,15 +81,14 @@
     localStorage.setItem('activeMenuItem', '#4');
 
     function createNotificationHtml(notification) {
-        console.log(notification);
         var dateDiff = getDateTimeDifference(notification.date);
         var content = `
                     <div class="item d-flex justify-content-between align-items-center">
                         <div class="figure">
-                                <a href="/home/users?id=${notification.fromUser.id}"><img src="${notification.fromUser.imageUrl}" class="rounded-circle" alt="image"></a>
+                                    <a href="/home/users?id=${notification.fromUserId}"><img src="${notification.fromUser.imageUrl}" class="rounded-circle" style="height: 70px !important; width: 70px !important; object-fit:cover;" alt="image"></a>
                         </div>
                         <div class="text">
-                            <h4><a href="/home/users?id=${notification.fromUser.id}">${notification.fromUser.userName}</a></h4>
+                            <h4><a href="/home/users?id=${notification.fromUserId}">${notification.fromUser.userName}</a></h4>
                             <span>${notification.message}</span>
                             <span class="main-color">${dateDiff}</span>
                         </div>
@@ -102,7 +106,6 @@
         var result = await makeAjaxRequest("/api/Notification/GetNotificationsOfUser?userId=" + currentUserId, "GET");
         result.sort((a, b) => new Date(a.date) - new Date(b.date)).reverse();
         allNotifications = result;
-        console.log(allNotifications);
     }
 
     var contaier = document.getElementById("notificationsBody");
@@ -121,6 +124,8 @@
         else {
             var notifications = allNotifications.splice(notificationCountInView, takeCount);
             notificationCountInView += notifications.length;
+            console.log(notifications.length);
+            console.log(notificationCountInView);
             for (var i = 0; i < notifications.length; i++) {
                 var notification = notifications[i];
                 var notificationHtml = createNotificationHtml(notification);

@@ -11,5 +11,10 @@
         {
             return $"{username} accepted your friend request!";
         }
+
+        public static string GetFriendRequestDeclinedMessage(string username)
+        {
+            return $"{username} declined your friend request!";
+        }
     }
 }
