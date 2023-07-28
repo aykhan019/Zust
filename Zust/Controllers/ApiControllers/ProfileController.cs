@@ -72,6 +72,16 @@ namespace Zust.Web.Controllers.ApiControllers
         {
             try
             {
+                // delete friend requests
+
+                // delete friendships
+
+                // delete likes
+
+                // delete posts
+                
+                // delete notifications    
+
                 await _userService.DeleteUserByIdAsync(userId);
 
                 return Ok();
