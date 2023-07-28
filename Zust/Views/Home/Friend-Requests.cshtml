@@ -121,7 +121,7 @@
     function getFriendRequestHtml(friendRequest) {
         var date = getDateTimeDifference(friendRequest.requestDate)
         var content = `
-                       <div id=${friendRequest.id} class="item d-flex justify-content-between align-items-center">
+                           <div id=${friendRequest.id} class="item d-flex justify-content-between align-items-center">
                             <div class="figure">
                                 <a href="/home/users?id=${friendRequest.senderId}">
                                    <img src="${friendRequest.sender.imageUrl}" class="rounded-circle" alt="image">

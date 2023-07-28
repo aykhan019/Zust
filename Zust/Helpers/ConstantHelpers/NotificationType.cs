@@ -16,5 +16,10 @@
         {
             return $"{username} declined your friend request!";
         }
+
+        public static string GetLikedYourPostMessage(string username)
+        {
+            return $"{username} liked your post!";
+        }
     }
 }

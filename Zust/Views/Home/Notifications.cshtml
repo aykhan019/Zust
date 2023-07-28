@@ -78,6 +78,10 @@
 <script>
     var currentUserId = '@user.Id.ToString()';
 
+    async function setNotificationSeemed(notification){
+        await makeAjaxRequest("/api/Notification/SetNotificationSeemed?notificationId=" + notification.id, "POST");
+    }
+
     localStorage.setItem('activeMenuItem', '#4');
 
     function createNotificationHtml(notification) {
@@ -128,6 +132,7 @@
             console.log(notificationCountInView);
             for (var i = 0; i < notifications.length; i++) {
                 var notification = notifications[i];
+                await setNotificationSeemed(notification);
                 var notificationHtml = createNotificationHtml(notification);
                 contaier.innerHTML += notificationHtml;
             }

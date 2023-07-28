@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Zust.Business.Abstract;
+using Zust.Business.Concrete;
 using Zust.Entities.Models;
 using Zust.Web.Helpers.ConstantHelpers;
 using Zust.Web.Helpers.Utilities;
@@ -13,9 +14,17 @@ namespace Zust.Web.Controllers.ApiControllers
 
         private readonly ILikeService _likeService;
 
-        public LikeController(ILikeService likeService)
+        private readonly IPostService _postService;
+
+        private readonly INotificationService _notificationService;
+
+        public LikeController(ILikeService likeService, IPostService postService, INotificationService notificationService)
         {
             _likeService = likeService;
+
+            _postService = postService;
+
+            _notificationService = notificationService;
         }
 
         [HttpGet(Routes.GetPostLikeCount)]
@@ -53,6 +62,21 @@ namespace Zust.Web.Controllers.ApiControllers
                 };
 
                 await _likeService.AddLikeToPostAsync(like);
+
+                var toUser = await _postService.GetOwnerOfPostById(postId);
+
+                var notification = new Notification()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Date = DateTime.Now,
+                    IsRead = false,
+                    FromUserId = currentUser.Id,
+                    ToUser = toUser,
+                    ToUserId = toUser.Id,
+                    Message = NotificationType.GetLikedYourPostMessage(currentUser.UserName),
+                };
+
+                await _notificationService.AddAsync(notification);
 
                 var likeCount = await _likeService.GetPostLikeCountAsync(postId);
 

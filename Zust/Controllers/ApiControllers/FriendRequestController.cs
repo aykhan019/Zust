@@ -179,6 +179,23 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        [HttpGet(Routes.GetPendingReceivedFriendRequestsCount)]
+        public async Task<ActionResult<int>> GetPendingReceivedFriendRequestsCount(string userId)
+        {
+            try
+            {
+                var friendRequests = await _friendRequestService.GetAllAsync(f => f.ReceiverId == userId);
+
+                var result = friendRequests.Where(fr => fr.Status == Status.Pending);
+
+                return Ok(result.Count());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost(Routes.AcceptRequest)]
         public async Task<IActionResult> AcceptRequest(string requestId)
         {
@@ -236,6 +253,8 @@ namespace Zust.Web.Controllers.ApiControllers
             try
             {
                 var friendRequest = await _friendRequestService.GetAsync(fr => fr.Id == requestId);
+
+                friendRequest.Receiver = await _userService.GetUserByIdAsync(friendRequest.ReceiverId);
 
                 if (friendRequest != null)
                 {

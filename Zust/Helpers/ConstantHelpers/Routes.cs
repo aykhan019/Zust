@@ -129,6 +129,14 @@
 
         public const string GetCommentsOfPost = "GetCommentsOfPost";
 
-        public const string GetCountOfCommentsOfPost = "GetCommentsOfPost/{postId}";
+        public const string GetCountOfCommentsOfPost = "GetCountOfCommentsOfPost/{postId}";
+
+        public const string AddComment = "AddComment";
+
+        public const string GetPendingReceivedFriendRequestsCount = "GetPendingReceivedFriendRequestsCount";
+
+        public const string SetNotificationSeemed = "SetNotificationSeemed";
+
+        public const string GetUnseenNotificationCount = "GetUnseenNotificationCount";
     }
 }

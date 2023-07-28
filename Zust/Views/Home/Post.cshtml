@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="~/assets/css/owl.theme.default.min.css">
 <link rel="stylesheet" href="~/assets/css/style.css">
 <link rel="stylesheet" href="~/assets/css/responsive.css">
+<link rel="stylesheet" href="~/assets/css/main.css">
 
 
 <style>
@@ -82,7 +83,11 @@
                 </a>
             </li>
             <li class="post-comment">
-                <a><i class="icon flaticon-comment"></i><span>Comment</span> <span class="number" id="comment-count">0</span></a>
+                <a>
+                    <i class="icon flaticon-comment"></i>
+                    <span>Comment</span> 
+                    <span class="number" id="comment-count">0</span>
+                </a>
             </li>
             <li class="post-share">
                 <a><i class="icon flaticon-share"></i><span>Share</span> <span class="number"></span></a>
@@ -96,16 +101,16 @@
 
         <div id="showMore" class="more-comments" style='text-align: center; margin-top: 5px; margin-bottom: 13px; cursor: pointer;'>
             <a onClick='showComments()'>More Comments+</a>
-        </div>`
+        </div>
 
-        <form class="post-footer">
+        <form class="post-footer" onsubmit="submitComment(event)">
             <div class="footer-image">
                 <a href="/home/my-profile"><img src="@currentUser.ImageUrl" style="max-height: 80px; max-width: 80px;" class="rounded-circle" alt="image"></a>
             </div>
             <div class="form-group" style="width: 100%; position: relative; padding-left: 5px;">
-                <textarea name="message" class="form-control" placeholder="Write a comment..." padding-right: 40px; min-height:60px;"></textarea>
+                <textarea id="commentText" name="message" class="form-control" placeholder="Write a comment..." style="padding-right: 40px; min-height: 60px; border-radius: 5px; color: black !important;"></textarea>
                 <label style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
-                    <a href="#"><i class="ri-send-plane-line"></i></a>
+                    <button type="submit" style="border:1px solid transparent;"><i class="ri-send-plane-line"></i></button>
                 </label>
             </div>
         </form>
@@ -131,11 +136,14 @@
     item.innerHTML = getDateTimeDifference(createdAt);
 
     var postId = '@Model.Id.ToString()';
-    async function setLikeCount() {
-        var likeCount = await makeAjaxRequest("/api/Like/GetPostLikeCount?postId=" + postId);
+    async function setCounts() {
+        var likeCount = await makeAjaxRequest("/api/Like/GetPostLikeCount?postId=" + postId, "GET");
         document.getElementById("like-count").innerHTML = likeCount;
+
+        var commentCount = await makeAjaxRequest(`/api/Post/GetCountOfCommentsOfPost/${postId}`, "GET")
+        document.getElementById("comment-count").innerHTML = commentCount;
     }
-    setLikeCount();
+    setCounts();
 
     var currentUserId = '@currentUser.Id.ToString()';
     async function setIsLiked() {
@@ -155,10 +163,10 @@
         var content = `
                              <div class="comment-list mt-3">
                                     <div class="comment-image">
-                                        <a href="/home/users?id=${comment}"><img src="${comment.user.imageUrl}" class="rounded-circle" alt="image" style="max-heigth:60px; max-width: 60px; background-color: gray;"></a>
-                                        <a href="/home/users?id=${comment}" class="padding-left: 10px;">${comment.user.userName}</a>
+                                        <a href="/home/users?id=${comment.user.id}"><img src="${comment.user.imageUrl}" class="rounded-circle" alt="image" style="min-heigth:60px !important;heigth:60px !important; max-height: 60px !important; max-width:60px !important; width:60px; min-width: 60px !important; background-color: gray;"></a>
+                                        <a href="/home/users?id=${comment.user.id}" style="padding-left: 10px;">${comment.user.userName}</a>
                                     </div>
-                                    <div class="comment-info">
+                                    <div class="comment-info mt-3">
                                         <p>${comment.text}</p>
                                     </div>
                                 </div>
@@ -213,7 +221,6 @@
     async function setPostComments() {
         var result = await makeAjaxRequest("/api/Post/GetCommentsOfPost?postId=" + postId, "GET");
         postComments = result;
-        console.log(postComments);
     }
 
     var commentContainer = document.getElementById("comments");
@@ -221,27 +228,109 @@
     var postCountInView = 0;
 
     async function showComments() {
-        if (postComments === null) {
-            await setPostComments();
-        }
-
-        if (postComments.length === 0) {
-            var html = getNoResultHtml("No Notifications", "You haven't received any notifications.");
-        }
-        else {
-            var comments = postComments.splice(postCountInView, takeCount);
-            postCountInView += takeCount;
-            for (var i = 0; i < comments.length; i++) {
-                var comment = comments[i];
-                var commentHtml = createCommentHtml(comment);
-                commentContainer.innerHTML += commentHtml;
+        try {
+            if (postComments === null) {
+                await setPostComments();
+                console.log(postComments);
             }
 
-            if (postCountInView === postComments.length) {
-                document.getElementById("showMore").style.display = 'none';
+            if (postComments.length === 0) {
+                var html = getNoResultHtml("No Comments", "This post has no comments.");
+                commentContainer.innerHTML = html; // Reset the container if there are no comments
+                    document.getElementById("showMore").style.display = 'none';
+            } else {
+                var comments = postComments.slice(postCountInView, postCountInView + takeCount);
+
+                for (var i = 0; i < comments.length; i++) {
+                    var comment = comments[i];
+                    var commentHtml = createCommentHtml(comment);
+                    commentContainer.innerHTML += commentHtml;
+                }
+
+                postCountInView += comments.length;
+
+                if (postCountInView >= postComments.length) {
+                    document.getElementById("showMore").style.display = 'none';
+                }
             }
+        } catch (error) {
+            console.error("Error fetching and displaying comments:", error);
         }
     }
 
     showComments();
+
+    async function makeRequest(url, method, data) {
+        try {
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json' // Set the Content-Type header to application/json
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            console.error('Error making AJAX request:', error);
+            throw error;
+        }
+    }
+
+    var spinnerHtml = `
+                <div class="spinner-border text-primary" role="status" style="color:var(--main-color) !important; width:1.1rem; height:1.1rem; ">
+                    <span class="sr-only"></span>
+                </div>
+            `;
+
+    async function submitComment(event) {
+        event.preventDefault();
+
+        const commentTextElement = document.getElementById("commentText");
+        const commentText = commentTextElement.value.trim();
+
+        if (commentText === "") {
+            return; // Don't submit an empty comment
+        }
+
+        try {
+            // Make an AJAX request to submit the comment
+            const response = await makeRequest("/api/Post/AddComment", "POST", {
+                postId: postId,
+                text: commentText,
+                userId: currentUserId
+            });
+
+            // Assuming the server responds with the newly added comment
+            const newComment = response;
+
+            // Reset the comment text area
+            commentTextElement.value = "";
+
+            // Create HTML for the new comment
+            const newCommentHtml = createCommentHtml(newComment);
+
+            // Insert the new comment at the beginning of the comment container
+            if (postComments === null || postComments.length === 0){
+                commentContainer.innerHTML = '';
+            }
+
+            commentContainer.insertAdjacentHTML("afterbegin", newCommentHtml);
+
+
+
+            var commentCountId = `comment-count`;
+            var item = document.getElementById(commentCountId);
+            item.innerHTML = spinnerHtml;
+            var commentCount = await makeAjaxRequest(`/api/Post/GetCountOfCommentsOfPost/${postId}`, "GET")
+            item.innerHTML = commentCount;
+        } catch (error) {
+            console.error("Error submitting the comment:", error);
+        }
+    }
 </script>

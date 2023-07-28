@@ -80,350 +80,45 @@
                         </div>
 
                         <div class="others-options d-flex align-items-center">
+
                             <div class="option-item">
                                 <a href="/home/index" class="home-btn"><i class="flaticon-home"></i></a>
                             </div>
+
                             <div class="option-item">
                                 <div class="dropdown friend-requests-nav-item">
-                                    <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <a href="/home/friend-requests">
                                         <div class="friend-requests-btn">
                                             <i class="flaticon-user"></i>
                                             @*Number Of Friend Requests*@
-                                            <span></span>
+                                            <span id="numberOfFriendRequests">0</span>
                                         </div>
                                     </a>
-
-                                    <div class="dropdown-menu">
-                                        <div class="friend-requests-header d-flex justify-content-between align-items-center">
-                                            <h3>Friend Requests</h3>
-                                            <i class="flaticon-menu"></i>
-                                        </div>
-
-                                        @*Friend Requests*@
-                                        <div class="friend-requests-body" data-simplebar>
-                                            <div class="item d-flex align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-2.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-
-                                                <div class="content d-flex justify-content-between align-items-center">
-                                                    <div class="text">
-                                                        <h4><a href="#">Sandra Cross</a></h4>
-                                                        <span>26 Friends</span>
-                                                    </div>
-                                                    <div class="btn-box d-flex align-items-center">
-                                                        <button class="delete-btn d-inline-block me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" type="button"><i class="ri-close-line"></i></button>
-
-                                                        <button class="confirm-btn d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Confirm" type="button"><i class="ri-check-line"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-3.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-
-                                                <div class="content d-flex justify-content-between align-items-center">
-                                                    <div class="text">
-                                                        <h4><a href="#">Kenneth Crowe</a></h4>
-                                                        <span>53 Friends</span>
-                                                    </div>
-                                                    <div class="btn-box d-flex align-items-center">
-                                                        <button class="delete-btn d-inline-block me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" type="button"><i class="ri-close-line"></i></button>
-
-                                                        <button class="confirm-btn d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Confirm" type="button"><i class="ri-check-line"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-4.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-
-                                                <div class="content d-flex justify-content-between align-items-center">
-                                                    <div class="text">
-                                                        <h4><a href="#">Andrea Harwell</a></h4>
-                                                        <span>99 Friends</span>
-                                                    </div>
-                                                    <div class="btn-box d-flex align-items-center">
-                                                        <button class="delete-btn d-inline-block me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" type="button"><i class="ri-close-line"></i></button>
-
-                                                        <button class="confirm-btn d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Confirm" type="button"><i class="ri-check-line"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-5.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-
-                                                <div class="content d-flex justify-content-between align-items-center">
-                                                    <div class="text">
-                                                        <h4><a href="#">John Lago</a></h4>
-                                                        <span>18 Friends</span>
-                                                    </div>
-                                                    <div class="btn-box d-flex align-items-center">
-                                                        <button class="delete-btn d-inline-block me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" type="button"><i class="ri-close-line"></i></button>
-
-                                                        <button class="confirm-btn d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Confirm" type="button"><i class="ri-check-line"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-6.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-
-                                                <div class="content d-flex justify-content-between align-items-center">
-                                                    <div class="text">
-                                                        <h4><a href="#">Sandra Cross</a></h4>
-                                                        <span>26 Friends</span>
-                                                    </div>
-                                                    <div class="btn-box d-flex align-items-center">
-                                                        <button class="delete-btn d-inline-block me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" type="button"><i class="ri-close-line"></i></button>
-
-                                                        <button class="confirm-btn d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Confirm" type="button"><i class="ri-check-line"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-7.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-
-                                                <div class="content d-flex justify-content-between align-items-center">
-                                                    <div class="text">
-                                                        <h4><a href="#">Kenneth Crowe</a></h4>
-                                                        <span>53 Friends</span>
-                                                    </div>
-                                                    <div class="btn-box d-flex align-items-center">
-                                                        <button class="delete-btn d-inline-block me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" type="button"><i class="ri-close-line"></i></button>
-
-                                                        <button class="confirm-btn d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Confirm" type="button"><i class="ri-check-line"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-8.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-
-                                                <div class="content d-flex justify-content-between align-items-center">
-                                                    <div class="text">
-                                                        <h4><a href="#">Andrea Harwell</a></h4>
-                                                        <span>99 Friends</span>
-                                                    </div>
-                                                    <div class="btn-box d-flex align-items-center">
-                                                        <button class="delete-btn d-inline-block me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" type="button"><i class="ri-close-line"></i></button>
-
-                                                        <button class="confirm-btn d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Confirm" type="button"><i class="ri-check-line"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-9.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-
-                                                <div class="content d-flex justify-content-between align-items-center">
-                                                    <div class="text">
-                                                        <h4><a href="#">John Lago</a></h4>
-                                                        <span>18 Friends</span>
-                                                    </div>
-                                                    <div class="btn-box d-flex align-items-center">
-                                                        <button class="delete-btn d-inline-block me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" type="button"><i class="ri-close-line"></i></button>
-
-                                                        <button class="confirm-btn d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Confirm" type="button"><i class="ri-check-line"></i></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="view-all-requests-btn">
-                                                <a href="/home/friends" class="default-btn">View All Requests</a>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             <div class="option-item">
                                 <div class="dropdown messages-nav-item">
-                                    <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <a href="/home/messages">
                                         <div class="messages-btn">
                                             <i class="flaticon-email"></i>
                                             @*Number of Messages*@
-                                            <span></span>
+                                            <span>0</span>
                                         </div>
                                     </a>
-
-                                    <div class="dropdown-menu">
-                                        <div class="messages-header d-flex justify-content-between align-items-center">
-                                            <h3>Messages</h3>
-                                            <i class="flaticon-menu"></i>
-                                        </div>
-                                        @*Messages*@
-                                        <div class="messages-body" data-simplebar>
-                                            <div class="item d-flex justify-content-between align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-11.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-                                                <div class="text">
-                                                    <h4><a href="#">James Vanwin</a></h4>
-                                                    <span>Hello Dear I Want Talk To You</span>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex justify-content-between align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-12.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-                                                <div class="text">
-                                                    <h4><a href="#">Harry Lopez</a></h4>
-                                                    <span>Hi. I Am looking For UI Designer</span>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex justify-content-between align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-13.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-                                                <div class="text">
-                                                    <h4><a href="#">Matthew Smith</a></h4>
-                                                    <span>Thanks For Connecting!</span>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex justify-content-between align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-14.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-                                                <div class="text">
-                                                    <h4><a href="#">Russe Smith</a></h4>
-                                                    <span>Thanks For Connecting!</span>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex justify-content-between align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-1.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-                                                <div class="text">
-                                                    <h4><a href="#">James Vanwin</a></h4>
-                                                    <span>Hello Dear I Want Talk To You</span>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex justify-content-between align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-2.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-                                                <div class="text">
-                                                    <h4><a href="#">Harry Lopez</a></h4>
-                                                    <span>Hi. I Am looking For UI Designer</span>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex justify-content-between align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-3.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-                                                <div class="text">
-                                                    <h4><a href="#">Matthew Smith</a></h4>
-                                                    <span>Thanks For Connecting!</span>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex justify-content-between align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-4.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-                                                <div class="text">
-                                                    <h4><a href="#">Russe Smith</a></h4>
-                                                    <span>Thanks For Connecting!</span>
-                                                </div>
-                                            </div>
-                                            <div class="view-all-messages-btn">
-                                                <a href="/home/messages" class="default-btn">View All Messages</a>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             <div class="option-item">
                                 <div class="dropdown notifications-nav-item">
-                                    <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <a href="/home/notifications">
                                         <div class="notifications-btn">
                                             <i class="flaticon-bell"></i>
                                             @*Number of Notifications*@
-                                            <span>1</span>
+                                            <span id="numberOfNotifications">0</span>
                                         </div>
                                     </a>
-
-                                    @*Notifications*@
-                                    <div class="dropdown-menu">
-                                        <div class="notifications-header d-flex justify-content-between align-items-center">
-                                            <h3>Notifications</h3>
-                                            <i class="flaticon-menu"></i>
-                                        </div>
-                                        <div class="notifications-body" data-simplebar>
-                                            <div class="item d-flex justify-content-between align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-11.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-                                                <div class="text">
-                                                    <h4><a href="#">James Vanwin</a></h4>
-                                                    <span>Posted A Comment On Your Status</span>
-                                                    <span class="main-color">20 Minites Ago</span>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex justify-content-between align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-12.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-                                                <div class="text">
-                                                    <h4><a href="#">Harry Lopez</a></h4>
-                                                    <span>Sent You A Friend Request</span>
-                                                    <span class="main-color">2 Days Ago</span>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex justify-content-between align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-13.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-                                                <div class="text">
-                                                    <h4><a href="#">Matthew Smith</a></h4>
-                                                    <span>Add A Photo In Design Group</span>
-                                                    <span class="main-color">3 Days Ago</span>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex justify-content-between align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-5.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-                                                <div class="text">
-                                                    <h4><a href="#">James Vanwin</a></h4>
-                                                    <span>Posted A Comment On Your Status</span>
-                                                    <span class="main-color">20 Minites Ago</span>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex justify-content-between align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-6.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-                                                <div class="text">
-                                                    <h4><a href="#">Harry Lopez</a></h4>
-                                                    <span>Sent You A Friend Request</span>
-                                                    <span class="main-color">2 Days Ago</span>
-                                                </div>
-                                            </div>
-                                            <div class="item d-flex justify-content-between align-items-center">
-                                                <div class="figure">
-                                                    <a href="#"><img src="~/assets/images/user/user-7.jpg" class="rounded-circle" alt="image"></a>
-                                                </div>
-                                                <div class="text">
-                                                    <h4><a href="#">Matthew Smith</a></h4>
-                                                    <span>Add A Photo In Design Group</span>
-                                                    <span class="main-color">3 Days Ago</span>
-                                                </div>
-                                            </div>
-                                            <div class="view-all-notifications-btn">
-                                                <a href="/home/notifications" class="default-btn">View All Notifications</a>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
+
                             <div class="option-item">
                                 @*Languages*@
                                 <div class="dropdown language-option">
@@ -962,6 +657,14 @@
 
 <script>
     var currentUserId = '@user.Id.ToString()';
+
+    async function setData(){
+        document.getElementById("numberOfFriendRequests").innerHTML = await makeAjaxRequest("/api/FriendRequest/GetPendingReceivedFriendRequestsCount?userId=" + currentUserId, "GET")
+        document.getElementById("numberOfNotifications").innerHTML = await makeAjaxRequest("/api/Notification/GetUnseenNotificationCount?userId=" + currentUserId, "GET");
+    }
+
+    setData();
+
 
     function getSpecialUsers() {
         return new Promise(function (resolve, reject) {

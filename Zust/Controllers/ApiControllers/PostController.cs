@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Zust.Business.Abstract;
 using Zust.Business.Concrete;
 using Zust.Entities.Models;
@@ -164,6 +165,37 @@ namespace Zust.Web.Controllers.ApiControllers
                 var comments = await _commentService.GetCommentsOfPostAsync(postId);
 
                 return Ok(comments.Count());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost(Routes.AddComment)]
+        public async Task<ActionResult<Comment>> AddComment([FromBody] CommentInputModel model)
+        {
+            try
+            {
+                var post = _postService.GetPostByIdAsync(model.PostId);
+
+                if (post == null)
+                {
+                    return NotFound();
+                }
+                var comment = new Comment
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Text = model.Text,
+                    UserId = model.UserId,
+                    PostId = model.PostId
+                };
+
+                await _commentService.AddAsync(comment);
+
+                comment.User = await _userService.GetUserByIdAsync(model.UserId);
+
+                return Ok(comment);
             }
             catch (Exception ex)
             {

@@ -67,6 +67,15 @@ namespace Zust.Business.Concrete
 
             return totalLikesCount;
         }
+
+        public async Task<User?> GetOwnerOfPostById(string postId)
+        {
+            var post = await _postDal.GetAsync(p => p.Id == postId);
+
+            var user = await _userService.GetUserByIdAsync(post.UserId);
+
+            return user;
+        }
     }
 }
 

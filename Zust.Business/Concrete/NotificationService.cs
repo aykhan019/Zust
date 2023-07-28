@@ -27,5 +27,17 @@ namespace Zust.Business.Concrete
         {
             return await _notificationDal.GetAllAsync(n => n.ToUserId == userId);
         }
+
+        public async Task<Notification?> GetNotificationByIdAsync(string notificationId)
+        {
+            return await _notificationDal.GetAsync(n => n.Id == notificationId);
+        }
+
+        public async Task<int> GetUnseenNotificationCountAsync(string userId)
+        {
+            var notifications = await GetAllNotificationsOfUserAsync(userId);
+
+            return notifications.Where(n => n.IsRead == false).Count();
+        }
     }
 }

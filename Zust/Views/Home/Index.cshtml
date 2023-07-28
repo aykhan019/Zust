@@ -554,6 +554,7 @@
         }
 
         var likeCount = await makeAjaxRequest(`/api/Like/GetPostLikeCount?postId=${post.id}`, "GET");
+        var commentCount = await makeAjaxRequest(`/api/Post/GetCountOfCommentsOfPost/${post.id}`, "GET")
 
         var html = `
                                                                 <div class="news-feed news-feed-post" id="post-item-${post.id}">
@@ -582,7 +583,7 @@
                                                                                 <a href="/home/posts?id=${post.id}">
                                                                                     <i class="flaticon-comment"></i>
                                                                                     <span>Comments</span>
-                                                                                    <span class="number">0</span>
+                                                                                    <span class="number" id='comment-count-${post.id}'>${commentCount}</span>
                                                                                 </a>
                                                                             </li>
                                                                             <li class="post-share">
@@ -592,13 +593,17 @@
                                                                                 </a>
                                                                             </li>
                                                                         </ul>
-                                                                        <form class="post-footer">
-                                                                            <div class="footer-image">
+                                                                       <form class="post-footer">
+                                                                             <div class="footer-image">
                                                                                 <a href="/home/my-profile"><img src="${currentUserProfile}" class="post-profile-image" style="background-color: gray !important; max-height: 80px !important; max-width: 80px !important; border-radius: 50%;"  alt="image"></a>
                                                                             </div>
                                                                             <div class="form-group" style="padding-left: 90px;">
-                                                                                <textarea name="message" class="form-control" placeholder="Write a comment..."></textarea>
-                                                                                    <label><a href="#"><i class="ri-send-plane-line"></i></a></label>
+                                                                                <textarea id="commentText-${post.id}" class="form-control" placeholder="Write a comment..."></textarea>
+                                                                                <label>
+                                                                                    <a onclick="sendComment('${post.id}')">
+                                                                                        <i class="ri-send-plane-line"></i>
+                                                                                    </a>
+                                                                                </label>
                                                                             </div>
                                                                         </form>
                                                                     </div>
@@ -606,6 +611,65 @@
 
                                                                 <hr/>`;
         return html;
+    }
+
+    async function makeRequest(url, method, data) {
+        try {
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json' // Set the Content-Type header to application/json
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            console.error('Error making AJAX request:', error);
+            throw error;
+        }
+    }
+
+    var spinnerHtml = `
+            <div class="spinner-border text-primary" role="status" style="color:var(--main-color) !important; width:1.1rem; height:1.1rem; ">
+                <span class="sr-only"></span>
+            </div>
+        `;
+
+    async function sendComment(postId) {
+        try {
+            const commentTextContainer = document.getElementById(`commentText-${postId}`);
+            const commentText = commentTextContainer.value;
+
+            if (commentText.trim() === '') {
+                return;
+            }
+
+            const response = await makeRequest("/api/Post/AddComment", "POST", {
+                postId: postId,
+                text: commentText,
+                userId: currentUserId
+            });
+
+            // Handle the response (e.g., show the comment on the page)
+
+            showToast("Commet was shared successfully!", "green");
+            commentTextContainer.value = '';
+
+            var commentCountId = `comment-count-${postId}`;
+            var item = document.getElementById(commentCountId);
+            item.innerHTML = spinnerHtml;
+            var commentCount = await makeAjaxRequest(`/api/Post/GetCountOfCommentsOfPost/${postId}`, "GET")
+            item.innerHTML = commentCount;
+        } catch (error) {
+            showToast("Error sharing comment!", "red");
+            commentTextContainer.value = '';
+        }
     }
 
     function likePost(postId) {

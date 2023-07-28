@@ -25,7 +25,7 @@ namespace Zust.Web.Controllers.ApiControllers
             try
             {
                 var notifications = (await _notificationService.GetAllNotificationsOfUserAsync(userId)).ToList();
-
+                
                 notifications.ForEach(async notification =>
                 {
                     notification.ToUser = await _userService.GetUserByIdAsync(notification.ToUserId);
@@ -38,8 +38,39 @@ namespace Zust.Web.Controllers.ApiControllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpPost(Routes.SetNotificationSeemed)]
+        public async Task<ActionResult<IEnumerable<Notification>>> SetNotificationSeemed(string notificationId)
+        {
+            try
+            {
+                var notification = await _notificationService.GetNotificationByIdAsync(notificationId);
+
+                notification.IsRead = true;
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
 
+        [HttpGet(Routes.GetUnseenNotificationCount)]
+        public async Task<ActionResult<IEnumerable<Notification>>> GetUnseenNotificationCount(string userId)
+        {
+            try
+            {
+                var count = await _notificationService.GetUnseenNotificationCountAsync(userId);
+
+                return Ok(count);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
