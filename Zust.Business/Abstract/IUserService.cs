@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,6 @@ namespace Zust.Business.Abstract
         Task UpdateAsync(User user); 
         Task<IEnumerable<User>> GetAllUsersAsync();
         Task<IEnumerable<User>> GetAllUsersOtherThanAsync(string userId);
+        Task DeleteUserByIdAsync(string userId);
     }
 }   

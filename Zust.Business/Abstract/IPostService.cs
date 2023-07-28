@@ -15,6 +15,6 @@ namespace Zust.Business.Abstract
         Task<IEnumerable<Post>> GetAllPostsOfUserAsync(string userId);
         Task<Post> GetPostByIdAsync(string postId);
         Task<int> GetAllPostsLikeCountAsync(string userId);
-        Task<User> GetOwnerOfPostById(string postId); 
+        Task<User> GetOwnerOfPostById(string postId);
     }
 }

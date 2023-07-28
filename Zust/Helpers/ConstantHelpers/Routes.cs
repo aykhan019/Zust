@@ -135,8 +135,12 @@
 
         public const string GetPendingReceivedFriendRequestsCount = "GetPendingReceivedFriendRequestsCount";
 
-        public const string SetNotificationSeemed = "SetNotificationSeemed";
+        public const string SetNotificationRead = "SetNotificationRead";
 
-        public const string GetUnseenNotificationCount = "GetUnseenNotificationCount";
+        public const string GetUnreadNotificationCount = "GetUnreadNotificationCount";
+
+        public const string DeleteProfile = "DeleteProfile";
+
+        public const string IsUsernameAndPasswordValid = "IsUsernameAndPasswordValid";
     }
 }

@@ -12,6 +12,7 @@ namespace Zust.Business.Abstract
         Task AddAsync(Notification notification);
         Task<IEnumerable<Notification>> GetAllNotificationsOfUserAsync(string userId);
         Task<Notification> GetNotificationByIdAsync(string notificationId);
-        Task<int> GetUnseenNotificationCountAsync(string userId);
+        Task<int> GetUnreadNotificationCountAsync(string userId);
+        Task UpdateNotificationIsRead(string notificationid);
     }
 }

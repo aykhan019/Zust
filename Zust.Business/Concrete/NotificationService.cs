@@ -33,11 +33,20 @@ namespace Zust.Business.Concrete
             return await _notificationDal.GetAsync(n => n.Id == notificationId);
         }
 
-        public async Task<int> GetUnseenNotificationCountAsync(string userId)
+        public async Task<int> GetUnreadNotificationCountAsync(string userId)
         {
             var notifications = await GetAllNotificationsOfUserAsync(userId);
 
             return notifications.Where(n => n.IsRead == false).Count();
+        }
+
+        public async Task UpdateNotificationIsRead(string notificationid)
+        {
+            var post = await GetNotificationByIdAsync(notificationid);
+
+            post.IsRead = true;
+
+            await _notificationDal.UpdateAsync(post);
         }
     }
 }

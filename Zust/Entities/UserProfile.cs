@@ -8,6 +8,11 @@
         /// <summary>
         /// Gets or sets the username.
         /// </summary>
+        public string? OldUserName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
         public string? UserName { get; set; }
 
         /// <summary>
@@ -81,3 +86,4 @@
         public string? Interests { get; set; }
     }
 }
+    

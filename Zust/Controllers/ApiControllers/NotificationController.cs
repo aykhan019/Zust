@@ -40,14 +40,14 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
-        [HttpPost(Routes.SetNotificationSeemed)]
-        public async Task<ActionResult<IEnumerable<Notification>>> SetNotificationSeemed(string notificationId)
+        [HttpPost(Routes.SetNotificationRead)]
+        public async Task<ActionResult<IEnumerable<Notification>>> SetNotificationRead(string notificationId)
         {
             try
             {
                 var notification = await _notificationService.GetNotificationByIdAsync(notificationId);
 
-                notification.IsRead = true;
+                await _notificationService.UpdateNotificationIsRead(notificationId);
 
                 return Ok();
             }
@@ -58,12 +58,12 @@ namespace Zust.Web.Controllers.ApiControllers
         }
 
 
-        [HttpGet(Routes.GetUnseenNotificationCount)]
+        [HttpGet(Routes.GetUnreadNotificationCount)]
         public async Task<ActionResult<IEnumerable<Notification>>> GetUnseenNotificationCount(string userId)
         {
             try
             {
-                var count = await _notificationService.GetUnseenNotificationCountAsync(userId);
+                var count = await _notificationService.GetUnreadNotificationCountAsync(userId);
 
                 return Ok(count);
             }

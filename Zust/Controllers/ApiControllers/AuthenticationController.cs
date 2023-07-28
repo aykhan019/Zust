@@ -64,6 +64,7 @@ namespace Zust.Web.Controllers.ApiControllers
             _roleManager = roleManager;
 
             _userService = userService;
+
             _staticService = staticService;
         }
 

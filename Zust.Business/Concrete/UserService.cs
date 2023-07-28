@@ -62,5 +62,12 @@ namespace Zust.Business.Concrete
 
             return list;
         }
+
+        public async Task DeleteUserByIdAsync(string userId)
+        {
+            var user = await _userDal?.GetAsync(u => u.Id == userId);
+
+            await _userDal.DeleteAsync(user);
+        }
     }
 }

@@ -164,7 +164,7 @@
                                             <li><i class="flaticon-settings"></i> <a href="/account/settings">Setting</a></li>
                                             <li><i class="flaticon-privacy"></i> <a href="/home/privacy">Privacy</a></li>
                                             <li><i class="flaticon-information"></i> <a href="/home/help-and-support">Help & Support</a></li>
-                                            <li><i class="flaticon-logout"></i> <a href="/home/index">Logout</a></li>
+                                            <li><i class="flaticon-logout"></i> <a href="/account/login">Logout</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -434,7 +434,7 @@
                                                 <li><i class="flaticon-settings"></i> <a href="/account/settings">Setting</a></li>
                                                 <li><i class="flaticon-privacy"></i> <a href="/home/privacy">Privacy</a></li>
                                                 <li><i class="flaticon-information"></i> <a href="/home/help-and-support">Help & Support</a></li>
-                                                <li><i class="flaticon-logout"></i> <a href="/home/index">Logout</a></li>
+                                                <li><i class="flaticon-logout"></i> <a href="/account/login">Logout</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -660,7 +660,7 @@
 
     async function setData(){
         document.getElementById("numberOfFriendRequests").innerHTML = await makeAjaxRequest("/api/FriendRequest/GetPendingReceivedFriendRequestsCount?userId=" + currentUserId, "GET")
-        document.getElementById("numberOfNotifications").innerHTML = await makeAjaxRequest("/api/Notification/GetUnseenNotificationCount?userId=" + currentUserId, "GET");
+        document.getElementById("numberOfNotifications").innerHTML = await makeAjaxRequest("/api/Notification/GetUnreadNotificationCount?userId=" + currentUserId, "GET");
     }
 
     setData();

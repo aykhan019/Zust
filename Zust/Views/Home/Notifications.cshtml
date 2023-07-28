@@ -57,6 +57,22 @@
         flex-direction: column;
         align-items: center;
     }
+
+    .isRead,
+    .notRead{
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+        background-color: var(--main-color);
+        margin-top: -2px;
+    }
+
+    .icon{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
 </style>
 
 <div class="all-notifications-body" id="container">
@@ -79,16 +95,21 @@
     var currentUserId = '@user.Id.ToString()';
 
     async function setNotificationSeemed(notification){
-        await makeAjaxRequest("/api/Notification/SetNotificationSeemed?notificationId=" + notification.id, "POST");
+        await makeAjaxRequest("/api/Notification/SetNotificationRead?notificationId=" + notification.id, "POST");
     }
 
     localStorage.setItem('activeMenuItem', '#4');
 
     function createNotificationHtml(notification) {
         var dateDiff = getDateTimeDifference(notification.date);
+        var notRead = '';
+        if (!notification.isRead){
+            notRead = 'notRead';
+        }
+
         var content = `
                     <div class="item d-flex justify-content-between align-items-center">
-                        <div class="figure">
+                          <div class="figure">
                                     <a href="/home/users?id=${notification.fromUserId}"><img src="${notification.fromUser.imageUrl}" class="rounded-circle" style="height: 70px !important; width: 70px !important; object-fit:cover;" alt="image"></a>
                         </div>
                         <div class="text">
@@ -97,7 +118,8 @@
                             <span class="main-color">${dateDiff}</span>
                         </div>
                         <div class="icon">
-                            <a onClick=removeNotification()><i class="flaticon-x-mark"></i></a>
+                                <div class='${notRead}'></div>
+                                <a onClick=removeNotification()><i class="flaticon-x-mark"></i></a>
                         </div>
                     </div>
                 `;
