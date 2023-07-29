@@ -21,9 +21,17 @@ builder.Services.AddControllersWithViews();
 
 // Register the database context
 var connectionString = builder.Configuration.GetConnectionString(Constants.ConnectionStringName);
-builder.Services.AddDbContext<ZustDbContext>(opt =>
+
+builder.Services.AddDbContext<ZustDbContext>(options =>
 {
-    opt.UseSqlServer(connectionString, b => b.MigrationsAssembly(Constants.MigrationsAssembly));
+    options.UseSqlServer(connectionString, sqlServerOptions =>
+    {
+        // Specify the assembly where the EF Core migrations are located
+        sqlServerOptions.MigrationsAssembly(Constants.MigrationsAssembly);
+
+        // Enable transient error resiliency (retry on failure)
+        sqlServerOptions.EnableRetryOnFailure();
+    });
 });
 
 // Dependency injection configuration

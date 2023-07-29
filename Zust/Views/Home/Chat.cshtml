@@ -1,12 +1,28 @@
 ﻿@model ChatViewModel;
 @{
     ViewData["Title"] = "Zust - Chat";
+
+    // Group messages by date
+    var messagesByDate = Model.Chat.Messages
+        .GroupBy(m => m.DateSent.Date)
+        .OrderBy(g => g.Key);
 }
 
 <style>
     #messages{
-        min-height: 300px !important;
+        min-height: 400px !important;
     }
+
+    .all-messages-body {
+        width: 600px;
+    }
+
+    @@media only screen and (max-width: 800px) {
+        .all-messages-body {
+            width: 100% !important;
+        }
+    }
+
 </style>
 
 <div class="all-messages-body">
@@ -15,66 +31,80 @@
     </div>
 
     <div class="messages-profile-box">
-        <a href="/home/users?id=@Model.UserToChat.Id"><img src="@Model.UserToChat.ImageUrl" class="rounded-circle" alt="image"></a>
+        <a href="/home/users?id=@Model.UserToChat.Id"><img src="@Model.UserToChat.ImageUrl" style="max-width: 120px !important; max-height: 120px !important;" class="rounded-circle" alt="image"></a>
         <h3><a href="/home/users?id=@Model.UserToChat.Id">@Model.UserToChat.UserName</a></h3>
     </div>
 
     <div class="messages-chat-container">
         <div class="chat-content" id="messages">
-            @foreach (var message in @Model.Chat.Messages)
+            @foreach (var group in messagesByDate)
             {
-                if (message.SenderUserId == Model.CurrentUser.Id)
+                <hr />
+                <h5>@group.Key.ToString("yyyy-MM-dd")</h5> <!-- Display the date -->
+                @foreach (var message in group)
                 {
-                    <div class="chat">
-                        <div class="chat-avatar">
-                            <a href="/home/my-profile" class="d-inline-block">
-                                <img src="@message.SenderUser.ImageUrl" width="50" height="50" class="rounded-circle" alt="image">
-                            </a>
-                        </div>
+                    if (message.SenderUserId == Model.CurrentUser.Id)
+                    {
+                        @*Brings to the right*@
+                        <div class="chat chat-left">
+                            <div class="chat-avatar">
+                                <a href="/home/my-profile" class="d-inline-block">
+                                    <img src="@message.SenderUser.ImageUrl" width="50" height="50" class="rounded-circle" alt="image">
+                                </a>
+                            </div>
 
-                        <div class="chat-body">
-                            <div class="chat-message">
-                                <p>@message.Text</p>
-                                <span class="time d-block">@message.DateSent</span>
+                            <div class="chat-body">
+                                <div class="chat-message">
+                                    <p>@message.Text</p>
+                                    <span class="time d-block">@message.DateSent.ToString("HH:mm")</span> <!-- Display the time -->
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
-                else
-                {
-                    <div class="chat chat-left">
-                        <div class="chat-avatar">
-                            <a href="/home/users?id=@message.ReceiverUserId" class="d-inline-block">
-                                <img src="@message.ReceiverUser.ImageUrl" width="50" height="50" class="rounded-circle" alt="image">
-                            </a>
-                        </div>
+                    }
+                    else
+                    {
+                        <div class="chat">
+                            <div class="chat-avatar">
+                                <a href="/home/users?id=@message.SenderUserId" class="d-inline-block">
+                                    <img src="@message.SenderUser.ImageUrl" width="50" height="50" class="rounded-circle" alt="image">
+                                </a>
+                            </div>
 
-                        <div class="chat-body">
-                            <div class="chat-message">
-                                <p>@message.Text</p>
-                                <span class="time d-block">@message.DateSent</span>
+                            <div class="chat-body">
+                                <div class="chat-message">
+                                    <p>@message.Text</p>
+                                    <span class="time d-block">@message.DateSent.ToString("HH:mm")</span> <!-- Display the time -->
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 }
             }
         </div>
 
         <div class="chat-list-footer">
-            <form class="d-flex align-items-center" onsubmit="sendMessage()">
+            <form class="d-flex align-items-center" onsubmit="sendMessage(event)">
                 <input id="messageText" type="text" class="form-control" placeholder="Type your message...">
 
-                <button type="submit" class="send-btn d-inline-block">Send</button>
+                <button class="send-btn d-inline-block">Send</button>
             </form>
         </div>
     </div>
 </div>
 
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/functions.js"></script>
+<script src="~/assets/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/assets/js/userHub.js"></script>
 
 <script>
-    function createMyMessageHtml(message){
+    function createMyMessageHtml(message) {
+        var sentDate = new Date(message.dateSent); // Convert the date to a JavaScript Date object
+        var hours = sentDate.getHours().toString().padStart(2, '0'); // Get hours in two-digit format
+        var minutes = sentDate.getMinutes().toString().padStart(2, '0'); // Get minutes in two-digit format
+
         var content = `
-              <div class="chat">
+             <div class="chat chat-left">
                 <div class="chat-avatar">
                     <a href="/home/my-profile" class="d-inline-block">
                         <img src="${message.senderUser.imageUrl}" width="50" height="50" class="rounded-circle" alt="image">
@@ -84,27 +114,30 @@
                 <div class="chat-body">
                     <div class="chat-message">
                         <p>${message.text}</p>
-                        <span class="time d-block">${message.dateSent}</span>
+                                <span class="time d-block">${hours}:${minutes}</span>
                     </div>
                 </div>
             </div>
-        `;
+            `;
         return content;
     }
 
-    function createUserMessageHtml(message){
+    function createUserMessageHtml(message) {
+        var sentDate = new Date(message.dateSent); // Convert the date to a JavaScript Date object
+        var hours = sentDate.getHours().toString().padStart(2, '0'); // Get hours in two-digit format
+        var minutes = sentDate.getMinutes().toString().padStart(2, '0'); // Get minutes in two-digit format
+
         var content = `
-             <div class="chat chat-left">
+            <div class="chat">
                 <div class="chat-avatar">
                     <a href="/home/users?id=${message.receiverUserId}" class="d-inline-block">
                         <img src="${message.receiverUser.imageUrl}" width="50" height="50" class="rounded-circle" alt="image">
                     </a>
                 </div>
-
                 <div class="chat-body">
                     <div class="chat-message">
                         <p>${message.text}</p>
-                        <span class="time d-block">${message.sentDate}</span>
+                        <span class="time d-block" style="right: 10px !important;">${hours}:${minutes}</span>
                     </div>
                 </div>
             </div>
@@ -112,41 +145,45 @@
         return content;
     }
 
+
     var messagesContainer = document.getElementById("messages");
 
-    function sendMessage(){
-        var message = document.getElementById("messageText").value.trim();
-        if (message === ''){
+    function sendMessage(e) {
+        e.preventDefault();
+
+        var messageText = document.getElementById("messageText").value.trim();
+        if (messageText === '') {
             return;
         }
-
 
         var message = {
             senderUserId: '@Model.CurrentUser.Id.ToString()',
             receiverUserId: '@Model.UserToChat.Id.ToString()',
-            text: message,
-            dateSent: new Date(),
+            text: messageText,
             chatId: '@Model.Chat.Id.ToString()'
-        }
-
-        console.log(message);
+        };
 
         $.ajax({
             url: "/api/Chat/AddMessage",
             type: "POST",
             data: JSON.stringify(message),
             contentType: "application/json",
-            success: function (response) {
+            success: async function (response) {
                 var messageResponse = response;
                 messagesContainer.innerHTML += createMyMessageHtml(messageResponse);
+                await connection.invoke("SendMessageToUser", '@Model.UserToChat.Id.ToString()', messageText);
 
                 console.log("Message sent successfully!", response);
             },
             error: function (error) {
-
                 console.error("Failed to send message:", error);
             }
         });
     }
 
+    connection.on('ReceiveMessage', function (text) {
+        var html = createUserMessageHtml(text);
+        console.log(html);
+        messagesContainer.innerHTML += html;
+    });
 </script>

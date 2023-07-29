@@ -37,7 +37,7 @@ namespace Zust.Web.Controllers.ApiControllers
                     ReceiverUserId = model.ReceiverUserId,
                     SenderUserId = model.SenderUserId,
                     ChatId = model.ChatId,
-                    DateSent = model.DateSent
+                    DateSent = DateTime.Now
                 };
 
                 await _messageService.AddMessageAsync(message);
@@ -56,7 +56,7 @@ namespace Zust.Web.Controllers.ApiControllers
                     ReceiverUserId = model.ReceiverUserId,
                     SenderUserId = model.SenderUserId,
                     ChatId = otherUserChat.Id,
-                    DateSent = model.DateSent
+                    DateSent = DateTime.Now
                 };
 
                 await _messageService.AddMessageAsync(message2);

@@ -93,7 +93,7 @@ namespace Zust.Web.Controllers.ViewControllers
 
         public async Task<IActionResult> Chats(string userId = Constants.StringEmpty)
         {
-            if (userId == Constants.StringEmpty)
+            if (string.IsNullOrEmpty(userId))
             {
                 return NotFound();
             }
@@ -101,6 +101,10 @@ namespace Zust.Web.Controllers.ViewControllers
             var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
 
             var userToChat = await _userService.GetUserByIdAsync(userId);
+            if (userToChat == null)
+            {
+                return NotFound();
+            }
 
             var chat = await _chatService.GetChatAsync(currentUser.Id, userToChat.Id);
 
@@ -116,26 +120,31 @@ namespace Zust.Web.Controllers.ViewControllers
                 };
 
                 await _chatService.AddChatAsync(chat);
-
             }
+
 
             var messages = await _messageService.GetChatMessagesByIdAsync(chat.Id);
             if (messages != null)
             {
-                var result = messages.ToList();
-
-                result.ForEach(async m =>
+                var messageTasks = messages.Select(async m =>
                 {
                     m.SenderUser = await _userService.GetUserByIdAsync(m.SenderUserId);
                     m.ReceiverUser = await _userService.GetUserByIdAsync(m.ReceiverUserId);
                 });
 
-                chat.Messages = result;
-                
+                await Task.WhenAll(messageTasks);
+
+                messages = messages.OrderBy(m => m.DateSent).ToList();
+
+                chat.Messages = messages.ToList();
+            }
+            else
+            {
+                chat.Messages = new List<Message>();
             }
 
             var chatForOtherUser = await _chatService.GetChatAsync(userToChat.Id, currentUser.Id);
-             
+
             if (chatForOtherUser == null)
             {
                 chatForOtherUser = new Chat()
@@ -160,6 +169,7 @@ namespace Zust.Web.Controllers.ViewControllers
 
             return View(Routes.Chat, chatVm);
         }
+
 
         /// <summary>
         /// Displays the Events view.
