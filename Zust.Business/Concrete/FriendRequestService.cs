@@ -62,5 +62,15 @@ namespace Zust.Business.Concrete
             var friendRequest = await GetAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId && fr.Status == status);
             return friendRequest != null;
         }
+
+        public async Task DeleteUserFriendRequestsAsync(string userId)
+        {
+            var friendRequests = await _friendRequestDal.GetAllAsync(fr => fr.SenderId == userId || fr.ReceiverId == userId);
+
+            foreach (var friendRequest in friendRequests)
+            {
+                await DeleteAsync(friendRequest);
+            }
+        }
     }
 }

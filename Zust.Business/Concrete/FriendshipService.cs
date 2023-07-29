@@ -75,5 +75,15 @@ namespace Zust.Business.Concrete
 
             return friendship != null;
         }
+
+        public async Task DeleteUserFriendshipsAsync(string userId)
+        {
+            var friendships = await _friendshipDal.GetAllAsync(f => f.UserId == userId || f.FriendId == userId);
+
+            foreach (var friendship in friendships)
+            {
+                await _friendshipDal.DeleteAsync(friendship);
+            }
+        }
     }
 }

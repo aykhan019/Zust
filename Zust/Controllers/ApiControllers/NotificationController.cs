@@ -47,7 +47,7 @@ namespace Zust.Web.Controllers.ApiControllers
             {
                 var notification = await _notificationService.GetNotificationByIdAsync(notificationId);
 
-                await _notificationService.UpdateNotificationIsRead(notificationId);
+                await _notificationService.UpdateNotificationIsReadAsync(notificationId);
 
                 return Ok();
             }

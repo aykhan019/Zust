@@ -25,6 +25,21 @@ namespace Zust.Business.Concrete
             await _likeDal.AddAsync(like);
         }
 
+        public async Task DeleteLikeAsync(Like like)
+        {
+            await _likeDal.DeleteAsync(like);
+        }
+
+        public async Task DeleteUserLikesAsync(string userId)
+        {
+            var usersLikes = await _likeDal.GetAllAsync(l => l.UserId == userId);
+
+            foreach (var userLike in usersLikes)
+            {
+                await RemoveLikeAsync(userLike);
+            }
+        }
+
         public async Task<IEnumerable<string?>> GetPostIdsUserLikedAsync(string userId)
         {
             return (await _likeDal.GetAllAsync(l => l.UserId == userId)).Select(e => e.PostId);
@@ -33,6 +48,11 @@ namespace Zust.Business.Concrete
         public async Task<int> GetPostLikeCountAsync(string postId)
         {
             return (await _likeDal.GetAllAsync(l => l.PostId == postId)).Count();
+        }
+
+        public async Task<IEnumerable<Like>> GetPostLikesAsync(string postId)
+        {
+            return await _likeDal.GetAllAsync(l => l.PostId == postId);
         }
 
         public async Task RemoveLikeAsync(Like like)
@@ -46,7 +66,7 @@ namespace Zust.Business.Concrete
             await RemoveLikeAsync(like);
         }
 
-        public async Task<bool> UserLikedPost(string userId, string postId)
+        public async Task<bool> UserLikedPostAsync(string userId, string postId)
         {
             var result = await _likeDal.GetAsync(l => l.UserId == userId && l.PostId == postId);
 

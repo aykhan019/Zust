@@ -23,6 +23,16 @@ namespace Zust.Business.Concrete
             await _notificationDal.AddAsync(notification);
         }
 
+        public async Task DeleteUserNotificationsAsync(string userId)
+        {
+            var notifications = await _notificationDal.GetAllAsync(n => n.FromUserId == userId || n.ToUserId == userId);
+
+            foreach (var notification in notifications)
+            {
+                await _notificationDal.DeleteAsync(notification);
+            }
+        }
+
         public async Task<IEnumerable<Notification>> GetAllNotificationsOfUserAsync(string userId)
         {
             return await _notificationDal.GetAllAsync(n => n.ToUserId == userId);
@@ -40,7 +50,7 @@ namespace Zust.Business.Concrete
             return notifications.Where(n => n.IsRead == false).Count();
         }
 
-        public async Task UpdateNotificationIsRead(string notificationid)
+        public async Task UpdateNotificationIsReadAsync(string notificationid)
         {
             var post = await GetNotificationByIdAsync(notificationid);
 

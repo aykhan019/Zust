@@ -14,6 +14,9 @@ namespace Zust.Business.Abstract
         Task<IEnumerable<string>> GetPostIdsUserLikedAsync(string userId);
         Task RemoveLikeAsync(Like like);
         Task RemoveLikeAsync(string userId, string postId);
-        Task<bool> UserLikedPost(string userId, string postId); 
+        Task<bool> UserLikedPostAsync(string userId, string postId);
+        Task DeleteUserLikesAsync(string userId);
+        Task<IEnumerable<Like>> GetPostLikesAsync(string postId);
+        Task DeleteLikeAsync(Like like);
     }
 }

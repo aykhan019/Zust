@@ -15,5 +15,6 @@ namespace Zust.Business.Abstract
         Task<Friendship> GetFriendshipAsync(string userId, string friendId); 
         Task<bool> DeleteFriendshipAsync(string userId, string friendId);
         Task<bool> IsFriendAsync(string userId, string friendId);
+        Task DeleteUserFriendshipsAsync(string userId);
     }
 }

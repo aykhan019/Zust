@@ -20,19 +20,48 @@ namespace Zust.Web.Controllers.ApiControllers
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IFriendRequestService _friendRequestService;
+        private readonly IFriendshipService _friendshipService;
+        private readonly ILikeService _likeService;
+        private readonly IPostService _postService;
+        private readonly INotificationService _notificationService;
+        private readonly ICommentService _commentService;
 
         /// <summary>
         /// Initializes a new instance of the ProfileController class.
         /// </summary>
         /// <param name="userService">The user service used for user-related operations.</param>
         /// <param name="mapper">The mapper used for object mapping.</param>
-        public ProfileController(IUserService userService, IMapper mapper, UserManager<User> userManager, SignInManager<User> signInManager)
+        public ProfileController(IUserService userService,
+                                 IMapper mapper,
+                                 UserManager<User> userManager,
+                                 SignInManager<User> signInManager,
+                                 IFriendRequestService friendRequestService,
+                                 IFriendshipService friendshipService,
+                                 ILikeService likeService,
+                                 IPostService postService,
+                                 INotificationService notificationService,
+                                 ICommentService commentService)
         {
             _userService = userService;
 
             _mapper = mapper;
+
             _userManager = userManager;
+
             _signInManager = signInManager;
+
+            _friendRequestService = friendRequestService;
+
+            _friendshipService = friendshipService;
+
+            _likeService = likeService;
+
+            _postService = postService;
+
+            _notificationService = notificationService;
+
+            _commentService = commentService;
         }
 
         /// <summary>
@@ -72,16 +101,31 @@ namespace Zust.Web.Controllers.ApiControllers
         {
             try
             {
-                // delete friend requests
+                // Delete Friend Requests
+                await _friendRequestService.DeleteUserFriendRequestsAsync(userId);
 
-                // delete friendships
+                // Delete Friendships
+                await _friendshipService.DeleteUserFriendshipsAsync(userId);
 
-                // delete likes
+                // Delete Likes
+                await _likeService.DeleteUserLikesAsync(userId);
 
-                // delete posts
-                
-                // delete notifications    
+                // Delete Post Comments
+                await _commentService.DeleteUserCommentsAsync(userId);
 
+                // Delete Comments of All User Posts
+                await _postService.DeleteUserPostCommentsAsync(userId);
+
+                // Delete Likes of All User Posts
+                await _postService.DeleteUserPostLikesAsync(userId);
+
+                // Delete Posts
+                await _postService.DeleteUserPostsAsync(userId);
+
+                // Delete Notifications
+                await _notificationService.DeleteUserNotificationsAsync(userId);
+
+                // Delete User
                 await _userService.DeleteUserByIdAsync(userId);
 
                 return Ok();

@@ -4,6 +4,7 @@ using Zust.Business.Abstract;
 using Zust.Entities.Models;
 using Zust.Web.Abstract;
 using Zust.Web.Helpers.ConstantHelpers;
+using Zust.Web.Helpers.Utilities;
 using Zust.Web.Models;
 
 namespace Zust.Web.Controllers.ViewControllers
@@ -24,15 +25,25 @@ namespace Zust.Web.Controllers.ViewControllers
 
         private readonly IPostService _postService;
 
+        private readonly IChatService _chatService;
+
+        private readonly IMessageService _messageService;
+
         /// <summary>
         /// Initializes a new instance of the HomeController class with the specified user service.
         /// </summary>
         /// <param name="userService">The user service to be used by the controller.</param>
-        public HomeController(IUserService userService, IStaticService staticService, IPostService postService)
+        public HomeController(IUserService userService, IStaticService staticService, IPostService postService, IChatService chatService, IMessageService messageService)
         {
             _userService = userService;
+
             _staticService = staticService;
+
             _postService = postService;
+
+            _chatService = chatService;
+
+            _messageService = messageService;
         }
 
         /// <summary>
@@ -78,6 +89,76 @@ namespace Zust.Web.Controllers.ViewControllers
             }
             post.User = await _userService.GetUserByIdAsync(post.UserId);
             return View(Routes.Post, post);
+        }
+
+        public async Task<IActionResult> Chats(string userId = Constants.StringEmpty)
+        {
+            if (userId == Constants.StringEmpty)
+            {
+                return NotFound();
+            }
+
+            var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
+
+            var userToChat = await _userService.GetUserByIdAsync(userId);
+
+            var chat = await _chatService.GetChatAsync(currentUser.Id, userToChat.Id);
+
+            if (chat == null)
+            {
+                chat = new Chat()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    SenderUserId = currentUser.Id,
+                    ReceiverUserId = userToChat.Id,
+                    SenderUser = currentUser,
+                    ReceiverUser = userToChat
+                };
+
+                await _chatService.AddChatAsync(chat);
+
+            }
+
+            var messages = await _messageService.GetChatMessagesByIdAsync(chat.Id);
+            if (messages != null)
+            {
+                var result = messages.ToList();
+
+                result.ForEach(async m =>
+                {
+                    m.SenderUser = await _userService.GetUserByIdAsync(m.SenderUserId);
+                    m.ReceiverUser = await _userService.GetUserByIdAsync(m.ReceiverUserId);
+                });
+
+                chat.Messages = result;
+                
+            }
+
+            var chatForOtherUser = await _chatService.GetChatAsync(userToChat.Id, currentUser.Id);
+             
+            if (chatForOtherUser == null)
+            {
+                chatForOtherUser = new Chat()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    SenderUserId = userToChat.Id,
+                    ReceiverUserId = currentUser.Id,
+                    SenderUser = userToChat,
+                    ReceiverUser = currentUser
+                };
+
+                await _chatService.AddChatAsync(chatForOtherUser);
+            }
+
+            var chatVm = new ChatViewModel()
+            {
+                CurrentUser = currentUser,
+                UserToChat = userToChat,
+                Chat = chat,
+                ChatForOtherUser = chatForOtherUser
+            };
+
+            return View(Routes.Chat, chatVm);
         }
 
         /// <summary>
@@ -144,9 +225,9 @@ namespace Zust.Web.Controllers.ViewControllers
         {
             var vm = new IndexViewModel()
             {
-                 CreatePostViewModel = new CreatePostViewModel(),
-                 WatchVideos = _staticService.GetWatchVideos(Path.Combine(FileConstants.FilesFolderPath, FileConstants.WatchVideoUrlsFile)),
-                 Advertisements = _staticService.GetAdvertisements(Path.Combine(FileConstants.FilesFolderPath, FileConstants.AdvertisementsFile))
+                CreatePostViewModel = new CreatePostViewModel(),
+                WatchVideos = _staticService.GetWatchVideos(Path.Combine(FileConstants.FilesFolderPath, FileConstants.WatchVideoUrlsFile)),
+                Advertisements = _staticService.GetAdvertisements(Path.Combine(FileConstants.FilesFolderPath, FileConstants.AdvertisementsFile))
             };
             return View(vm);
         }

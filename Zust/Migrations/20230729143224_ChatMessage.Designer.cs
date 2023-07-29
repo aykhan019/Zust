@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Zust.Core.Concrete.EntityFramework;
 
@@ -11,9 +12,10 @@ using Zust.Core.Concrete.EntityFramework;
 namespace Zust.Web.Migrations
 {
     [DbContext(typeof(ZustDbContext))]
-    partial class ZustDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230729143224_ChatMessage")]
+    partial class ChatMessage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -246,22 +248,12 @@ namespace Zust.Web.Migrations
                     b.Property<DateTime>("DateSent")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ReceiverUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SenderUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ChatId");
-
-                    b.HasIndex("ReceiverUserId");
-
-                    b.HasIndex("SenderUserId");
 
                     b.ToTable("Messages");
                 });
@@ -582,22 +574,10 @@ namespace Zust.Web.Migrations
             modelBuilder.Entity("Zust.Entities.Models.Message", b =>
                 {
                     b.HasOne("Zust.Entities.Models.Chat", "Chat")
-                        .WithMany("Messages")
+                        .WithMany()
                         .HasForeignKey("ChatId");
 
-                    b.HasOne("Zust.Entities.Models.User", "ReceiverUser")
-                        .WithMany()
-                        .HasForeignKey("ReceiverUserId");
-
-                    b.HasOne("Zust.Entities.Models.User", "SenderUser")
-                        .WithMany()
-                        .HasForeignKey("SenderUserId");
-
                     b.Navigation("Chat");
-
-                    b.Navigation("ReceiverUser");
-
-                    b.Navigation("SenderUser");
                 });
 
             modelBuilder.Entity("Zust.Entities.Models.Notification", b =>
@@ -622,11 +602,6 @@ namespace Zust.Web.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Zust.Entities.Models.Chat", b =>
-                {
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("Zust.Entities.Models.User", b =>

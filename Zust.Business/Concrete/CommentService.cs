@@ -23,6 +23,21 @@ namespace Zust.Business.Concrete
             await _commentDal.AddAsync(comment);    
         }
 
+        public async Task DeleteCommentAsync(Comment comment)
+        {
+            await _commentDal.DeleteAsync(comment);
+        }
+
+        public async Task DeleteUserCommentsAsync(string userId)
+        {
+            var comments = await _commentDal.GetAllAsync(c => c.UserId == userId);
+
+            foreach (var comment in comments)
+            {
+                await _commentDal.DeleteAsync(comment);
+            }
+        }
+
         public async Task<IEnumerable<Comment>> GetCommentsOfPostAsync(string postId)
         {
             return await _commentDal.GetAllAsync(c => c.PostId == postId);

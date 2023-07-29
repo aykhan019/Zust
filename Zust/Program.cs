@@ -43,6 +43,10 @@ builder.Services.AddScoped<ILikeDal, EFLikeDal>();
 builder.Services.AddScoped<ILikeService, LikeService>();
 builder.Services.AddScoped<ICommentDal, EFCommentDal>();
 builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IChatDal, EFChatDal>();
+builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<IMessageDal, EFMessageDal>();
+builder.Services.AddScoped<IMessageService, MessageService>();
 
 // Register Session
 builder.Services.AddSession();

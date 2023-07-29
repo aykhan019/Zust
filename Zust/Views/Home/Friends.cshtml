@@ -20,9 +20,9 @@
     }
 
     /*.single-friends-card:hover .send-message-btn {
-            background-color: var(--main-color) !important;
-            color: var(--white-color) !important;
-        }*/
+                background-color: var(--main-color) !important;
+                color: var(--white-color) !important;
+            }*/
 
     .send-message-btn:hover {
         background-color: var(--main-color) !important;
@@ -72,9 +72,9 @@
     }
 
     /*   .friends-content *,
-            .post-body * {
-                font-weight: bold;
-            }*/
+                .post-body * {
+                    font-weight: bold;
+                }*/
 
     .transparent-button {
         background-color: transparent;
@@ -128,9 +128,9 @@
 
     function startSpinner(spinnerId) {
         var spinner = `
-                                    <div class="spinner-border custom-spinner-color" role="status">
-                                        <span class="sr-only"></span>
-                                    </div>`;
+                                        <div class="spinner-border custom-spinner-color" role="status">
+                                            <span class="sr-only"></span>
+                                        </div>`;
         $(`#${spinnerId}`).prop('disabled', true);
         $(`#${spinnerId}`).html(spinner);
     }
@@ -189,117 +189,121 @@
     }
 
     var spinnerHtml = `
-                <div class="spinner-border text-primary" role="status" style="color:var(--main-color) !important; width:1.1rem; height:1.1rem; ">
-                    <span class="sr-only"></span>
-                </div>
-            `;
+                    <div class="spinner-border text-primary" role="status" style="color:var(--main-color) !important; width:1.1rem; height:1.1rem; ">
+                        <span class="sr-only"></span>
+                    </div>
+                `;
 
     function createFollowerHtml(user, postLikesCountId, followingsCountId, followersCountId) {
         var content = `
-                                            <div class="col-lg-3 col-sm-6" id="follower-card-${user.id}">
-                                                <div class="single-friends-card">
-                                                    <div class="friends-image">
-                                                        <a href="/home/users?id=${user.id}">
-                                                            <img src="${user.coverImage}" alt="${user.coverImage}">
-                                                        </a>
-                                                        <div class="icon">
-                                                            <a href="/home/users?id=${user.id}"><i class="flaticon-user my-icon"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="friends-content">
-                                                        <div class="friends-info d-flex justify-content-between align-items-center">
+                                                <div class="col-lg-3 col-sm-6" id="follower-card-${user.id}">
+                                                    <div class="single-friends-card">
+                                                        <div class="friends-image">
                                                             <a href="/home/users?id=${user.id}">
-                                                                <img src="${user.imageUrl}" alt="image" class="user-image">
+                                                                <img src="${user.coverImage}" alt="${user.coverImage}">
                                                             </a>
-                                                            <div class="text ms-3">
-                                                                <h3><a href="/home/users?id=${user.id}">${user.userName}</a></h3>
-                                                                <span>${user.email}</span>
+                                                            <div class="icon">
+                                                                <a href="/home/users?id=${user.id}"><i class="flaticon-user my-icon"></i></a>
                                                             </div>
                                                         </div>
-                                                        <ul class="statistics">
-                                                            <li>
-                                                                <a href="#">
-                                                                    <span class="item-number" id=${postLikesCountId}>${spinnerHtml}</span>
-                                                                    <span class="item-text">Likes</span>
+                                                        <div class="friends-content">
+                                                            <div class="friends-info d-flex justify-content-between align-items-center">
+                                                                <a href="/home/users?id=${user.id}">
+                                                                    <img src="${user.imageUrl}" alt="image" class="user-image">
                                                                 </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#">
-                                                                        <span class="item-number" id="${followingsCountId}">${spinnerHtml}</span>
-                                                                    <span class="item-text">Following</span>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#">
-                                                                        <span class="item-number" id="${followersCountId}">${spinnerHtml}</span>
-                                                                    <span class="item-text">Followers</span>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="button-group d-flex justify-content-between align-items-center">
-                                                            <div class="add-friend-btn" style="display: flex; gap:20px;">
-                                                                         <button type="submit" onclick="callRemoveFriend('${user.id}')" class="remove-friend-btn" >Remove Follower</button>
+                                                                <div class="text ms-3">
+                                                                    <h3><a href="/home/users?id=${user.id}">${user.userName}</a></h3>
+                                                                    <span>${user.email}</span>
+                                                                </div>
+                                                            </div>
+                                                            <ul class="statistics">
+                                                                <li>
+                                                                    <a href="#">
+                                                                        <span class="item-number" id=${postLikesCountId}>${spinnerHtml}</span>
+                                                                        <span class="item-text">Likes</span>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#">
+                                                                            <span class="item-number" id="${followingsCountId}">${spinnerHtml}</span>
+                                                                        <span class="item-text">Following</span>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#">
+                                                                            <span class="item-number" id="${followersCountId}">${spinnerHtml}</span>
+                                                                        <span class="item-text">Followers</span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                            <div class="button-group d-flex justify-content-between align-items-center">
+                                                                <div class="add-friend-btn" style="display: flex; gap:20px;">
+                                                                             <button type="submit" onclick="callRemoveFriend('${user.id}')" class="remove-friend-btn" >Remove Follower</button>
 
-                                                                 <button type="submit" class="send-message-btn">Send Message</button>
+                                                                     <button onClick=redirectToChat('${user.id}') type="submit" class="send-message-btn">Send Message</button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>`;
+                                                </div>`;
         return content;
     }
 
     function createFollowingHtml(user, postLikesCountId, followingsCountId, followersCountId) {
         var content = `
-                                            <div class="col-lg-3 col-sm-6">
-                                                <div class="single-friends-card">
-                                                    <div class="friends-image">
-                                                        <a href="/home/users?id=${user.id}">
-                                                            <img src="${user.coverImage}" alt="${user.coverImage}">
-                                                        </a>
-                                                        <div class="icon">
-                                                            <a href="/home/users?id=${user.id}"><i class="flaticon-user my-icon"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="friends-content">
-                                                        <div class="friends-info d-flex justify-content-between align-items-center">
+                                                <div class="col-lg-3 col-sm-6">
+                                                    <div class="single-friends-card">
+                                                        <div class="friends-image">
                                                             <a href="/home/users?id=${user.id}">
-                                                                    <img src="${user.imageUrl}" alt="image" class="user-image">
+                                                                <img src="${user.coverImage}" alt="${user.coverImage}">
                                                             </a>
-                                                            <div class="text ms-3">
-                                                                <h3><a href="/home/users?id=${user.id}">${user.userName}</a></h3>
-                                                                <span>${truncateText(user.email, 15)}</span>
+                                                            <div class="icon">
+                                                                <a href="/home/users?id=${user.id}"><i class="flaticon-user my-icon"></i></a>
                                                             </div>
                                                         </div>
-                                                        <ul class="statistics">
-                                                            <li>
-                                                                <a href="#">
-                                                                        <span class="item-number" id='${postLikesCountId}'>${spinnerHtml}</span>
-                                                                    <span class="item-text">Likes</span>
+                                                        <div class="friends-content">
+                                                            <div class="friends-info d-flex justify-content-between align-items-center">
+                                                                <a href="/home/users?id=${user.id}">
+                                                                        <img src="${user.imageUrl}" alt="image" class="user-image">
                                                                 </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#">
-                                                                        <span class="item-number" id='${followingsCountId}'>${spinnerHtml}</span>
-                                                                    <span class="item-text">Following</span>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#">
-                                                                        <span class="item-number" id="${followersCountId}">${spinnerHtml}</span>
-                                                                    <span class="item-text">Followers</span>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="button-group d-flex justify-content-between align-items-center">
-                                                            <div class="add-friend-btn">
-                                                                 <button type="submit" class="send-message-btn">Send Message</button>
+                                                                <div class="text ms-3">
+                                                                    <h3><a href="/home/users?id=${user.id}">${user.userName}</a></h3>
+                                                                    <span>${truncateText(user.email, 15)}</span>
+                                                                </div>
+                                                            </div>
+                                                            <ul class="statistics">
+                                                                <li>
+                                                                    <a href="#">
+                                                                            <span class="item-number" id='${postLikesCountId}'>${spinnerHtml}</span>
+                                                                        <span class="item-text">Likes</span>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#">
+                                                                            <span class="item-number" id='${followingsCountId}'>${spinnerHtml}</span>
+                                                                        <span class="item-text">Following</span>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#">
+                                                                            <span class="item-number" id="${followersCountId}">${spinnerHtml}</span>
+                                                                        <span class="item-text">Followers</span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                            <div class="button-group d-flex justify-content-between align-items-center">
+                                                                <div class="add-friend-btn">
+                                                                         <button onClick=redirectToChat('${user.id}') type="submit" class="send-message-btn">Send Message</button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>`;
+                                                </div>`;
         return content;
+    }
+
+    function redirectToChat(userId) {
+        location.href = '/home/chats?userId=' + userId;
     }
 
     async function setSocialDataFollower(newUsers) {

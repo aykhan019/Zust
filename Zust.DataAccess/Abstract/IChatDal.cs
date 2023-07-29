@@ -8,7 +8,7 @@ using Zust.Entities.Models;
 
 namespace Zust.DataAccess.Abstract
 {
-    public interface ICommentDal : IEntityRepository<Comment>
+    public interface IChatDal : IEntityRepository<Chat>
     {
     }
-}   
+}

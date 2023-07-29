@@ -142,5 +142,11 @@
         public const string DeleteProfile = "DeleteProfile";
 
         public const string IsUsernameAndPasswordValid = "IsUsernameAndPasswordValid";
+
+        public const string Chat = "Chat";
+
+        public const string ChatAPI = "api/Chat";
+
+        public const string AddMessage = "AddMessage";
     }
 }

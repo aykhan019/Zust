@@ -40,5 +40,7 @@ namespace Zust.Core.Concrete.EntityFramework
         public DbSet<Notification>? Notifications { get; set; }
         public DbSet<Like>? Likes { get; set; }
         public DbSet<Comment>? Comments { get; set; }
+        public DbSet<Chat>? Chat { get; set; }
+        public DbSet<Message>? Messages { get; set; }
     }
 }

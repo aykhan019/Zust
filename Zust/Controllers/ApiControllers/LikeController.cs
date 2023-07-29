@@ -63,7 +63,7 @@ namespace Zust.Web.Controllers.ApiControllers
 
                 await _likeService.AddLikeToPostAsync(like);
 
-                var toUser = await _postService.GetOwnerOfPostById(postId);
+                var toUser = await _postService.GetOwnerOfPostByIdAsync(postId);
 
                 var notification = new Notification()
                 {
@@ -133,7 +133,7 @@ namespace Zust.Web.Controllers.ApiControllers
         {
             try
             {
-                var result = await _likeService.UserLikedPost(userId, postId);
+                var result = await _likeService.UserLikedPostAsync(userId, postId);
 
                 return Ok(result);
             }
