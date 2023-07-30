@@ -9,12 +9,15 @@
 }
 
 <style>
-    #messages{
-        min-height: 400px !important;
+    #messages {
+        min-height: 550px !important;
+        max-height: 550px !important;
+        overflow-y: scroll;
     }
 
     .all-messages-body {
         width: 600px;
+        padding-top: 0px;
     }
 
     @@media only screen and (max-width: 800px) {
@@ -97,3 +100,104 @@
 <script src="~/assets/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/assets/js/userHub.js"></script>
 <script src="~/assets/js/view/chat.js"></script>
+
+<script>
+    function scrollToBottom() {
+        var messagesElement = document.getElementById("messages");
+        messagesElement.scrollTop = messagesElement.scrollHeight;
+    }
+
+    scrollToBottom();
+
+    function createMyMessageHtml(message) {
+        var sentDate = new Date(message.dateSent); // Convert the date to a JavaScript Date object
+        var hours = sentDate.getHours().toString().padStart(2, '0'); // Get hours in two-digit format
+        var minutes = sentDate.getMinutes().toString().padStart(2, '0'); // Get minutes in two-digit format
+
+        var content = `
+                 <div class="chat chat-left">
+                    <div class="chat-avatar">
+                        <a href="/home/my-profile" class="d-inline-block">
+                            <img src="${message.senderUser.imageUrl}" width="50" height="50" class="rounded-circle" alt="image">
+                        </a>
+                    </div>
+
+                    <div class="chat-body">
+                        <div class="chat-message">
+                            <p>${message.text}</p>
+                                    <span class="time d-block">${hours}:${minutes}</span>
+                        </div>
+                    </div>
+                </div>
+                `;
+        return content;
+    }
+
+    function createUserMessageHtml(message) {
+        var sentDate = new Date(message.dateSent); // Convert the date to a JavaScript Date object
+        var hours = sentDate.getHours().toString().padStart(2, '0'); // Get hours in two-digit format
+        var minutes = sentDate.getMinutes().toString().padStart(2, '0'); // Get minutes in two-digit format
+
+        var content = `
+                <div class="chat">
+                    <div class="chat-avatar">
+                            <a href="/home/users?id=${message.senderUserId}" class="d-inline-block">
+                            <img src="${message.senderUser.imageUrl}" width="50" height="50" class="rounded-circle" alt="image">
+                        </a>
+                    </div>
+                    <div class="chat-body">
+                        <div class="chat-message">
+                            <p>${message.text}</p>
+                                <span class="time d-block" style="right: 10px !important;">${hours}:${minutes}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        return content;
+    }
+
+
+    var messagesContainer = document.getElementById("messages");
+
+    function sendMessage(e) {
+        e.preventDefault();
+
+        var inputElement = document.getElementById("messageText");
+
+        var messageText = inputElement.value.trim();
+        if (messageText === '') {
+            return;
+        }
+
+        var message = {
+            senderUserId: '@Model.CurrentUser.Id.ToString()',
+            receiverUserId: '@Model.UserToChat.Id.ToString()',
+            text: messageText,
+            chatId: '@Model.Chat.Id.ToString()'
+        };
+
+        $.ajax({
+            url: "/api/Chat/AddMessage",
+            type: "POST",
+            data: JSON.stringify(message),
+            contentType: "application/json",
+            success: async function (response) {
+                var messageResponse = response;
+                messagesContainer.innerHTML += createMyMessageHtml(messageResponse);
+                await connection.invoke("SendMessageToUser", messageResponse);
+                inputElement.value = '';
+                scrollToBottom();
+            },
+            error: function (error) {
+                inputElement.value = '';
+                // Show Error
+            }
+        });
+    }
+
+    connection.on('ReceiveMessage', function (messageModel) {
+        var html = createUserMessageHtml(messageModel);
+        messagesContainer.innerHTML += html;
+        scrollToBottom();
+    });
+</script>
