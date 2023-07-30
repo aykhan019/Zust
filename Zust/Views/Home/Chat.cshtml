@@ -102,9 +102,10 @@
 <script src="~/assets/js/view/chat.js"></script>
 
 <script>
+    var messagesContainer = document.getElementById("messages");
+
     function scrollToBottom() {
-        var messagesElement = document.getElementById("messages");
-        messagesElement.scrollTop = messagesElement.scrollHeight;
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
     scrollToBottom();
@@ -157,7 +158,6 @@
     }
 
 
-    var messagesContainer = document.getElementById("messages");
 
     function sendMessage(e) {
         e.preventDefault();

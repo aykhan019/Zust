@@ -15,17 +15,17 @@
         object-fit: cover !important; /* Maintain aspect ratio and cover the container */
     }
 
-    .cancel-btn{
+    .cancel-btn {
         background-color: var(--yellow-color);
         color: var(--black-color);
     }
 
-    .remove-friend-btn{
+    .remove-friend-btn {
         background-color: var(--red-color);
         color: var(--white-color);
     }
 
-    .send-request-btn{
+    .send-request-btn {
         background-color: var(--main-color);
         color: var(--white-color);
     }
@@ -41,12 +41,13 @@
         width: 45%;
     }
 
-    .post-body *{
+    .post-body * {
         font-weight: bold !important;
     }
+
 </style>
 
-<link rel="stylesheet" href="~/assets/css/main.css"/>
+<link rel="stylesheet" href="~/assets/css/main.css" />
 
 <div class="my-profile-inner-box" id="body">
 
@@ -58,10 +59,10 @@
 
     <div class="profile-info-box">
         <div class="inner-info-box d-flex justify-content-between align-items-center">
-            <div class="info-image">
-                <a>
+            <div class="info-image" >
+                <div>
                     <img src="@Model.ImageUrl" alt="image" class="profile-image">
-                </a>
+                </div>
             </div>
             <div class="info-text ms-3">
                 <h3><a href='/home/my-profile'>@Model.UserName</a></h3>
@@ -352,10 +353,10 @@
         buttonsContainer.innerHTML = btnHtml;
 
         buttonsContainer.innerHTML += `
-                        <div class="send-message-button ms-3">
-                             <a href="/home/chats?userId=${userId}" class="btn" style='background-color:var(--main-color); color: var(--white-color)'>Send Message</a>
-                        </div>
-            `;
+                            <div class="send-message-button ms-3">
+                                 <a href="/home/chats?userId=${userId}" class="btn" style='background-color:var(--main-color); color: var(--white-color)'>Send Message</a>
+                            </div>
+                `;
     }
 
     async function reload(userId, myHasFriendRequestPending, myIsFriend) {
@@ -369,10 +370,10 @@
         buttonsContainer.innerHTML = btnHtml;
 
         buttonsContainer.innerHTML += `
-            <div class="send-message-button ms-3">
-                    <a href="/home/chats?userId=${userId}" class="btn" style='background-color:var(--main-color); color: var(--white-color)'>Send Message</a>
-            </div>
-        `;
+                <div class="send-message-button ms-3">
+                        <a href="/home/chats?userId=${userId}" class="btn" style='background-color:var(--main-color); color: var(--white-color)'>Send Message</a>
+                </div>
+            `;
 
         const buttons = document.querySelectorAll('.btn');
         if (buttons.length > 0) {
@@ -433,42 +434,42 @@
 
         if (post.hasMediaContent && !post.isVideo) {
             content = `
-                                    <div class="image-post" style="display:flex; justify-content: center;">
-                                        <img src="${post.contentUrl}" alt="image" class="fit-image">
-                                    </div>
-                                `;
+                                        <div class="image-post" style="display:flex; justify-content: center;">
+                                            <img src="${post.contentUrl}" alt="image" class="fit-image">
+                                        </div>
+                                    `;
         }
         else if (post.hasMediaContent && post.isVideo) {
             content = `
-                                  <div class="post-video">
-                                       <video src="${post.contentUrl}" controls></video>
-                                  </div>
-                                `;
+                                      <div class="post-video">
+                                           <video src="${post.contentUrl}" controls></video>
+                                      </div>
+                                    `;
         }
 
         var dateDiff = getDateTimeDifference(post.createdAt);
 
         var html = `
-                               <div class="news-feed news-feed-post" onclick="window.location.href = '/home/posts?id=${post.id}'" style="cursor: pointer;">
-                                    <div class="post-header d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <a href="/home/users?id=${post.userId}">
-                                                <img src="${post.user.imageUrl}" alt="image" class="profile-image" style="max-height: 80px !important; max-width: 80px !important; border-radius: 50%;">
-                                            </a>
+                                   <div class="news-feed news-feed-post" onclick="window.location.href = '/home/posts?id=${post.id}'" style="cursor: pointer;">
+                                        <div class="post-header d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <a href="/home/users?id=${post.userId}">
+                                                    <img src="${post.user.imageUrl}" alt="image" class="profile-image" style="max-height: 80px !important; max-width: 80px !important; border-radius: 50%;">
+                                                </a>
+                                            </div>
+                                            <div class="info ms-3">
+                                                <span class="name"><a href="/home/users?id=${post.userId}">${post.user.userName}</a></span>
+                                                <span class="small-text"><a>${dateDiff}</a></span>
+                                            </div>
                                         </div>
-                                        <div class="info ms-3">
-                                            <span class="name"><a href="/home/users?id=${post.userId}">${post.user.userName}</a></span>
-                                            <span class="small-text"><a>${dateDiff}</a></span>
+
+                                        <div class="post-body">
+                                            <p>${post.description}</p>
+                                            ${content}
                                         </div>
                                     </div>
 
-                                    <div class="post-body">
-                                        <p>${post.description}</p>
-                                        ${content}
-                                    </div>
-                                </div>
-
-                                <hr/>`;
+                                    <hr/>`;
         return html;
     }
 
