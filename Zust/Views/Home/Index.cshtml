@@ -221,13 +221,13 @@
 
                 @foreach (var ads in Model.Advertisements)
                 {
-                    <a class="advertisement-image" href="@ads.AdvertisementUrl" onmouseover="advertisementHoverHandle(this.querySelector('img'), '@ads.LogoUrl')" onmouseout="restoreOriginalSize(this.querySelector('img'), '@ads.AdvertisementImageUrl')">
+                    <a class="advertisement-image" target="_blank" href="@ads.AdvertisementUrl" onmouseover="advertisementHoverHandle(this.querySelector('img'), '@ads.LogoUrl')" onmouseout="restoreOriginalSize(this.querySelector('img'), '@ads.AdvertisementImageUrl')">
                         <img src="@ads.AdvertisementImageUrl" alt="Image">
                     </a>
                 }
             </div>
 
-            <div class="widget widget-suggested-groups">
+          @*  <div class="widget widget-suggested-groups">
                 <h3 class="widget-title">Suggested Groups</h3>
                 <article class="item">
                     <a href="#" class="thumb">
@@ -268,7 +268,7 @@
                         <a href="#" class="join-btn">Join Community</a>
                     </div>
                 </article>
-            </div>
+            </div>*@
         </aside>
     </div>
 

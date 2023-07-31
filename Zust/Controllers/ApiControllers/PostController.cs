@@ -20,8 +20,9 @@ namespace Zust.Web.Controllers.ApiControllers
         private readonly IUserService _userService;
         private readonly ICommentService _commentService;
         private readonly INotificationService _notificationService;
+        private readonly IFriendshipService _friendshipService;
 
-        public PostController(IMediaService mediaService, IPostService postService, IUserService userService, ICommentService commentService, INotificationService notificationService)
+        public PostController(IMediaService mediaService, IPostService postService, IUserService userService, ICommentService commentService, INotificationService notificationService, IFriendshipService friendshipService)
         {
             _mediaService = mediaService;
 
@@ -32,6 +33,8 @@ namespace Zust.Web.Controllers.ApiControllers
             _commentService = commentService;
 
             _notificationService = notificationService;
+
+            _friendshipService = friendshipService;
         }
 
         [HttpPost(Routes.CreatePost)]
@@ -87,6 +90,24 @@ namespace Zust.Web.Controllers.ApiControllers
                     }
                 }
                 post.User = await _userService.GetUserByIdAsync(post.UserId);
+
+                // Send notification to all followers
+                var followers = await _friendshipService.GetAllFollowersOfUserAsync(currentUser.Id);
+                foreach (var follower in followers)
+                {
+                    var notification = new Notification()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Date = DateTime.Now,
+                        FromUserId = currentUser.Id,
+                        ToUserId = follower.Id,
+                        IsRead = false,
+                        Message = NotificationType.GetSharedPostMessage(currentUser.UserName)
+                    };
+
+                    await _notificationService.AddAsync(notification);
+                }
+
                 return Ok(post);
 
             }

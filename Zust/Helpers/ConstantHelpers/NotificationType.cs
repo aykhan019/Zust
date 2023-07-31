@@ -31,5 +31,10 @@
         {
             return $"{username} sent you a message!";
         }
+
+        public static string GetSharedPostMessage(string username)
+        {
+            return $"{username} shared a post!";
+        }
     }
 }
