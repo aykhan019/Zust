@@ -33,6 +33,7 @@ namespace Zust.Web.Helpers.Utilities
                 using (var jw = new JsonTextWriter(sw))
                 {
                     jw.Formatting = Formatting.Indented;
+
                     serializer.Serialize(jw, values);
                 }
             }
@@ -46,7 +47,9 @@ namespace Zust.Web.Helpers.Utilities
         public static List<T?> Deserialize(string filename)
         {
             List<T> values = new List<T>();
+
             var serializer = new JsonSerializer();
+
             using (var sr = new StreamReader(filename))
             {
                 using (var jr = new JsonTextReader(sr))
@@ -54,6 +57,7 @@ namespace Zust.Web.Helpers.Utilities
                     values = serializer.Deserialize<List<T>>(jr);
                 }
             }
+
             return values;
         }
     }
