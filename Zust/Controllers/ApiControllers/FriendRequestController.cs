@@ -15,20 +15,32 @@ namespace Zust.Web.Controllers.ApiControllers
     public class FriendRequestController : ControllerBase
     {
         /// <summary>
-        /// Gets or sets the friend request service used for friend request-related operations.
+        /// Gets the friend request service used by the controller.
         /// </summary>
         private readonly IFriendRequestService _friendRequestService;
 
+        /// <summary>
+        /// Gets the user service used by the controller.
+        /// </summary>
         private readonly IUserService _userService;
 
+        /// <summary>
+        /// Gets the friendship service used by the controller.
+        /// </summary>
         private readonly IFriendshipService _friendshipService;
 
+        /// <summary>
+        /// Gets the notification service used by the controller.
+        /// </summary>
         private readonly INotificationService _notificationService;
 
         /// <summary>
-        /// Initializes a new instance of the FriendRequestController class with the required dependencies.
+        /// Initializes a new instance of the <see cref="FriendRequestController"/> class with the specified services.
         /// </summary>
-        /// <param name="friendRequestService">The service for friend request-related operations.</param>
+        /// <param name="friendRequestService">The friend request service to be used by the controller.</param>
+        /// <param name="userService">The user service to be used by the controller.</param>
+        /// <param name="friendshipService">The friendship service to be used by the controller.</param>
+        /// <param name="notificationService">The notification service to be used by the controller.</param>
         public FriendRequestController(IFriendRequestService friendRequestService, IUserService userService, IFriendshipService friendshipService, INotificationService notificationService)
         {
             _friendRequestService = friendRequestService;
@@ -77,27 +89,36 @@ namespace Zust.Web.Controllers.ApiControllers
                 var notification = new Notification()
                 {
                     Id = Guid.NewGuid().ToString(),
+
                     Date = DateTime.Now,
+
                     IsRead = false,
+
                     FromUserId = currentUser.Id,
+
                     ToUserId = receiverId,
+
                     Message = NotificationType.GetNewFriendRequestMessage(currentUser.UserName),
                 };
 
                 await _notificationService.AddAsync(notification);
 
                 var sender = await _userService.GetUserByIdAsync(currentUser.Id);
+
                 var reciever = await _userService.GetUserByIdAsync(receiverId);
 
                 friendRequest.Sender = sender;
+
                 friendRequest.Receiver = reciever;
 
                 notification.FromUser = sender;
+
                 notification.ToUser = reciever;
 
                 var friendRequestNotificationVm = new FriendRequestNotificiationViewModel()
                 {
                      Notification = notification,
+
                      FriendRequest = friendRequest
                 };
 
@@ -153,9 +174,13 @@ namespace Zust.Web.Controllers.ApiControllers
                 var friendRequests = await _friendRequestService.GetAllAsync(f => f.SenderId == userId);
 
                 if (friendRequests != null)
+                {
                     return Ok(friendRequests);
+                }
                 else
+                {
                     return BadRequest(Errors.AnErrorOccured);
+                }
             }
             catch (Exception ex)
             {
@@ -192,6 +217,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Gets the count of pending received friend requests for a given user.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose friend requests are to be checked.</param>
+        /// <returns>The count of pending received friend requests.</returns>
         [HttpGet(Routes.GetPendingReceivedFriendRequestsCount)]
         public async Task<ActionResult<int>> GetPendingReceivedFriendRequestsCount(string userId)
         {
@@ -209,6 +239,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Accepts a friend request with the specified ID.
+        /// </summary>
+        /// <param name="requestId">The ID of the friend request to be accepted.</param>
+        /// <returns>An IActionResult representing the status of the accept request operation.</returns>
         [HttpPost(Routes.AcceptRequest)]
         public async Task<IActionResult> AcceptRequest(string requestId)
         {
@@ -238,16 +273,22 @@ namespace Zust.Web.Controllers.ApiControllers
                     var notification = new Notification()
                     {
                         Id = Guid.NewGuid().ToString(),
+
                         Date = DateTime.Now,
+
                         IsRead = false,
+
                         FromUserId = friendRequest.ReceiverId,
+
                         ToUserId = friendRequest.SenderId,
+
                         Message = NotificationType.GetFriendRequestAcceptedMessage(friendRequest.Receiver.UserName),
                     };
 
                     await _notificationService.AddAsync(notification);
 
                     notification.ToUser = await _userService.GetUserByIdAsync(notification.ToUserId);
+
                     notification.FromUser = await _userService.GetUserByIdAsync(notification.FromUserId);
 
                     return Ok(notification);
@@ -263,6 +304,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Declines a friend request with the specified ID.
+        /// </summary>
+        /// <param name="requestId">The ID of the friend request to be declined.</param>
+        /// <returns>An IActionResult representing the status of the decline request operation.</returns>
         [HttpPost(Routes.DeclineRequest)]
         public async Task<IActionResult> DeclineRequest(string requestId)
         {
@@ -281,16 +327,22 @@ namespace Zust.Web.Controllers.ApiControllers
                     var notification = new Notification()
                     {
                         Id = Guid.NewGuid().ToString(),
+
                         Date = DateTime.Now,
+
                         IsRead = false,
+
                         FromUserId = friendRequest.ReceiverId,
+
                         ToUserId = friendRequest.SenderId,
+
                         Message = NotificationType.GetFriendRequestDeclinedMessage(friendRequest.Receiver.UserName),
                     };
 
                     await _notificationService.AddAsync(notification);
 
                     notification.ToUser = await _userService.GetUserByIdAsync(notification.ToUserId);
+
                     notification.FromUser = await _userService.GetUserByIdAsync(notification.FromUserId);
 
                     return Ok(notification);
@@ -307,21 +359,3 @@ namespace Zust.Web.Controllers.ApiControllers
         }
     }
 }
-
-
-
-//var list = await _userService.GetAllUsersAsync();
-//var users = list.Take(15);
-//var current = await UserHelper.GetCurrentUserAsync(HttpContext);
-//foreach (var u in users)
-//{
-//    var fr = new FriendRequest()
-//    {
-//        Id = Guid.NewGuid().ToString(),
-//        ReceiverId = current.Id,
-//        SenderId = u.Id,
-//        RequestDate = DateTime.Now,
-//        Status = Status.Pending
-//    };
-//    await _friendRequestService.AddAsync(fr);
-//}

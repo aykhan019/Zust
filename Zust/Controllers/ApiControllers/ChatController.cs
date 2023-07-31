@@ -7,15 +7,40 @@ using Zust.Web.Models;
 
 namespace Zust.Web.Controllers.ApiControllers
 {
+    /// <summary>
+    /// API controller responsible for handling chat-related operations.
+    /// </summary>
     [Route(Routes.ChatAPI)]
     [ApiController]
     public class ChatController : ControllerBase
     {
+        /// <summary>
+        /// Gets the user service used by the controller.
+        /// </summary>
         private readonly IUserService _userService;
+
+        /// <summary>
+        /// Gets the chat service used by the controller.
+        /// </summary>
         private readonly IChatService _chatService;
+
+        /// <summary>
+        /// Gets the message service used by the controller.
+        /// </summary>
         private readonly IMessageService _messageService;
+
+        /// <summary>
+        /// Gets the notification service used by the controller.
+        /// </summary>
         private readonly INotificationService _notificationService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChatController"/> class with the specified services.
+        /// </summary>
+        /// <param name="chatService">The chat service to be used by the controller.</param>
+        /// <param name="messageService">The message service to be used by the controller.</param>
+        /// <param name="userService">The user service to be used by the controller.</param>
+        /// <param name="notificationService">The notification service to be used by the controller.</param>
         public ChatController(IChatService chatService, IMessageService messageService, IUserService userService, INotificationService notificationService)
         {
             _chatService = chatService;
@@ -27,6 +52,11 @@ namespace Zust.Web.Controllers.ApiControllers
             _notificationService = notificationService;
         }
 
+        /// <summary>
+        /// Adds a new message to the chat.
+        /// </summary>
+        /// <param name="model">The SendMessageViewModel containing the message data.</param>
+        /// <returns>Returns ActionResult with a MessageNotificationViewModel on success, or BadRequest with an error message on failure.</returns>
         [HttpPost(Routes.AddMessage)]
         public async Task<ActionResult<Message>> AddMessage([FromBody] SendMessageViewModel model)
         {
@@ -46,7 +76,9 @@ namespace Zust.Web.Controllers.ApiControllers
                 await _messageService.AddMessageAsync(message);
 
                 message.ReceiverUser = await _userService.GetUserByIdAsync(model.Message.ReceiverUserId);
+
                 message.SenderUser = await _userService.GetUserByIdAsync(model.Message.SenderUserId);
+
                 message.Chat = await _chatService.GetChatByIdAsync(model.Message.ChatId);
 
                 // For User To Send Message
@@ -55,10 +87,15 @@ namespace Zust.Web.Controllers.ApiControllers
                 var message2 = new Message()
                 {
                     Id = Guid.NewGuid().ToString(),
+
                     Text = model.Message.Text,
+
                     ReceiverUserId = model.Message.ReceiverUserId,
+
                     SenderUserId = model.Message.SenderUserId,
+
                     ChatId = otherUserChat.Id,
+
                     DateSent = DateTime.Now
                 };
 
@@ -78,12 +115,19 @@ namespace Zust.Web.Controllers.ApiControllers
                     var notification = new Notification()
                     {
                         Id = Guid.NewGuid().ToString(),
+
                         Date = DateTime.Now,
+
                         IsRead = false,
+
                         FromUserId = currentUser.Id,
+
                         FromUser = currentUser,
+
                         ToUserId = model.Message.ReceiverUserId,
+
                         ToUser = await _userService.GetUserByIdAsync(model.Message.ReceiverUserId),
+
                         Message = NotificationType.GetSentYouMessageMessage(currentUser.UserName),
                     };
 
@@ -101,13 +145,20 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Gets all chat users for a specific user.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose chats need to be retrieved.</param>
+        /// <returns>Returns ActionResult with a list of users representing the chat participants on success, or BadRequest with an error message on failure.</returns>
         [HttpGet(Routes.GetChats)]
         public async Task<ActionResult<IEnumerable<User>>> GetChats(string userId)
         {
             try
             {
                 var chats = await _chatService.GetAllUserChats(userId);
+
                 var list = chats.ToList();
+
                 var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
 
                 var usersTasks = list.Select(async c =>

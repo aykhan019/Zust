@@ -8,17 +8,52 @@ using Zust.Web.Models;
 
 namespace Zust.Web.Controllers.ApiControllers
 {
+    /// <summary>
+    /// API controller responsible for handling posts and related operations.
+    /// </summary>
     [Route(Routes.PostAPI)]
     [Controller]
     public class PostController : ControllerBase
     {
+        /// <summary>
+        /// The service responsible for handling media-related operations.
+        /// </summary>
         private readonly IMediaService _mediaService;
+
+        /// <summary>
+        /// The service responsible for handling post-related operations.
+        /// </summary>
         private readonly IPostService _postService;
+
+        /// <summary>
+        /// The service responsible for handling user-related operations.
+        /// </summary>
         private readonly IUserService _userService;
+
+        /// <summary>
+        /// The service responsible for handling comment-related operations.
+        /// </summary>
         private readonly ICommentService _commentService;
+
+        /// <summary>
+        /// The service responsible for handling notification-related operations.
+        /// </summary>
         private readonly INotificationService _notificationService;
+
+        /// <summary>
+        /// The service responsible for handling friendship-related operations.
+        /// </summary>
         private readonly IFriendshipService _friendshipService;
 
+        /// <summary>
+        /// Initializes a new instance of the PostController class with the specified services.
+        /// </summary>
+        /// <param name="mediaService">The service for handling media-related operations.</param>
+        /// <param name="postService">The service for handling post-related operations.</param>
+        /// <param name="userService">The service for handling user-related operations.</param>
+        /// <param name="commentService">The service for handling comment-related operations.</param>
+        /// <param name="notificationService">The service for handling notification-related operations.</param>
+        /// <param name="friendshipService">The service for handling friendship-related operations.</param>
         public PostController(IMediaService mediaService, IPostService postService, IUserService userService, ICommentService commentService, INotificationService notificationService, IFriendshipService friendshipService)
         {
             _mediaService = mediaService;
@@ -34,6 +69,10 @@ namespace Zust.Web.Controllers.ApiControllers
             _friendshipService = friendshipService;
         }
 
+        /// <summary>
+        /// Creates a new post and adds it to the database.
+        /// </summary>
+        /// <param name="model">The view model containing the post details.</param>
         [HttpPost(Routes.CreatePost)]
         public async Task<IActionResult> CreatePost([FromForm] CreatePostViewModel model)
         {
@@ -90,15 +129,21 @@ namespace Zust.Web.Controllers.ApiControllers
 
                 // Send notification to all followers
                 var followers = await _friendshipService.GetAllFollowersOfUserAsync(currentUser.Id);
+
                 foreach (var follower in followers)
                 {
                     var notification = new Notification()
                     {
                         Id = Guid.NewGuid().ToString(),
+
                         Date = DateTime.Now,
+
                         FromUserId = currentUser.Id,
+
                         ToUserId = follower.Id,
+
                         IsRead = false,
+
                         Message = NotificationType.GetSharedPostMessage(currentUser.UserName)
                     };
 
@@ -114,6 +159,9 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Gets all posts for the news feed of the current user.
+        /// </summary>
         [HttpGet(Routes.GetAllPosts)]
         public async Task<ActionResult<IEnumerable<User>>> GetAllPosts()
         {
@@ -131,6 +179,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Retrieves all posts of a specific user by their user ID.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose posts to retrieve.</param>
+        /// <returns>An action result containing the list of posts belonging to the user.</returns>
         [HttpGet(Routes.GetAllPostsOfUser)]
         public async Task<ActionResult<IEnumerable<User>>> GetAllPostsOfUser(string userId)
         {
@@ -146,6 +199,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Retrieves the total number of likes on all posts of a specific user by their user ID.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose posts' like count to retrieve.</param>
+        /// <returns>An action result containing the total number of likes on the user's posts.</returns>
         [HttpGet(Routes.GetAllPostsLikeCount)]
         public async Task<ActionResult<int>> GetAllPostsLikeCount(string userId)
         {
@@ -161,6 +219,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Retrieves all comments of a specific post by its post ID.
+        /// </summary>
+        /// <param name="postId">The ID of the post whose comments to retrieve.</param>
+        /// <returns>An action result containing the list of comments belonging to the post.</returns>
         [HttpGet(Routes.GetCommentsOfPost)]
         public async Task<ActionResult<IEnumerable<Comment>>> GetAllCommentsOfPost(string postId)
         {
@@ -181,6 +244,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Retrieves the total count of comments on a specific post by its post ID.
+        /// </summary>
+        /// <param name="postId">The ID of the post whose comments' count to retrieve.</param>
+        /// <returns>An action result containing the total count of comments on the post.</returns>
         [HttpGet(Routes.GetCountOfCommentsOfPost)]
         public async Task<ActionResult<int>> GetCountOfCommentsOfPost(string postId)
         {
@@ -196,6 +264,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Adds a new comment to a specific post by its post ID.
+        /// </summary>
+        /// <param name="model">The input model containing comment details.</param>
+        /// <returns>An action result containing the newly added comment and related notification.</returns>
         [HttpPost(Routes.AddComment)]
         public async Task<ActionResult<Comment>> AddComment([FromBody] CommentInputModel model)
         {
@@ -207,28 +280,38 @@ namespace Zust.Web.Controllers.ApiControllers
                 {
                     return NotFound();
                 }
+
                 var comment = new Comment
                 {
                     Id = Guid.NewGuid().ToString(),
+
                     Text = model.Text,
+
                     UserId = model.UserId,
+
                     PostId = model.PostId
                 };
 
                 await _commentService.AddAsync(comment);
-
 
                 var currentUser = await _userService.GetUserByIdAsync(model.UserId);
 
                 var notification = new Notification()
                 {
                     Id = Guid.NewGuid().ToString(),
+
                     Date = DateTime.Now,
+
                     IsRead = false,
+
                     FromUserId = currentUser.Id,
+
                     FromUser = currentUser,
+
                     ToUserId = post.UserId,
+
                     ToUser = await _userService.GetUserByIdAsync(post.UserId),
+
                     Message = NotificationType.GetCommentedOnYourPostMessage(currentUser.UserName),
                 };
 
@@ -239,8 +322,10 @@ namespace Zust.Web.Controllers.ApiControllers
                 var vm = new CommentNotificationViewModel()
                 {
                     Notification = notification,
+
                     Comment = comment
                 };
+
                 return Ok(vm);
             }
             catch (Exception ex)

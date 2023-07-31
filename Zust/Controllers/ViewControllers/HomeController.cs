@@ -16,17 +16,28 @@ namespace Zust.Web.Controllers.ViewControllers
     [Controller]
     public class HomeController : Controller
     {
-        private readonly IStaticService _staticService;
-
         /// <summary>
-        /// Gets the user service used by the controller.
+        /// Represents an instance of the IStaticService interface used to interact with static data and settings in the application.
+        /// </summary>
+        private readonly IStaticService _staticService;
+        /// <summary>
+        /// Represents an instance of the IUserService interface used to interact with user-related data and perform user-related operations in the application.
         /// </summary>
         private readonly IUserService _userService;
 
+        /// <summary>
+        /// Represents an instance of the IPostService interface used to interact with post-related data and perform post-related operations in the application.
+        /// </summary>
         private readonly IPostService _postService;
 
+        /// <summary>
+        /// Represents an instance of the IChatService interface used to interact with chat-related data and perform chat-related operations in the application.
+        /// </summary>
         private readonly IChatService _chatService;
 
+        /// <summary>
+        /// Represents an instance of the IMessageService interface used to interact with message-related data and perform message-related operations in the application.
+        /// </summary>
         private readonly IMessageService _messageService;
 
         /// <summary>

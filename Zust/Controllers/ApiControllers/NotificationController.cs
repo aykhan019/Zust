@@ -5,19 +5,39 @@ using Zust.Web.Helpers.ConstantHelpers;
 
 namespace Zust.Web.Controllers.ApiControllers
 {
+    /// <summary>
+    /// API controller responsible for handling notifications and related operations.
+    /// </summary>
     [Route(Routes.NotificationAPI)]
     [ApiController]
     public class NotificationController : ControllerBase
     {
+        /// <summary>
+        /// The service responsible for handling notification-related operations.
+        /// </summary>
         private readonly INotificationService _notificationService;
+
+        /// <summary>
+        /// The service responsible for handling user-related operations.
+        /// </summary>
         private readonly IUserService _userService;
 
+        /// <summary>
+        /// Initializes a new instance of the NotificationController class with the specified services.
+        /// </summary>
+        /// <param name="notificationService">The service for handling notification-related operations.</param>
+        /// <param name="userService">The service for handling user-related operations.</param>
         public NotificationController(INotificationService notificationService, IUserService userService)
         {
             _notificationService = notificationService;
+
             _userService = userService;
         }
 
+        /// <summary>
+        /// Gets notifications of a user by their ID.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose notifications to retrieve.</param>    
         [HttpGet(Routes.GetNotificationsOfUser)]
         public async Task<ActionResult<IEnumerable<Notification>>> GetNotificationsOfUser(string userId)
         {
@@ -28,6 +48,7 @@ namespace Zust.Web.Controllers.ApiControllers
                 notifications.ForEach(async notification =>
                 {
                     notification.ToUser = await _userService.GetUserByIdAsync(notification.ToUserId);
+
                     notification.FromUser = await _userService.GetUserByIdAsync(notification.FromUserId);
                 });
 
@@ -39,6 +60,10 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Marks a notification as read.
+        /// </summary>
+        /// <param name="notificationId">The ID of the notification to mark as read.</param>
         [HttpPost(Routes.SetNotificationRead)]
         public async Task<ActionResult<IEnumerable<Notification>>> SetNotificationRead(string notificationId)
         {
@@ -56,7 +81,10 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
-
+        /// <summary>
+        /// Gets the count of unread notifications for a user by their ID.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose unread notification count to retrieve.</param>
         [HttpGet(Routes.GetUnreadNotificationCount)]
         public async Task<ActionResult<IEnumerable<Notification>>> GetUnseenNotificationCount(string userId)
         {

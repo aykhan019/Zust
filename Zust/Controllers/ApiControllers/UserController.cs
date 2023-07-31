@@ -29,12 +29,13 @@ namespace Zust.Web.Controllers.ApiControllers
         private readonly INotificationService _notificationService;
 
         private readonly IMapper _mapper;
-
-        /// <summary>
-        /// Initializes a new instance of the UserController class.
-        /// </summary>
-        /// <param name="userService">The user service used for user-related operations.</param>
-        public UserController(IUserService userService, IFriendshipService friendshipService, IFriendRequestService friendRequestService, IMediaService mediaService, INotificationService notificationService, IMapper mapper)
+      
+        public UserController(IUserService userService,
+                              IFriendshipService friendshipService,
+                              IFriendRequestService friendRequestService,
+                              IMediaService mediaService,
+                              INotificationService notificationService,
+                              IMapper mapper)
         {
             _userService = userService;
 
@@ -111,120 +112,6 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
-        //private async Task addRandom()
-        //{
-        //    var random = new Random();
-        //    var list = await _userService.GetAllUsersAsync();
-
-        //    foreach (var user in list)
-        //    {
-        //        var allUsers = list.Where(u => u.Id != user.Id).ToList();
-        //        var userCount = random.Next(0, allUsers.Count());
-        //        var pendingRequestCount = (int)(userCount * 0.07);
-        //        var friendCount = userCount - pendingRequestCount;
-
-        //        var users = allUsers.ToList().GetRandomElements(userCount);
-
-        //        for (int i = 0; i < friendCount; i++)
-        //        {
-        //            var friendToSendRequest = users[i];
-
-        //            var requestDate = GenerateRandomDate(new DateTime(2023, 1, 1));
-
-        //            var fr = new FriendRequest()
-        //            {
-        //                Id = Guid.NewGuid().ToString(),
-        //                SenderId = user.Id,
-        //                ReceiverId = friendToSendRequest.Id,
-        //                RequestDate = GenerateRandomDate(new DateTime(2023, 1, 1)),
-        //                Status = Status.Accepted,
-        //            };
-
-        //            await _friendRequestService.AddAsync(fr);
-
-        //            var ntfc = new Notification()
-        //            {
-        //                Id = Guid.NewGuid().ToString(),
-        //                Date = requestDate,
-        //                IsRead = true,
-        //                FromUser = user,
-        //                FromUserId = user.Id,
-        //                ToUser = friendToSendRequest,
-        //                ToUserId = friendToSendRequest.Id,
-        //                Message = NotificationType.GetNewFriendRequestMessage(user.UserName),
-        //            };
-
-        //            await _notificationService.AddAsync(ntfc);
-
-        //            var friendShip = new Friendship()
-        //            {
-        //                FriendshipId = Guid.NewGuid().ToString(),
-
-        //                FriendId = fr.ReceiverId,
-
-        //                UserId = fr.SenderId
-        //            };
-
-        //            await _friendshipService.AddFriendship(friendShip);
-
-        //            var ntfc2 = new Notification()
-        //            {
-        //                Id = Guid.NewGuid().ToString(),
-        //                Date = requestDate.AddDays(random.Next(35)),
-        //                IsRead = true,
-        //                Message = NotificationType.GetFriendRequestAcceptedMessage(friendToSendRequest.UserName),
-        //                FromUser = friendToSendRequest,
-        //                FromUserId = friendToSendRequest.Id,
-        //                ToUser = user,
-        //                ToUserId = user.Id
-        //            };
-
-        //            await _notificationService.AddAsync(ntfc2);
-        //        }
-
-        //        for (int i = 0; i < pendingRequestCount; i++)
-        //        {
-        //            var friendToSendRequest = users[i + friendCount];
-
-        //            var requestDate = GenerateRandomDate(new DateTime(2023, 1, 1));
-
-        //            var fr = new FriendRequest()
-        //            {
-        //                Id = Guid.NewGuid().ToString(),
-        //                SenderId = user.Id,
-        //                ReceiverId = friendToSendRequest.Id,
-        //                RequestDate = requestDate,
-        //                Status = Status.Pending,
-        //            };
-
-        //            await _friendRequestService.AddAsync(fr);
-
-        //            var ntfc = new Notification()
-        //            {
-        //                Id = Guid.NewGuid().ToString(),
-        //                Date = requestDate,
-        //                IsRead = true,
-        //                Message = NotificationType.GetNewFriendRequestMessage(user.UserName),
-        //                FromUser = user,
-        //                FromUserId = user.Id,
-        //                ToUser = friendToSendRequest,
-        //                ToUserId = friendToSendRequest.Id
-        //            };
-
-        //            await _notificationService.AddAsync(ntfc);
-        //        }
-        //    }
-        //}
-
-        //private static DateTime GenerateRandomDate(DateTime startDate)
-        //{
-        //    DateTime endDate = DateTime.Today;
-        //    Random random = new Random();
-        //    int range = (endDate - startDate).Days;
-
-        //    return startDate.AddDays(random.Next(range));
-        //}
-
         /// <summary>
         /// Retrieves a user by ID.
         /// </summary>
@@ -266,6 +153,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Retrieves a list of user profiles that match the specified text.
+        /// </summary>
+        /// <param name="text">The text to search for in the user profiles.</param>
+        /// <returns>A list of user profiles that match the specified text.</returns>
         [HttpGet(Routes.GetUsersByText)]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsersByText(string text)
         {
@@ -287,6 +179,7 @@ namespace Zust.Web.Controllers.ApiControllers
                 userDTOs.ForEach(async user =>
                 {
                     user.IsFriend = await _friendshipService.IsFriendAsync(currentUser.Id, user.Id);
+
                     if (!user.IsFriend)
                     {
                         user.HasFriendRequestPending = await _friendRequestService.HasRequestPendingAsync(currentUser.Id, user.Id, Status.Pending);
@@ -301,6 +194,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Retrieves a list of followers for the specified user.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose followers are to be retrieved.</param>
+        /// <returns>A list of followers for the specified user.</returns>
         [HttpGet(Routes.GetFollowers)]
         public async Task<ActionResult<IEnumerable<User>>> GetFollowers(string userId)
         {
@@ -316,6 +214,12 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Retrieves a range of followers for the current user.
+        /// </summary>
+        /// <param name="startIndex">The start index of the range.</param>
+        /// <param name="takeCount">The number of followers to take from the range.</param>
+        /// <returns>A range of followers for the current user.</returns>
         [HttpGet(Routes.GetFollowersInRange)]
         public async Task<ActionResult<IEnumerable<User>>> GetFollowersInRange(int startIndex, int takeCount)
         {
@@ -344,6 +248,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Retrieves a list of random followers for the specified user.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose random followers are to be retrieved.</param>
+        /// <returns>A list of random followers for the specified user.</returns>
         [HttpGet(Routes.GetRandomFollowers)]
         public async Task<ActionResult<IEnumerable<User>>> GetRandomFollowers(string userId)
         {
@@ -359,6 +268,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Retrieves the count of followers for the specified user.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose follower count is to be retrieved.</param>
+        /// <returns>The count of followers for the specified user.</returns>
         [HttpGet(Routes.GetFollowersCount)]
         public async Task<ActionResult<int>> GetFollowersCount(string userId)
         {
@@ -375,7 +289,11 @@ namespace Zust.Web.Controllers.ApiControllers
                 return BadRequest(ex.Message);
             }
         }
-
+        /// <summary>
+        /// Retrieves a list of users that the specified user is following.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose followings are to be retrieved.</param>
+        /// <returns>A list of users that the specified user is following.</returns>
         [HttpGet(Routes.GetFollowings)]
         public async Task<ActionResult<IEnumerable<User>>> GetFollowings(string userId)
         {
@@ -391,6 +309,12 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Retrieves a range of users that the current user is following.
+        /// </summary>
+        /// <param name="startIndex">The start index of the range.</param>
+        /// <param name="takeCount">The number of users to take from the range.</param>
+        /// <returns>A range of users that the current user is following.</returns>
         [HttpGet(Routes.GetFollowingsInRange)]
         public async Task<ActionResult<IEnumerable<User>>> GetFollowingsInRange(int startIndex, int takeCount)
         {
@@ -419,6 +343,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Retrieves the count of users that the specified user is following.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose following count is to be retrieved.</param>
+        /// <returns>The count of users that the specified user is following.</returns>
         [HttpGet(Routes.GetFollowingsCount)]
         public async Task<ActionResult<int>> GetFollowingsCount(string userId)
         {
@@ -436,6 +365,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Removes the specified user from the current user's friends list.
+        /// </summary>
+        /// <param name="friendId">The ID of the user to be removed from the friends list.</param>
+        /// <returns>An action result indicating the success or failure of the removal operation.</returns>
         [HttpPost(Routes.RemoveFriend)]
         public async Task<IActionResult> RemoveFriend(string friendId)
         {
@@ -472,6 +406,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Removes the specified user from the current user's followers list.
+        /// </summary>
+        /// <param name="friendId">The ID of the user to be removed from the followers list.</param>
+        /// <returns>An action result indicating the success or failure of the removal operation.</returns>
         [HttpPost(Routes.RemoveFollower)]
         public async Task<IActionResult> RemoveFollower(string friendId)
         {
@@ -508,6 +447,10 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Retrieves the current user's profile.
+        /// </summary>
+        /// <returns>The profile of the current user.</returns>
         [HttpGet(Routes.GetCurrentUser)]
         public async Task<ActionResult<User?>> GetCurrentUser()
         {
@@ -528,6 +471,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Updates the current user's profile image with the provided media file.
+        /// </summary>
+        /// <param name="model">The model containing the media file and user ID.</param>
+        /// <returns>An action result indicating the success or failure of the update operation.</returns>
         [HttpPost(Routes.UpdateProfileImage)]
         public async Task<IActionResult> UpdateProfileImage([FromForm] UpdateProfileViewModel model)
         {
@@ -569,6 +517,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Retrieves a list of users whose birthday is today.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose birthday list is to be retrieved.</param>
+        /// <returns>A list of users whose birthday is today.</returns>
         [HttpGet(Routes.GetUsersWithTodayBirthday)]
         public async Task<IActionResult> GetUsersWithTodayBirthday(string userId)
         {
@@ -588,6 +541,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Retrieves a list of users whose birthday occurred within a recent range.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose birthday list is to be retrieved.</param>
+        /// <returns>A list of users whose birthday occurred within a recent range.</returns>
         [HttpGet(Routes.GetUsersWithRecentBirthday)]
         public async Task<IActionResult> GetUsersWithRecentBirthday(string userId)
         {
@@ -611,6 +569,11 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Retrieves a list of users whose birthday is coming up in the next few days.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose birthday list is to be retrieved.</param>
+        /// <returns>A list of users whose birthday is coming up in the next few days.</returns>
         [HttpGet(Routes.GetUsersWithComingBirthday)]
         public async Task<IActionResult> GetUsersWithComingBirthday(string userId)
         {

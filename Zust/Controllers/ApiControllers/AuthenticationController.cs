@@ -16,11 +16,6 @@ namespace Zust.Web.Controllers.ApiControllers
     public class AuthenticationController : ControllerBase
     {
         /// <summary>
-        /// Gets the configuration for accessing application settings.
-        /// </summary>
-        private readonly IConfiguration _configuration;
-
-        /// <summary>
         /// Gets the manager for user sign-in functionality.
         /// </summary>
         private readonly SignInManager<User> _signInManager;
@@ -30,6 +25,9 @@ namespace Zust.Web.Controllers.ApiControllers
         /// </summary>
         private readonly UserManager<User> _userManager;
 
+        /// <summary>
+        /// The service responsible for handling static content and data.
+        /// </summary>
         private readonly IStaticService _staticService;
 
         /// <summary>
@@ -43,25 +41,24 @@ namespace Zust.Web.Controllers.ApiControllers
         private readonly IUserService _userService;
 
         /// <summary>
-        /// Initializes a new instance of the AuthenticationController class with the required dependencies.
+        /// Initializes a new instance of the AuthenticationController class with the specified services and managers.
         /// </summary>
-        /// <param name="authRepository">The repository for authentication-related operations.</param>
-        /// <param name="configuration">The configuration for accessing application settings.</param>
-        /// <param name="signInManager">The manager for user sign-in functionality.</param>
-        public AuthenticationController(IConfiguration configuration,
-                                        SignInManager<User> signInManager,
+        /// <param name="signInManager">The manager for handling sign-in operations for users.</param>
+        /// <param name="userManager">The manager for handling user-related operations.</param>
+        /// <param name="roleManager">The manager for handling role-related operations.</param>
+        /// <param name="userService">The service for handling user-related operations.</param>
+        /// <param name="staticService">The service for handling static content and data.</param>
+        public AuthenticationController(SignInManager<User> signInManager,
                                         UserManager<User> userManager,
                                         RoleManager<Zust.Entities.Models.Role> roleManager,
                                         IUserService userService,
                                         IStaticService staticService)
         {
-            _configuration = configuration;
-
             _signInManager = signInManager;
 
             _userManager = userManager;
 
-            _roleManager = roleManager;
+            _roleManager = roleManager; 
 
             _userService = userService;
 
@@ -124,6 +121,7 @@ namespace Zust.Web.Controllers.ApiControllers
             else
             {
                 result.Errors.ToList().ForEach(error => { model.Errors.Add(error.Description); });
+
                 return RedirectToAction(Routes.Register, Routes.Account, routeValues: model);
             }
         }
