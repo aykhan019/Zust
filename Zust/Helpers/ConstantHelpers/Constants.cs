@@ -45,27 +45,49 @@
         /// </summary>
         public const string StringEmpty = "";
 
-
         /// <summary>
-        /// Represents the file name for covers.
+        /// Represents the settings key for Cloudinary configuration.
         /// </summary>
-
         public const string CloudinarySettings = "CloudinarySettings";
 
+        /// <summary>
+        /// Represents the file type for images.
+        /// </summary>
         public const string ImageFileType = "image/";
 
+        /// <summary>
+        /// Represents the file type for videos.
+        /// </summary>
         public const string VideoFileType = "video/";
 
+        /// <summary>
+        /// Represents the URL for the default image when no content is found.
+        /// </summary>
         public const string NoContentImageUrl = "https://res.cloudinary.com/dax9yhk8g/image/upload/v1689665492/noContentFound_m74is3.png";
 
+        /// <summary>
+        /// Represents the number of status items to show in the news feed.
+        /// </summary>
         public const int StatusCountInNewsFeed = 6;
 
+        /// <summary>
+        /// Represents the number of video items to show in the news feed.
+        /// </summary>
         public const int VideoCountInNewsFeed = 6;
 
+        /// <summary>
+        /// Represents the number of advertisement items to show in the news feed.
+        /// </summary>
         public const int AdvertisementCountInNewsFeed = 2;
 
+        /// <summary>
+        /// Represents the range in days for checking birthdays.
+        /// </summary>
         public const int BirthdayRange = 7;
 
+        /// <summary>
+        /// Represents the number of random followers to show.
+        /// </summary>
         public const int RandomFollowerCount = 5;
     }
-}       
+}

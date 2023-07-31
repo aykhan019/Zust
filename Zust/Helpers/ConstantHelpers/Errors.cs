@@ -50,16 +50,34 @@
         /// </summary>
         public const string FriendRequestNotFound = "Friend request was not found";
 
+        /// <summary>
+        /// Represents the error message for when a friend request has already been sent.
+        /// </summary>
         public const string FriendRequestAlreadySent = "Friend request was already sent";
 
-        public const string AnErrorOccured = "An Error Occured";
+        /// <summary>
+        /// Represents the error message for a generic error.
+        /// </summary>
+        public const string AnErrorOccured = "An Error Occurred";
 
+        /// <summary>
+        /// Represents the error message for when the file type is not supported.
+        /// </summary>
         public const string FileTypeNotSupportedError = "File type not supported";
 
+        /// <summary>
+        /// Represents the error message for when an image upload error occurs.
+        /// </summary>
         public const string ImageUploadError = "An error occurred while uploading the image";
 
+        /// <summary>
+        /// Represents the error message for invalid request data.
+        /// </summary>
         public const string InvalidRequestData = "Invalid request data";
 
+        /// <summary>
+        /// Represents the error message for when a user is not found.
+        /// </summary>
         public const string UserNotFound = "User Not Found";
     }
 }
