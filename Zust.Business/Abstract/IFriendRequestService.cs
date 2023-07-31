@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using Zust.Core.Abstraction;
+﻿using System.Linq.Expressions;
 using Zust.Entities.Models;
 
 namespace Zust.Business.Abstract

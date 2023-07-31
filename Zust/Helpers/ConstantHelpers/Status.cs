@@ -6,7 +6,9 @@
     public static class Status
     {
         public const string Accepted = "Accepted";
+
         public const string Declined = "Declined";
+
         public const string Pending = "Pending";
     }
 }

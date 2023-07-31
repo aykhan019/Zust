@@ -1,18 +1,12 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 using Zust.Business.Abstract;
-using Zust.Business.Concrete;
 using Zust.Entities.Models;
 using Zust.Web.Abstract;
 using Zust.Web.DTOs;
 using Zust.Web.Extensions;
 using Zust.Web.Helpers.ConstantHelpers;
 using Zust.Web.Helpers.Utilities;
-using Zust.Web.Migrations;
 using Zust.Web.Models;
 
 namespace Zust.Web.Controllers.ApiControllers
@@ -43,10 +37,15 @@ namespace Zust.Web.Controllers.ApiControllers
         public UserController(IUserService userService, IFriendshipService friendshipService, IFriendRequestService friendRequestService, IMediaService mediaService, INotificationService notificationService, IMapper mapper)
         {
             _userService = userService;
+
             _friendshipService = friendshipService;
+
             _friendRequestService = friendRequestService;
+
             _mediaService = mediaService;
+
             _notificationService = notificationService;
+
             _mapper = mapper;
         }
 

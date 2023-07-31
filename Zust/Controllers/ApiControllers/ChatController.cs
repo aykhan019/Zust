@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Zust.Business.Abstract;
-using Zust.Business.Concrete;
 using Zust.Entities.Models;
 using Zust.Web.Helpers.ConstantHelpers;
 using Zust.Web.Helpers.Utilities;
-using Zust.Web.Migrations;
 using Zust.Web.Models;
 
 namespace Zust.Web.Controllers.ApiControllers

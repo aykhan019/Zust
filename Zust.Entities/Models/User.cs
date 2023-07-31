@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Reflection.Metadata;
 using Zust.Core.Abstraction;
 
 namespace Zust.Entities.Models

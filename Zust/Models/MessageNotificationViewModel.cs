@@ -1,5 +1,4 @@
 ﻿using Zust.Entities.Models;
-using Zust.Web.Migrations;
 
 namespace Zust.Web.Models
 {

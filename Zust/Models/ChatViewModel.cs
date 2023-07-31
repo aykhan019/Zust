@@ -1,4 +1,4 @@
-﻿    using Zust.Entities.Models;
+﻿using Zust.Entities.Models;
 
 namespace Zust.Web.Models
 {

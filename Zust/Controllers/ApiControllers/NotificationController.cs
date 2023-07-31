@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Zust.Business.Abstract;
 using Zust.Entities.Models;
 using Zust.Web.Helpers.ConstantHelpers;
