@@ -5,7 +5,7 @@ namespace Zust.Web.Helpers.Utilities
     /// <summary>
     /// Helper class for working with files.
     /// </summary>
-    public class FileHelper<T> where T: class
+    public class FileHelper<T> where T : class
     {
         /// <summary>
         /// Retrieves a list of images from a text file.
@@ -19,6 +19,11 @@ namespace Zust.Web.Helpers.Utilities
             return lines.ToList();
         }
 
+        /// <summary>
+        /// Serializes a list of objects to JSON format and writes it to a file with the specified filename.
+        /// </summary>
+        /// <param name="values">The list of objects to be serialized.</param>
+        /// <param name="filename">The filename for the output JSON file.</param>
         public static void Serialize(List<T> values, string filename)
         {
             var serializer = new JsonSerializer();
@@ -33,6 +38,11 @@ namespace Zust.Web.Helpers.Utilities
             }
         }
 
+        /// <summary>
+        /// Deserializes JSON data from a file with the specified filename and converts it back to a list of objects.
+        /// </summary>
+        /// <param name="filename">The filename of the JSON file to be deserialized.</param>
+        /// <returns>The deserialized list of objects.</returns>
         public static List<T?> Deserialize(string filename)
         {
             List<T> values = new List<T>();
@@ -46,6 +56,5 @@ namespace Zust.Web.Helpers.Utilities
             }
             return values;
         }
-
     }
 }
