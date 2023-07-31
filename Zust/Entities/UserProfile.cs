@@ -6,7 +6,7 @@
     public class UserProfile
     {
         /// <summary>
-        /// Gets or sets the username.
+        /// Gets or sets the old username.
         /// </summary>
         public string? OldUserName { get; set; }
 
