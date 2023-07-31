@@ -30,9 +30,13 @@ namespace Zust.Web.Controllers.ViewControllers
         private readonly IMessageService _messageService;
 
         /// <summary>
-        /// Initializes a new instance of the HomeController class with the specified user service.
+        /// Initializes a new instance of the HomeController class with the specified services.
         /// </summary>
         /// <param name="userService">The user service to be used by the controller.</param>
+        /// <param name="staticService">The static service to be used by the controller.</param>
+        /// <param name="postService">The post service to be used by the controller.</param>
+        /// <param name="chatService">The chat service to be used by the controller.</param>
+        /// <param name="messageService">The message service to be used by the controller.</param>
         public HomeController(IUserService userService, IStaticService staticService, IPostService postService, IChatService chatService, IMessageService messageService)
         {
             _userService = userService;
@@ -56,10 +60,13 @@ namespace Zust.Web.Controllers.ViewControllers
         }
 
         /// <summary>
-        /// Renders the user profile view.
+        /// Displays the user profile page for a specific user.
+        /// If the "id" parameter is empty, returns the default view.
+        /// If the user with the given "id" is not found, returns a 404 Not Found page.
         /// </summary>
-        /// <param name="id">The ID of the user.</param>
-        /// <returns>The user profile view.</returns>
+        /// <param name="id">The unique identifier of the user.</param>
+        /// <returns>Returns a view containing the user profile information if the user is found, 
+        /// otherwise returns a default view or a 404 Not Found page.</returns>
         public async Task<IActionResult> Users(string id = Constants.StringEmpty)
         {
             if (id == Constants.StringEmpty)
@@ -68,13 +75,23 @@ namespace Zust.Web.Controllers.ViewControllers
             }
 
             var user = await _userService.GetUserByIdAsync(id);
+
             if (user == null)
             {
                 return NotFound();
             }
+
             return View(Routes.UserProfile, user);
         }
 
+        /// <summary>
+        /// Displays the details of a specific post with the given "id".
+        /// If the "id" parameter is empty, returns a 404 Not Found page.
+        /// If the post with the given "id" is not found, returns a 404 Not Found page.
+        /// </summary>
+        /// <param name="id">The unique identifier of the post.</param>
+        /// <returns>Returns a view containing the post details if the post is found, 
+        /// otherwise returns a 404 Not Found page.</returns>
         public async Task<IActionResult> Posts(string id = Constants.StringEmpty)
         {
             if (id == Constants.StringEmpty)
@@ -83,14 +100,26 @@ namespace Zust.Web.Controllers.ViewControllers
             }
 
             var post = await _postService.GetPostByIdAsync(id);
+
             if (post == null)
             {
                 return NotFound();
             }
+
             post.User = await _userService.GetUserByIdAsync(post.UserId);
+
             return View(Routes.Post, post);
         }
 
+
+        /// <summary>
+        /// Displays the chat view for a specific user with the given "userId".
+        /// If the "userId" parameter is empty or null, returns a 404 Not Found page.
+        /// If the user with the given "userId" is not found, returns a 404 Not Found page.
+        /// </summary>
+        /// <param name="userId">The unique identifier of the user to chat with.</param>
+        /// <returns>Returns a view containing the chat details if the user is found and 
+        /// a chat exists, otherwise returns a 404 Not Found page.</returns>
         public async Task<IActionResult> Chats(string userId = Constants.StringEmpty)
         {
             if (string.IsNullOrEmpty(userId))
@@ -101,6 +130,7 @@ namespace Zust.Web.Controllers.ViewControllers
             var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
 
             var userToChat = await _userService.GetUserByIdAsync(userId);
+
             if (userToChat == null)
             {
                 return NotFound();
@@ -113,9 +143,13 @@ namespace Zust.Web.Controllers.ViewControllers
                 chat = new Chat()
                 {
                     Id = Guid.NewGuid().ToString(),
+
                     SenderUserId = currentUser.Id,
+
                     ReceiverUserId = userToChat.Id,
+
                     SenderUser = currentUser,
+
                     ReceiverUser = userToChat
                 };
 
@@ -124,11 +158,13 @@ namespace Zust.Web.Controllers.ViewControllers
 
 
             var messages = await _messageService.GetChatMessagesByIdAsync(chat.Id);
+
             if (messages != null)
             {
                 var messageTasks = messages.Select(async m =>
                 {
                     m.SenderUser = await _userService.GetUserByIdAsync(m.SenderUserId);
+
                     m.ReceiverUser = await _userService.GetUserByIdAsync(m.ReceiverUserId);
                 });
 
@@ -150,9 +186,13 @@ namespace Zust.Web.Controllers.ViewControllers
                 chatForOtherUser = new Chat()
                 {
                     Id = Guid.NewGuid().ToString(),
+
                     SenderUserId = userToChat.Id,
+
                     ReceiverUserId = currentUser.Id,
+
                     SenderUser = userToChat,
+
                     ReceiverUser = currentUser
                 };
 
@@ -162,8 +202,11 @@ namespace Zust.Web.Controllers.ViewControllers
             var chatVm = new ChatViewModel()
             {
                 CurrentUser = currentUser,
+
                 UserToChat = userToChat,
+
                 Chat = chat,
+
                 ChatForOtherUser = chatForOtherUser
             };
 

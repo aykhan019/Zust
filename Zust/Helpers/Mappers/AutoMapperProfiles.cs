@@ -16,6 +16,7 @@ namespace Zust.Web.Helpers.Mappers
         public AutoMapperProfiles   ()
         {
             CreateMap<User, UserProfile>().ReverseMap();
+
             CreateMap<User, UserDTO>().ReverseMap();
         }
     }
