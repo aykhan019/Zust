@@ -22,7 +22,9 @@
 
                 // Swap list elements at positions i and j
                 T temp = list[i];
+
                 list[i] = list[j];
+
                 list[j] = temp;
             }
         }
@@ -37,7 +39,9 @@
         public static List<T> GetRandomElements<T>(this List<T> source, int count)
         {
             Random random = new Random();
+
             List<T> result = new List<T>();
+
             HashSet<int> selectedIndices = new HashSet<int>();
 
             while (result.Count < count)
@@ -47,6 +51,7 @@
                 if (!selectedIndices.Contains(index))
                 {
                     result.Add(source[index]);
+
                     selectedIndices.Add(index);
                 }
             }
