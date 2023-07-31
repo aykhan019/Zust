@@ -6,6 +6,7 @@ using Zust.Core.Concrete.EntityFramework;
 using Zust.Entities.Models;
 using Zust.Web.Helpers.ConstantHelpers;
 using Zust.Web.Helpers.Utilities;
+using Zust.Web.Models;
 
 namespace Zust.Web.Controllers.ApiControllers
 {
@@ -88,7 +89,22 @@ namespace Zust.Web.Controllers.ApiControllers
 
                 await _notificationService.AddAsync(notification);
 
-                return Ok();
+                var sender = await _userService.GetUserByIdAsync(currentUser.Id);
+                var reciever = await _userService.GetUserByIdAsync(receiverId);
+
+                friendRequest.Sender = sender;
+                friendRequest.Receiver = reciever;
+
+                notification.FromUser = sender;
+                notification.ToUser = reciever;
+
+                var friendRequestNotificationVm = new FriendRequestNotificiationViewModel()
+                {
+                     Notification = notification,
+                     FriendRequest = friendRequest
+                };
+
+                return Ok(friendRequestNotificationVm);
             }
             catch (Exception ex)
             {
@@ -234,7 +250,10 @@ namespace Zust.Web.Controllers.ApiControllers
 
                     await _notificationService.AddAsync(notification);
 
-                    return Ok();
+                    notification.ToUser = await _userService.GetUserByIdAsync(notification.ToUserId);
+                    notification.FromUser = await _userService.GetUserByIdAsync(notification.FromUserId);
+
+                    return Ok(notification);
                 }
                 else
                 {   
@@ -274,7 +293,10 @@ namespace Zust.Web.Controllers.ApiControllers
 
                     await _notificationService.AddAsync(notification);
 
-                    return Ok();
+                    notification.ToUser = await _userService.GetUserByIdAsync(notification.ToUserId);
+                    notification.FromUser = await _userService.GetUserByIdAsync(notification.FromUserId);
+
+                    return Ok(notification);
                 }
                 else
                 {

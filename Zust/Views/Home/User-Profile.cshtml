@@ -288,6 +288,8 @@
 
 <script src="~/assets/js/jquery.min.js"></script>
 <script src="~/assets/js/functions.js"></script>
+<script src="~/assets/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/assets/js/userHub.js"></script>
 
 <script>
     var userId = '@Model.Id.ToString()';
@@ -407,8 +409,15 @@
 
     async function callSendFriendRequest(userId) {
         var result = await sendFriendRequest(userId);
+        
         if (result) {
             await reload(userId, true, false);
+
+            await connection.invoke("SendFriendRequest", result.friendRequest);
+
+            //var notification = result;
+            console.log(result);
+            await connection.invoke("SendFriendRequestNotification", result.notification);
         }
     }
 
@@ -491,6 +500,10 @@
             container.innerHTML = noResult;
         }
     }
+
+    connection.on("ReceiveFriendRequestResponse", async function(response){
+        await reload(response.id, response.hasFriendRequestPending, response.isFriend);
+    });
 
     addPostsToView();
 </script>

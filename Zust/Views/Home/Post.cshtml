@@ -128,6 +128,8 @@
 <script src="~/assets/js/owl.carousel.min.js"></script>
 <script src="~/assets/js/wow.min.js"></script>
 <script src="~/assets/js/main.js"></script>
+<script src="~/assets/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/assets/js/userHub.js"></script>
 
 <script>
 
@@ -307,7 +309,7 @@
             });
 
             // Assuming the server responds with the newly added comment
-            const newComment = response;
+            const newComment = response.comment;
 
             // Reset the comment text area
             commentTextElement.value = "";
@@ -322,13 +324,15 @@
 
             commentContainer.insertAdjacentHTML("afterbegin", newCommentHtml);
 
-
-
             var commentCountId = `comment-count`;
             var item = document.getElementById(commentCountId);
             item.innerHTML = spinnerHtml;
             var commentCount = await makeAjaxRequest(`/api/Post/GetCountOfCommentsOfPost/${postId}`, "GET")
             item.innerHTML = commentCount;
+
+            const notification = response.notification;
+
+            await connection.invoke("SendCommentNotification", notification);
         } catch (error) {
             console.error("Error submitting the comment:", error);
         }

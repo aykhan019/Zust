@@ -31,16 +31,48 @@
     <link rel="icon" type="image/png" href="~/assets/images/favicon.png">
 </head>
 
-<body>
+<style>
 
-    <style>
-        #hide {
-            visibility: hidden;
+    .myimg{
+        max-width: 40px !important;
+        min-width: 40px !important;
+        width: 40px !important;
+        max-height: 40px !important;
+        min-height: 40px !important;
+        height: 40px !important;
+    }
+
+    #chats{
+        max-height: 220px;
+        overflow-y: scroll;
+    }
+
+    .chat-body::-webkit-scrollbar {
+        width: 8px; /* Width of the scrollbar */
+    }
+
+    .chat-body::-webkit-scrollbar-thumb {
+        background-color: #888; /* Color of the scrollbar thumb (the draggable part) */
+        border-radius: 4px; /* Border radius of the scrollbar thumb */
+    }
+
+        .chat-body::-webkit-scrollbar-thumb:hover {
+            background-color: #555; /* Color of the scrollbar thumb when hovered */
         }
 
-    </style>
+    /* Hide scrollbar for Firefox */
+    .chat-body {
+        scrollbar-width: thin;
+        scrollbar-color: #888 #f5f5f5;
+    }
 
-    <!-- Start Preloader Area -->
+        .chat-body::-webkit-scrollbar-track {
+            background: #f5f5f5; /* Color of the scrollbar track */
+        }
+</style>
+
+<body>
+
     <div class="preloader-area">
         <div class="spinner">
             <div class="inner">
@@ -58,7 +90,7 @@
         <div class="navbar-area">
             <div class="main-responsive-nav">
                 <div class="main-responsive-menu">
-                    <div class="responsive-burger-menu d-none" style="width: 25px;">
+                    <div class="responsive-burger d-none" style="width: 25px;" id="hide">
                         <span class="top-bar"></span>
                         <span class="middle-bar"></span>
                         <span class="bottom-bar"></span>
@@ -342,7 +374,7 @@
                                 </div>
                                 <div class="option-item">
                                     <div class="dropdown notifications-nav-item">
-                                        <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <a class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <div class="notifications-btn">
                                                 <i class="flaticon-bell"></i>
                                                 <span></span>
@@ -578,41 +610,13 @@
         <div class="right-sidebar-area" data-simplebar>
             <div class="recent-chat-box">
                 <div class="title">
-                    <h3>Recent Chat</h3>
+                    <h3>Chats</h3>
                 </div>
 
-                <div class="chat-body" data-simplebar>
-                    <div class="chat-item">
-                        <a href="#"><img src="~/assets/images/user/user-15.jpg" class="rounded-circle" alt="image"></a>
-                        <span class="name"><a href="#">Stephan Redding</a></span>
-                        <span class="status-online"></span>
-                    </div>
-                    <div class="chat-item">
-                        <a href="#"><img src="~/assets/images/user/user-16.jpg" class="rounded-circle" alt="image"></a>
-                        <span class="name"><a href="#">Maria Smith</a></span>
-                        <span class="status-offline"></span>
-                    </div>
-                    <div class="chat-item">
-                        <a href="#"><img src="~/assets/images/user/user-17.jpg" class="rounded-circle" alt="image"></a>
-                        <span class="name"><a href="#">Paul Enlow</a></span>
-                        <span class="status-online"></span>
-                    </div>
-                    <div class="chat-item">
-                        <a href="#"><img src="~/assets/images/user/user-8.jpg" class="rounded-circle" alt="image"></a>
-                        <span class="name"><a href="#">Stephan Redding</a></span>
-                        <span class="status-offline"></span>
-                    </div>
-                    <div class="chat-item">
-                        <a href="#"><img src="~/assets/images/user/user-9.jpg" class="rounded-circle" alt="image"></a>
-                        <span class="name"><a href="#">Maria Smith</a></span>
-                        <span class="status-online"></span>
-                    </div>
-                    <div class="chat-item">
-                        <a href="#"><img src="~/assets/images/user/user-10.jpg" class="rounded-circle" alt="image"></a>
-                        <span class="name"><a href="#">Paul Enlow</a></span>
-                        <span class="status-offline"></span>
-                    </div>
-                </div>
+              <div class="chat-body" data-simplebar id="chats">
+
+
+                  </div>
             </div>
 
             <div class="recent-contact-box">
@@ -665,6 +669,31 @@
 
     setData();
 
+    var chats = document.getElementById("chats");
+
+    var createChatHtml = function(user) {
+        var content = `
+            <div class="chat-item">
+                <a href="/home/chats?userId=${user.id}"><img src="${user.imageUrl}" class="rounded-circle myimg" alt="image"></a>
+                <span class="name"><a href="/home/chats?userId=${user.id}">${user.userName}</a></span>
+            </div>
+        `;
+        return content;
+    };
+
+    async function getChats() {
+        var users = await makeAjaxRequest(`/api/Chat/GetChats?userId=${currentUserId}`, "GET");
+        users.forEach(user => {
+            var html = createChatHtml(user);
+            chats.innerHTML += html;
+        });
+    }
+
+    async function setChats() {
+        await getChats();
+    }
+
+    setChats();
 
     function getSpecialUsers() {
         return new Promise(function (resolve, reject) {

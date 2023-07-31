@@ -12,5 +12,6 @@ namespace Zust.Business.Abstract
         Task<Chat> GetChatAsync(string senderUserId, string receiverUserId);
         Task AddChatAsync(Chat chat);
         Task<Chat> GetChatByIdAsync(string chatId);
+        Task<IEnumerable<Chat>> GetAllUserChats(string userId);
     }
 }

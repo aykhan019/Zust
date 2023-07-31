@@ -148,5 +148,7 @@
         public const string ChatAPI = "api/Chat";
 
         public const string AddMessage = "AddMessage";
+
+        public const string GetChats = "GetChats";
     }
 }

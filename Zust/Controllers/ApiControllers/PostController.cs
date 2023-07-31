@@ -19,13 +19,19 @@ namespace Zust.Web.Controllers.ApiControllers
         private readonly IPostService _postService;
         private readonly IUserService _userService;
         private readonly ICommentService _commentService;
+        private readonly INotificationService _notificationService;
 
-        public PostController(IMediaService mediaService, IPostService postService, IUserService userService, ICommentService commentService)
+        public PostController(IMediaService mediaService, IPostService postService, IUserService userService, ICommentService commentService, INotificationService notificationService)
         {
             _mediaService = mediaService;
+
             _postService = postService;
+
             _userService = userService;
+
             _commentService = commentService;
+
+            _notificationService = notificationService;
         }
 
         [HttpPost(Routes.CreatePost)]
@@ -177,7 +183,7 @@ namespace Zust.Web.Controllers.ApiControllers
         {
             try
             {
-                var post = _postService.GetPostByIdAsync(model.PostId);
+                var post = await _postService.GetPostByIdAsync(model.PostId);
 
                 if (post == null)
                 {
@@ -193,9 +199,31 @@ namespace Zust.Web.Controllers.ApiControllers
 
                 await _commentService.AddAsync(comment);
 
+
+                var currentUser = await _userService.GetUserByIdAsync(model.UserId);
+
+                var notification = new Notification()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Date = DateTime.Now,
+                    IsRead = false,
+                    FromUserId = currentUser.Id,
+                    FromUser = currentUser,
+                    ToUserId = post.UserId,
+                    ToUser = await _userService.GetUserByIdAsync(post.UserId),
+                    Message = NotificationType.GetCommentedOnYourPostMessage(currentUser.UserName),
+                };
+
+                await _notificationService.AddAsync(notification);
+
                 comment.User = await _userService.GetUserByIdAsync(model.UserId);
 
-                return Ok(comment);
+                var vm = new CommentNotificationViewModel()
+                {
+                    Notification = notification,
+                    Comment = comment
+                };
+                return Ok(vm);
             }
             catch (Exception ex)
             {

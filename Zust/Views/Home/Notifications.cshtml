@@ -91,6 +91,9 @@
 
 <script src="~/assets/js/jquery.min.js"></script>
 <script src="~/assets/js/functions.js"></script>
+<script src="~/assets/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/assets/js/userHub.js"></script>
+
 <script>
     var currentUserId = '@user.Id.ToString()';
 
@@ -106,6 +109,8 @@
         if (!notification.isRead){
             notRead = 'notRead';
         }
+
+        console.log("HERE");
 
         var content = `
                     <div class="item d-flex justify-content-between align-items-center">
@@ -123,6 +128,7 @@
                         </div>
                     </div>
                 `;
+
         return content;
     }
 
@@ -137,6 +143,8 @@
     var contaier = document.getElementById("notificationsBody");
     var notificationCountInView = 0;
     var takeCount = 25;
+
+    var allContent = '';
 
     async function showNotifications() {
         if (allNotifications === null) {
@@ -157,6 +165,7 @@
                 await setNotificationSeemed(notification);
                 var notificationHtml = createNotificationHtml(notification);
                 contaier.innerHTML += notificationHtml;
+                allContent += notificationHtml;
             }
         }
 
@@ -164,6 +173,13 @@
             document.getElementById("loadMore").style.display = 'none';
         }
     }
+
+    connection.on("ReceiveNotification", async function (notification) {
+        await setNotificationSeemed(notification);
+        var notificationHtml = createNotificationHtml(notification);
+        var newHtml = notificationHtml + allContent;
+        contaier.innerHTML = newHtml;
+    });
 
     showNotifications();
 </script>

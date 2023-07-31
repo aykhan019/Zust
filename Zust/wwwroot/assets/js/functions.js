@@ -49,6 +49,11 @@ function getDateTimeDifference(dateTime) {
     // Calculate the time difference in milliseconds
     const difference = Math.abs(currentTime.getTime() - requestTime.getTime());
 
+    // If the time difference is less than 1 second, return "Right now"
+    if (difference < 1000) {
+        return "Right now";
+    }
+
     // Convert milliseconds to seconds, minutes, hours, days, months, and years
     const seconds = Math.floor(difference / 1000);
     const minutes = Math.floor(seconds / 60);
@@ -191,8 +196,8 @@ function sendFriendRequest(receiverId) {
         $.ajax({
             url: '/api/FriendRequest/AddFriendRequest?receiverId=' + receiverId,
             method: 'POST',
-            success: async function () {
-                resolve(true);
+            success: async function (friendRequestNotificiationVm) {
+                resolve(friendRequestNotificiationVm);
             },
             error: function (error) {
                 alert("Error occurred: " + error.responseText);

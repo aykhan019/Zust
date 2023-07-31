@@ -89,6 +89,9 @@
 <script src="~/assets/js/jquery.min.js"></script>
 <link rel="stylesheet" href="~/assets//css/main.css" />
 <script src="~/assets/js/functions.js"></script>
+<script src="~/assets/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/assets/js/userHub.js"></script>
+
 <script>
     localStorage.setItem('activeMenuItem', '#5');
 
@@ -165,8 +168,14 @@
         $.ajax({
             url: `/api/FriendRequest/AcceptRequest?requestId=` + friendRequestId,
             method: 'POST',
-            success: function (data) {
+            success: async function (notification) {
                 showReceivedFriendRequests();
+                var friendRequestViewModel = {
+                    id: notification.fromUserId,
+                    hasFriendRequestPending: false,
+                    isFriend: true
+                };
+                await connection.invoke("SendNotification", notification, friendRequestViewModel);
             },
             error: function (error) {
                 alert("Error occurred: " + error.responseText);
@@ -179,14 +188,27 @@
         $.ajax({
             url: `/api/FriendRequest/DeclineRequest?requestId=` + friendRequestId,
             method: 'POST',
-            success: function (data) {
+            success: async function (notification) {
                 showReceivedFriendRequests();
+                console.log(notification);
+                var friendRequestViewModel = {
+                    id: notification.fromUserId,
+                    hasFriendRequestPending: false,
+                    isFriend: false
+                };
+                console.log(friendRequestViewModel);
+                await connection.invoke("SendNotification", notification, friendRequestViewModel);
             },
             error: function (error) {
                 alert("Error occurred: " + error.responseText);
             }
         });
     }
+
+    connection.on("ReceiveFriendRequest", function(friendRequest){
+        var html = getFriendRequestHtml(friendRequest);
+        requestsBody.innerHTML = html + requestsBody.innerHTML;
+    });
 
     startSpinner();
     showReceivedFriendRequests();

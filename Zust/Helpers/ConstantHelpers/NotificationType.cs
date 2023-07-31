@@ -21,5 +21,15 @@
         {
             return $"{username} liked your post!";
         }
+
+        public static string GetCommentedOnYourPostMessage(string username)
+        {
+            return $"{username} commented on your post!";
+        }
+
+        public static string GetSentYouMessageMessage(string username)
+        {
+            return $"{username} sent you a message!";
+        }
     }
 }

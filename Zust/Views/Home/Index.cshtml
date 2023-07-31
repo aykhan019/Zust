@@ -351,6 +351,9 @@
 <script src="~/assets/js/owl.carousel.min.js"></script>
 <script src="~/assets/js/wow.min.js"></script>
 <script src="~/assets/js/main.js"></script>
+<script src="~/assets/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/assets/js/userHub.js"></script>
+
 <script>
     function advertisementHoverHandle(element, newSource) {
         element.dataset.originalWidth = element.offsetWidth;
@@ -666,6 +669,9 @@
             item.innerHTML = spinnerHtml;
             var commentCount = await makeAjaxRequest(`/api/Post/GetCountOfCommentsOfPost/${postId}`, "GET")
             item.innerHTML = commentCount;
+
+            const notification = response.notification;
+            await connection.invoke("SendCommentNotification", notification);
         } catch (error) {
             showToast("Error sharing comment!", "red");
             commentTextContainer.value = '';

@@ -13,6 +13,7 @@
         min-height: 550px !important;
         max-height: 550px !important;
         overflow-y: scroll;
+        padding: 10px;
     }
 
     .all-messages-body {
@@ -26,6 +27,28 @@
         }
     }
 
+    .chat-content::-webkit-scrollbar {
+        width: 8px; /* Width of the scrollbar */
+    }
+
+    .chat-content::-webkit-scrollbar-thumb {
+        background-color: #888; /* Color of the scrollbar thumb (the draggable part) */
+        border-radius: 4px; /* Border radius of the scrollbar thumb */
+    }
+
+    .chat-content::-webkit-scrollbar-thumb:hover {
+            background-color: #555; /* Color of the scrollbar thumb when hovered */
+        }
+
+    /* Hide scrollbar for Firefox */
+    .chat-content {
+        scrollbar-width: thin;
+        scrollbar-color: #888 #f5f5f5;
+    }
+
+    .chat-content::-webkit-scrollbar-track {
+            background: #f5f5f5; /* Color of the scrollbar track */
+        }
 </style>
 
 <div class="all-messages-body">
@@ -99,7 +122,6 @@
 <script src="~/assets/js/functions.js"></script>
 <script src="~/assets/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/assets/js/userHub.js"></script>
-<script src="~/assets/js/view/chat.js"></script>
 
 <script>
     var messagesContainer = document.getElementById("messages");
@@ -157,7 +179,7 @@
         return content;
     }
 
-
+    var firstMessageSent = false;
 
     function sendMessage(e) {
         e.preventDefault();
@@ -176,17 +198,27 @@
             chatId: '@Model.Chat.Id.ToString()'
         };
 
+        var sendMessageViewModel = {
+            message: message,
+            firstMessageSent: firstMessageSent
+        }
+
         $.ajax({
             url: "/api/Chat/AddMessage",
             type: "POST",
-            data: JSON.stringify(message),
+            data: JSON.stringify(sendMessageViewModel),
             contentType: "application/json",
-            success: async function (response) {
-                var messageResponse = response;
+            success: async function (messageNotificationVM) {
+                var messageResponse = messageNotificationVM.message;
                 messagesContainer.innerHTML += createMyMessageHtml(messageResponse);
                 await connection.invoke("SendMessageToUser", messageResponse);
                 inputElement.value = '';
                 scrollToBottom();
+                firstMessageSent = true;
+
+                if (messageNotificationVM.notification != null){
+                    await connection.invoke("SendCommentNotification", messageNotificationVM.notification)
+                }
             },
             error: function (error) {
                 inputElement.value = '';
