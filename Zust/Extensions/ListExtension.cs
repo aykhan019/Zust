@@ -13,7 +13,7 @@
         public static void Shuffle<T>(this List<T> list)
         {
             // Create a random number generator
-            Random random = new Random();
+            Random random = new();
 
             // Perform Fisher-Yates shuffle
             for (int i = list.Count - 1; i > 0; i--)
@@ -21,11 +21,7 @@
                 int j = random.Next(i + 1);
 
                 // Swap list elements at positions i and j
-                T temp = list[i];
-
-                list[i] = list[j];
-
-                list[j] = temp;
+                (list[j], list[i]) = (list[i], list[j]);
             }
         }
 
@@ -38,11 +34,11 @@
         /// <returns>A new List containing random elements from the source List.</returns>
         public static List<T> GetRandomElements<T>(this List<T> source, int count)
         {
-            Random random = new Random();
+            Random random = new();
 
-            List<T> result = new List<T>();
+            List<T> result = new();
 
-            HashSet<int> selectedIndices = new HashSet<int>();
+            HashSet<int> selectedIndices = new();
 
             while (result.Count < count)
             {

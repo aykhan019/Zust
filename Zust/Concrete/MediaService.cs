@@ -20,12 +20,12 @@ namespace Zust.Web.Concrete
         /// <summary>
         /// Cloudinary settings instance.
         /// </summary>
-        private CloudinarySettings? _cloudinarySettings;
+        private readonly CloudinarySettings? _cloudinarySettings;
 
         /// <summary>
         /// Cloudinary instance for interacting with the Cloudinary service.
         /// </summary>
-        private Cloudinary _cloudinary;
+        private readonly Cloudinary _cloudinary;
 
         /// <summary>
         /// Initializes a new instance of the MediaService class with the provided configuration.
@@ -36,7 +36,7 @@ namespace Zust.Web.Concrete
             _configuration = configuration;
             _cloudinarySettings = _configuration.GetSection(Constants.CloudinarySettings)
                                                 .Get<CloudinarySettings>();
-            Account account = new Account(
+            Account account = new(
 
                 _cloudinarySettings.CloudName,
 

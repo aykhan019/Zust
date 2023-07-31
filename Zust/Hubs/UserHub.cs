@@ -14,20 +14,6 @@ namespace Zust.Web.Hubs
         // There are repetitions . . .
 
         /// <summary>
-        /// The service used for user-related operations.
-        /// </summary>
-        private readonly IUserService _userService;
-
-        /// <summary>
-        /// Initializes a new instance of the UserHub class with the required dependencies.
-        /// </summary>
-        /// <param name="userService">The service used for user-related operations.</param>
-        public UserHub(IUserService userService)
-        {
-            _userService = userService;
-        }
-
-        /// <summary>
         /// Sends a message to a specific user.
         /// </summary>
         /// <param name="message">The message to be sent.</param>

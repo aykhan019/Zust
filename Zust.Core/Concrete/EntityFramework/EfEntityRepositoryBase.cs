@@ -21,12 +21,13 @@ namespace Zust.Core.Concrete.EntityFramework
         /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task AddAsync(TEntity entity)
         {
-            using (var context = new TContext())
-            {
-                var addedEntity = context.Entry(entity);
-                addedEntity.State = EntityState.Added;
-                await context.SaveChangesAsync();
-            }
+            using var context = new TContext();
+
+            var addedEntity = context.Entry(entity);
+
+            addedEntity.State = EntityState.Added;
+
+            await context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -36,12 +37,13 @@ namespace Zust.Core.Concrete.EntityFramework
         /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task DeleteAsync(TEntity entity)
         {
-            using (var context = new TContext())
-            {
-                var deletedEntity = context.Entry(entity);
-                deletedEntity.State = EntityState.Deleted;
-                await context.SaveChangesAsync();
-            }
+            using var context = new TContext();
+
+            var deletedEntity = context.Entry(entity);
+
+            deletedEntity.State = EntityState.Deleted;
+
+            await context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -51,12 +53,13 @@ namespace Zust.Core.Concrete.EntityFramework
         /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task UpdateAsync(TEntity entity)
         {
-            using (var context = new TContext())
-            {
-                var updatedEntity = context.Entry(entity);
-                updatedEntity.State = EntityState.Modified;
-                await context.SaveChangesAsync();
-            }   
+            using var context = new TContext();
+
+            var updatedEntity = context.Entry(entity);
+
+            updatedEntity.State = EntityState.Modified;
+
+            await context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -66,10 +69,9 @@ namespace Zust.Core.Concrete.EntityFramework
         /// <returns>A task that represents the asynchronous operation with the retrieved entity, or null if not found.</returns>
         public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> filter)
         {
-            using (var context = new TContext())
-            {
-                return await context.Set<TEntity>().FirstOrDefaultAsync(filter);
-            }
+            using var context = new TContext();
+
+            return await context.Set<TEntity>().FirstOrDefaultAsync(filter);
         }
 
         /// <summary>
@@ -79,11 +81,11 @@ namespace Zust.Core.Concrete.EntityFramework
         /// <returns>A task that represents the asynchronous operation with the collection of retrieved entities.</returns>
         public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null)
         {
-            using (var context = new TContext())
-            {
-                var items = context.Set<TEntity>();
-                return filter == null ? await items.ToListAsync() : await items.Where(filter).ToListAsync();
-            }
+            using var context = new TContext();
+
+            var items = context.Set<TEntity>();
+
+            return filter == null ? await items.ToListAsync() : await items.Where(filter).ToListAsync();
         }
     }
 }

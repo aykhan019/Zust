@@ -39,11 +39,6 @@ namespace Zust.Web.Controllers.ApiControllers
         private readonly IMediaService _mediaService;
 
         /// <summary>
-        /// The notification service used for notification-related operations.
-        /// </summary>
-        private readonly INotificationService _notificationService;
-
-        /// <summary>
         /// The mapper used for object mapping.
         /// </summary>
         private readonly IMapper _mapper;
@@ -55,13 +50,11 @@ namespace Zust.Web.Controllers.ApiControllers
         /// <param name="friendshipService">The friendship service used for friendship-related operations.</param>
         /// <param name="friendRequestService">The friend request service used for friend request-related operations.</param>
         /// <param name="mediaService">The media service used for media-related operations.</param>
-        /// <param name="notificationService">The notification service used for notification-related operations.</param>
         /// <param name="mapper">The mapper used for object mapping.</param>
         public UserController(IUserService userService,
                               IFriendshipService friendshipService,
                               IFriendRequestService friendRequestService,
                               IMediaService mediaService,
-                              INotificationService notificationService,
                               IMapper mapper)
         {
             _userService = userService;
@@ -71,8 +64,6 @@ namespace Zust.Web.Controllers.ApiControllers
             _friendRequestService = friendRequestService;
 
             _mediaService = mediaService;
-
-            _notificationService = notificationService;
 
             _mapper = mapper;
         }
