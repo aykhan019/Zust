@@ -18,18 +18,45 @@ namespace Zust.Web.Controllers.ApiControllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        /// <summary>
+        /// The user service used for user-related operations.
+        /// </summary>
         private readonly IUserService _userService;
 
+        /// <summary>
+        /// The friendship service used for friendship-related operations.
+        /// </summary>
         private readonly IFriendshipService _friendshipService;
 
+        /// <summary>
+        /// The friend request service used for friend request-related operations.
+        /// </summary>
         private readonly IFriendRequestService _friendRequestService;
 
+        /// <summary>
+        /// The media service used for media-related operations.
+        /// </summary>
         private readonly IMediaService _mediaService;
 
+        /// <summary>
+        /// The notification service used for notification-related operations.
+        /// </summary>
         private readonly INotificationService _notificationService;
 
+        /// <summary>
+        /// The mapper used for object mapping.
+        /// </summary>
         private readonly IMapper _mapper;
-      
+
+        /// <summary>
+        /// Initializes a new instance of the UserController class.
+        /// </summary>
+        /// <param name="userService">The user service used for user-related operations.</param>
+        /// <param name="friendshipService">The friendship service used for friendship-related operations.</param>
+        /// <param name="friendRequestService">The friend request service used for friend request-related operations.</param>
+        /// <param name="mediaService">The media service used for media-related operations.</param>
+        /// <param name="notificationService">The notification service used for notification-related operations.</param>
+        /// <param name="mapper">The mapper used for object mapping.</param>
         public UserController(IUserService userService,
                               IFriendshipService friendshipService,
                               IFriendRequestService friendRequestService,
