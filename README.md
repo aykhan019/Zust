@@ -1,3 +1,5 @@
+Sure, here's the updated README for Zust Social Media App:
+
 # Zust Social Media App - Getting Started Guide
 
 Welcome to Zust Social Media App! This guide will help you get started with setting up and running the application using Visual Studio 2022. The app utilizes Entity Framework Code First approach and requires a SQL database with the necessary data. Before you proceed, ensure that you have the following prerequisites installed:
@@ -19,19 +21,34 @@ git clone https://github.com/Drongo-J/Zust
 
 ## Set Up the Database
 
-Next, we'll set up the SQL database for Zust Social Media App. The repository already includes SQL insert statements for database seeding. Follow these steps to create the database and populate it with initial data:
+Next, we'll set up the SQL database for Zust Social Media App using Entity Framework Code First. Follow these steps to create the database and apply the initial migrations:
 
-1. Open SQL Server Management Studio or any SQL Server client you prefer.
-2. Connect to your local SQL Server or SQL Server LocalDB instance.
-3. Execute the SQL script located in the `Database` directory of the cloned repository. You can do this by opening the `ZustSocialMediaApp.sql` file and running it in your SQL client.
+1. Open Visual Studio 2022.
+2. Open the solution file (`Zust.sln`).
+3. In the Solution Explorer, locate the `Zust.Web` project and make sure it's set as the startup project (right-click on the project and select "Set as Startup Project").
+4. Open the Package Manager Console (PMC) from the Visual Studio menu: Tools > NuGet Package Manager > Package Manager Console.
+5. In the PMC, make sure that the "Default Project" selected is `Zust.Web`.
+6. Run the following command to create a new migration:
 
-The SQL script will create the database and tables required for the application, as well as insert some initial data.
+```bash
+Add-Migration InitialCreate
+```
+
+This command will generate a migration file based on the changes in the model classes.
+
+7. After creating the migration, run the following command to apply the initial migrations and create the database:
+
+```bash
+Update-Database
+```
+
+The `Update-Database` command will create the database and set up the required tables based on the defined model classes.
+
+Please note that `Add-Migration` needs to be run whenever you make changes to the model classes or database schema in the future. It generates new migrations to capture those changes, and you need to run `Update-Database` again to apply those changes to the database.
 
 ## Set Connection String
 
-After setting up the database, you need to configure the connection string in the application. Follow these steps to do so:
-
-Update appsettings.json
+The connection string is read from the `appsettings.json` file. Follow these steps to update the connection string:
 
 1. Open the solution file (`Zust.sln`) using Visual Studio 2022.
 2. Locate the `appsettings.json` file under the `Zust.Web` project.
