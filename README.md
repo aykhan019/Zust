@@ -1,5 +1,3 @@
-Sure, here's the updated README for Zust Social Media App:
-
 # Zust Social Media App - Getting Started Guide
 
 Welcome to Zust Social Media App! This guide will help you get started with setting up and running the application using Visual Studio 2022. The app utilizes Entity Framework Code First approach and requires a SQL database with the necessary data. Before you proceed, ensure that you have the following prerequisites installed:
