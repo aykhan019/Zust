@@ -31,7 +31,7 @@ The SQL script will create the database and tables required for the application,
 
 After setting up the database, you need to configure the connection string in the application. Follow these steps to do so:
 
-### Step 1: Update appsettings.json
+Update appsettings.json
 
 1. Open the solution file (`Zust.sln`) using Visual Studio 2022.
 2. Locate the `appsettings.json` file under the `Zust.Web` project.
@@ -44,19 +44,6 @@ Example connection string:
 "ConnectionStrings": {
   "Default": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=YourDatabaseName;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"
 },
-```
-
-Please ensure that your connection string points to the correct SQL Server instance and database name.
-
-### Step 2: Update Constants.cs
-
-1. In the Solution Explorer, locate the `Constants.cs` file under the `Zust.Web.Helpers.ConstantHelpers` namespace.
-2. In the `Constants.cs` file, find the `ConnectionString` constant and replace its value with your SQL Server connection string.
-
-Example connection string in Constants.cs:
-
-```csharp
-public const string ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=YourDatabaseName;Integrated Security=True;";
 ```
 
 Please ensure that your connection string points to the correct SQL Server instance and database name.
