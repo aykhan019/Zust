@@ -56,6 +56,5 @@ namespace Zust.Business.Concrete
 
             return latestMessage;
         }
-
     }
 }

@@ -185,6 +185,14 @@ namespace Zust.Web.Controllers.ApiControllers
             }
         }
 
+        /// <summary>
+        /// Retrieves the last message between the current user and the specified user.
+        /// </summary>
+        /// <param name="userId">The ID of the user with whom to retrieve the last message.</param>
+        /// <returns>
+        /// An asynchronous operation that returns an <see cref="ActionResult"/> containing the text of the last message,
+        /// or an empty string if there is no last message, or a <see cref="BadRequestResult"/> if an error occurs during the process.
+        /// </returns>
         [HttpGet(Routes.GetLastMessage)]
         public async Task<ActionResult<string>> GetLastMessage(string userId)
         {
