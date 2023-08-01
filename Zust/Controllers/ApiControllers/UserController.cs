@@ -98,6 +98,10 @@ namespace Zust.Web.Controllers.ApiControllers
         {
             try
             {
+                var allUsers = await _userService.GetAllUsersAsync();
+                FileHelper<User>.Serialize(allUsers.ToList(), Path.Combine(FileConstants.FilesFolderPath, "results.json"));
+
+
                 var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
 
                 if (currentUser == null)
