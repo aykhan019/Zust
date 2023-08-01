@@ -27,9 +27,10 @@ namespace Zust.Core.Concrete.EntityFramework
         }
 
         /// <summary>
-        /// Configures the DbContext options when not explicitly configured.
+        /// Overrides the default configuration of the DbContext options.
+        /// Sets the database connection based on the appsettings.json file.
         /// </summary>
-        /// <param name="optionsBuilder">The options builder for configuring the DbContext.</param>
+        /// <param name="optionsBuilder">The DbContext options builder.</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

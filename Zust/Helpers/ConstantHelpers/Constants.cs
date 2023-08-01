@@ -21,6 +21,9 @@
         /// </summary>
         public const string ConnectionStringName = "Default";
 
+        /// <summary>
+        /// Static constructor for the Constants class that initializes the ConnectionString constant.
+        /// </summary>
         static Constants()
         {
             var configuration = new ConfigurationBuilder()
