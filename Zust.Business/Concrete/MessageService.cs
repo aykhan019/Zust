@@ -42,5 +42,20 @@ namespace Zust.Business.Concrete
         {
             return await _messageDal.GetAllAsync(m => m.ChatId == chatId);
         }
+
+        /// <summary>
+        /// Retrieves the last message from the specified chat asynchronously.
+        /// </summary>
+        /// <param name="chat">The chat from which to retrieve the last message.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the last message in the chat.</returns>
+        public async Task<Message> GetLastMessageAsync(Chat chat)
+        {
+            var messages = await GetChatMessagesByIdAsync(chat.Id);
+
+            Message latestMessage = messages.OrderByDescending(obj => obj.DateSent).FirstOrDefault();
+
+            return latestMessage;
+        }
+
     }
 }

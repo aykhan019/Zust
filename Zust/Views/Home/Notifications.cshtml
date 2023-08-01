@@ -37,10 +37,6 @@
         }
     }
 
-    /*    .icon a {
-            margin-right: 10px;
-        }*/
-
     .custom-spinner-color {
         color: var(--main-color);
     }
@@ -114,8 +110,8 @@
 
         var content = `
                     <div class="item d-flex justify-content-between align-items-center">
-                          <div class="figure">
-                                    <a href="/home/users?id=${notification.fromUserId}"><img src="${notification.fromUser.imageUrl}" class="rounded-circle" style="height: 70px !important; width: 70px !important; object-fit:cover;" alt="image"></a>
+                        <div class="figure">
+                              <a href="/home/users?id=${notification.fromUserId}"><img src="${notification.fromUser.imageUrl}" class="rounded-circle" style="height: 70px !important; width: 70px !important; object-fit:cover;" alt="image"></a>
                         </div>
                         <div class="text">
                             <h4><a href="/home/users?id=${notification.fromUserId}">${notification.fromUser.userName}</a></h4>

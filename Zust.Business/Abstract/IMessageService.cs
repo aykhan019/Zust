@@ -17,5 +17,12 @@ namespace Zust.Business.Abstract
         /// <param name="message">The message object to be added.</param>
         /// <returns>Task representing the asynchronous operation.</returns>
         Task AddMessageAsync(Message message);
+
+        /// <summary>
+        /// Retrieves the last message from the specified chat asynchronously.
+        /// </summary>
+        /// <param name="chat">The chat from which to retrieve the last message.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the last message in the chat.</returns>
+        Task<Message> GetLastMessageAsync(Chat chat);
     }
 }

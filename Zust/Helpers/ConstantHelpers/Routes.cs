@@ -370,5 +370,10 @@
         /// </summary>
         public const string Post = "post";
 
+        /// <summary>
+        /// Represents a constant string with the value "GetLastMessage".
+        /// This constant is used to identify the action of retrieving the last message in the chat.
+        /// </summary>
+        public const string GetLastMessage = "GetLastMessage";
     }
 }

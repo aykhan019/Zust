@@ -133,9 +133,9 @@ namespace Zust.Web.Controllers.ViewControllers
         /// a chat exists, otherwise returns a 404 Not Found page.</returns>
         public async Task<IActionResult> Chats(string userId = Constants.StringEmpty)
         {
-            if (string.IsNullOrEmpty(userId))
+            if (userId == String.Empty)
             {
-                return NotFound();
+                return View();
             }
 
             var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
@@ -311,15 +311,6 @@ namespace Zust.Web.Controllers.ViewControllers
         /// </summary>
         /// <returns>The Marketplace view.</returns>
         public IActionResult Marketplace()
-        {
-            return View();
-        }
-
-        /// <summary>
-        /// Displays the Messages view.
-        /// </summary>
-        /// <returns>The Messages view.</returns>
-        public IActionResult Messages()
         {
             return View();
         }

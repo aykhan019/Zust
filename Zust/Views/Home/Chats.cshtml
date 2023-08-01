@@ -1,0 +1,99 @@
+@using Microsoft.AspNetCore.Identity;
+@using Zust.Entities.Models;
+@using Zust.Web.Helpers.ConstantHelpers;
+@{
+    var userManager = Context.RequestServices.GetService<UserManager<User>>();
+    var user = await userManager.GetUserAsync(Context.User);
+    ViewData["Title"] = "Zust - Chats";
+}
+
+<style>
+    .item {
+        width: 600px; /* Increase the width to your desired value */
+        padding-bottom: 10px;
+        cursor: pointer;
+    }
+
+    @@media only screen and (max-width: 700px) {
+        .item {
+            width: 100%;
+        }
+    }
+
+    #container {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+</style>
+
+
+<div class="all-notifications-body" id="container">
+
+    <div class="all-notifications-header d-flex justify-content-between align-items-center">
+        <h3 class="text-center w-100">Chats</h3>
+    </div>
+
+    <div id="my-chats">
+    </div>
+</div>
+
+
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/functions.js"></script>
+<!-- Add an empty div with the ID "my-chats" where the user chats will be displayed -->
+
+<script>
+    localStorage.setItem('activeMenuItem', '#6');
+
+    var currentUserId = '@user.Id.ToString()';
+
+    var createUserChatHtml = async function (user) {
+        var lastMessage = await makeAjaxRequest(`/api/Chat/GetLastMessage?userId=${user.id}`);
+        if (lastMessage === "") return "";
+        var content = `
+                <div class="item d-flex justify-content-between align-items-center" onclick=redirectToChat('${user.id}')>
+                    <div class="figure">
+                        <a href="/home/chats?userId=${user.id}"><img src="${user.imageUrl}" class="rounded-circle" style="height: 70px !important; width: 70px !important; object-fit:cover;" alt="image"></a>
+                    </div>
+                    <div class="text">
+                        <h4><a href="/home/chats?userId=${user.id}">${user.userName}</a></h4>
+                        <span>${lastMessage}</span>
+                    </div>
+                </div>
+                    <hr \>
+            `;
+        return content;
+    };
+
+    function redirectToChat(userId){
+        window.location.href = `/home/chats?userId=${userId}`;
+    }
+
+    async function getUserChats() {
+        try {
+            // Fetch user chats using AJAX request
+            var users = await makeAjaxRequest(`/api/Chat/GetChats?userId=${currentUserId}`, "GET");
+
+
+            var chats = document.getElementById("my-chats");
+
+            // Clear the existing content before adding new chat items
+            chats.innerHTML = '';
+
+            // Iterate through users and add chat items to the DOM
+            for (var i = 0; i < users.length; i++) {
+                var user = users[i];
+                var html = await createUserChatHtml(user);
+                chats.innerHTML += html;
+            }
+        } catch (error) {
+            console.error("Error fetching user chats:", error);
+        }
+    }
+
+    getUserChats();
+
+</script>

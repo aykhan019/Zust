@@ -105,8 +105,8 @@ namespace Zust.Web.Controllers.ApiControllers
 
                 var messageNotificationVM = new MessageNotificationViewModel()
                 {
-                     Message = message,
-                      Notification = null
+                    Message = message,
+                    Notification = null
                 };
 
                 if (!model.FirstMessageSent)
@@ -178,6 +178,32 @@ namespace Zust.Web.Controllers.ApiControllers
                 var users = await Task.WhenAll(usersTasks);
 
                 return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(Routes.GetLastMessage)]
+        public async Task<ActionResult<string>> GetLastMessage(string userId)
+        {
+            try
+            {
+                var currentUser = await UserHelper.GetCurrentUserAsync(HttpContext);
+
+                var chat = await _chatService.GetChatAsync(currentUser.Id, userId);
+
+                var message = await _messageService.GetLastMessageAsync(chat);
+
+                if (message == null)
+                {
+                    return Ok(String.Empty);
+                }
+                else
+                {
+                    return Ok(message.Text);
+                }
             }
             catch (Exception ex)
             {
