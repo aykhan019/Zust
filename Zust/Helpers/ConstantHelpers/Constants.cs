@@ -6,14 +6,29 @@
     public static class Constants
     {
         /// <summary>
-        /// Represents the name of the connection string in the configuration.
+        /// Represents the name of the app settings file ("appsettings.json").
+        /// This constant is used to retrieve application configuration settings.
         /// </summary>
-        public const string ConnectionStringName = "Default";
+        public const string AppSettingsFile = "appsettings.json";
 
         /// <summary>
         /// Represents the connection string used to connect to the database.
         /// </summary>
-        public const string ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ZustDb;Integrated Security=True;";
+        public static string ConnectionString = "";
+
+        /// <summary>
+        /// Represents the name of the connection string in the configuration.
+        /// </summary>
+        public const string ConnectionStringName = "Default";
+
+        static Constants()
+        {
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile(AppSettingsFile, optional: true, reloadOnChange: true)
+                .Build();
+
+            ConnectionString = configuration.GetConnectionString("Default");
+        }
 
         /// <summary>
         /// Represents the name of the assembly containing database migrations.
@@ -75,7 +90,7 @@
         /// </summary>
         public const int VideoCountInNewsFeed = 6;
 
-        /// <summary>
+        /// <summary>   
         /// Represents the number of advertisement items to show in the news feed.
         /// </summary>
         public const int AdvertisementCountInNewsFeed = 2;

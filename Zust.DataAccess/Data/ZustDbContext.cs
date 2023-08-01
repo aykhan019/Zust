@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Zust.DataAccess.Helpers;
 using Zust.Entities.Models;
 
 namespace Zust.Core.Concrete.EntityFramework
@@ -32,7 +34,16 @@ namespace Zust.Core.Concrete.EntityFramework
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ZustDb;Integrated Security=True;");
+                var configBuilder = new ConfigurationBuilder()
+                        .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                        .AddJsonFile(Constants.AppSettingsFile, optional: true, reloadOnChange: true);
+
+                IConfiguration configuration = configBuilder.Build();
+
+                // Read the connection string
+                string connectionString = configuration.GetConnectionString(Constants.Default);
+
+                optionsBuilder.UseSqlServer(connectionString);
             }
 
             base.OnConfiguring(optionsBuilder);
