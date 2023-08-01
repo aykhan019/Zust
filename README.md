@@ -49,15 +49,14 @@ Please note that `Add-Migration` needs to be run whenever you make changes to th
 Now that the database is set up with the required tables, you need to insert the initial data into the database. Zust Social Media App provides SQL scripts to insert the initial data. Follow these steps to insert the data:
 
 1. In the Solution Explorer, navigate to the `Database` folder.
-2. You will find the following SQL script files:
+2. You will find the following SQL script files. Execute the SQL scripts in the following order:
+   - `UserSqlStatements.sql`
+   - `PostSqlStatements.sql`
    - `CommentSqlStatements.sql`
+   - `LikeSqlStatements.sql`
    - `FriendRequestSqlStatements.sql`
    - `FriendshipSqlStatements.sql`
-   - `LikeSqlStatements.sql`
    - `NotificationSqlStatements.sql`
-   - `PostSqlStatements.sql`
-   - `UserSqlStatements.sql`
-3. Open each `.sql` file and execute the SQL statements in your SQL client (e.g., SQL Server Management Studio). Running these scripts will insert the initial data into the respective tables.
 
 Please ensure that you execute the scripts in the correct order, as some tables may have dependencies on others.
 
