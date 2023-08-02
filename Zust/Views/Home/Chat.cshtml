@@ -49,6 +49,24 @@
     .chat-content::-webkit-scrollbar-track {
             background: #f5f5f5; /* Color of the scrollbar track */
         }
+
+     #profile-image{
+        max-width: 120px !important;
+        max-height: 120px !important;
+        min-height: 120px !important;
+        min-width: 120px !important;
+        width: 120px !important;
+        height: 120px !important;
+    }
+
+    .myimg{
+        width: 50px;
+        height: 50px;
+        min-height: 50px;
+        max-height: 50px;
+        max-width: 50px;
+        min-width: 50px;
+    }
 </style>
 
 <div class="all-messages-body">
@@ -57,7 +75,7 @@
     </div>
 
     <div class="messages-profile-box">
-        <a href="/home/users?id=@Model.UserToChat.Id"><img src="@Model.UserToChat.ImageUrl" style="max-width: 120px !important; max-height: 120px !important;" class="rounded-circle" alt="image"></a>
+        <a href="/home/users?id=@Model.UserToChat.Id"><img src="@Model.UserToChat.ImageUrl" id="profile-image" class="rounded-circle" alt="image"></a>
         <h3><a href="/home/users?id=@Model.UserToChat.Id">@Model.UserToChat.UserName</a></h3>
     </div>
 
@@ -75,7 +93,7 @@
                         <div class="chat chat-left">
                             <div class="chat-avatar">
                                 <a href="/home/my-profile" class="d-inline-block">
-                                    <img src="@message.SenderUser.ImageUrl" width="50" height="50" class="rounded-circle" alt="image">
+                                    <img src="@message.SenderUser.ImageUrl" width="50" height="50" class="rounded-circle myimg" alt="image">
                                 </a>
                             </div>
 
@@ -92,7 +110,7 @@
                         <div class="chat">
                             <div class="chat-avatar">
                                 <a href="/home/users?id=@message.SenderUserId" class="d-inline-block">
-                                    <img src="@message.SenderUser.ImageUrl" width="50" height="50" class="rounded-circle" alt="image">
+                                    <img src="@message.SenderUser.ImageUrl" width="50" height="50" class="rounded-circle myimg" alt="image">
                                 </a>
                             </div>
 
@@ -141,7 +159,7 @@
                  <div class="chat chat-left">
                     <div class="chat-avatar">
                         <a href="/home/my-profile" class="d-inline-block">
-                            <img src="${message.senderUser.imageUrl}" width="50" height="50" class="rounded-circle" alt="image">
+                            <img src="${message.senderUser.imageUrl}" width="50" height="50" class="rounded-circle myimg" alt="image">
                         </a>
                     </div>
 
@@ -165,7 +183,7 @@
                 <div class="chat">
                     <div class="chat-avatar">
                             <a href="/home/users?id=${message.senderUserId}" class="d-inline-block">
-                            <img src="${message.senderUser.imageUrl}" width="50" height="50" class="rounded-circle" alt="image">
+                                <img src="${message.senderUser.imageUrl}" width="50" height="50" class="rounded-circle myimg" alt="image">
                         </a>
                     </div>
                     <div class="chat-body">

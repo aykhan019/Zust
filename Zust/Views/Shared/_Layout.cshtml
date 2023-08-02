@@ -686,10 +686,15 @@
 
     async function getChats() {
         var users = await makeAjaxRequest(`/api/Chat/GetChats?userId=${currentUserId}`, "GET");
-        users.forEach(user => {
-            var html = createChatHtml(user);
-            chats.innerHTML += html;
-        });
+        if (users != null){
+            users.forEach(user => {
+                var html = createChatHtml(user);
+                chats.innerHTML += html;
+            });
+        }
+        else{
+            chats.innerHTML = 'There is not chat';
+        }
     }
 
     async function setChats() {
