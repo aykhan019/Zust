@@ -17,6 +17,10 @@ To get started, first, you need to clone the GitHub repository to your local mac
 git clone https://github.com/Drongo-J/Zust
 ```
 
+## Set Connection String
+
+The connection string is read from the `appsettings.json` file, and it is already provided with a default value. There is no need to change the connection string unless you want to use a specific SQL Server instance or database name. If you wish to use the default settings, you can proceed to the next step.
+
 ## Set Up the Database
 
 Next, we'll set up the SQL database for Zust Social Media App using Entity Framework Code First. Follow these steps to create the database and apply the initial migrations:
@@ -60,28 +64,9 @@ Now that the database is set up with the required tables, you need to insert the
 
 Please ensure that you execute the scripts in the correct order, as some tables may have dependencies on others.
 
-## Set Connection String
-
-The connection string is read from the `appsettings.json` file. Follow these steps to update the connection string:
-
-1. Open the solution file (`Zust.sln`) using Visual Studio 2022.
-2. Locate the `appsettings.json` file under the `Zust.Web` project.
-3. In the `appsettings.json` file, find the `"ConnectionStrings"` section.
-4. Replace the value of the `Default` key with your SQL Server connection string.
-
-Example connection string:
-
-```json
-"ConnectionStrings": {
-  "Default": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=YourDatabaseName;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"
-},
-```
-
-Please ensure that your connection string points to the correct SQL Server instance and database name.
-
 ## Run the Application
 
-Now that the database is set up, and the connection string is configured, you can run the application using Visual Studio 2022. Follow these steps:
+Now that the database is set up with the initial data, and the connection string is configured, you can run the application using Visual Studio 2022. Follow these steps to run the application:
 
 1. Open the solution file (`Zust.sln`) in Visual Studio 2022.
 2. Set the `Zust.Web` project as the startup project (right-click on the project in the Solution Explorer and select "Set as Startup Project").
