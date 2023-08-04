@@ -5,14 +5,6 @@ Welcome to Zust Social Media App! This guide will help you get started with sett
 1. Visual Studio 2022 (or a compatible version).
 2. SQL Server (Express Edition or higher) or SQL Server LocalDB.
 
-## Project Showcase
-
-Check out this YouTube video showcasing Zust Social Media App:
-
- <a href="https://www.youtube.com/watch?v=vOdeSuh_zMY">
-      <img src="https://media.aykhan.net/thumbnails/step-it-academy/asp-net/task27.png" alt="Description" width="100%">
-  </a>
-
 ## Clone the Repository
 
 To get started, first, you need to clone the GitHub repository to your local machine. You can do this by following these steps:
@@ -90,3 +82,12 @@ Zust Social Media App is released under the [MIT License](LICENSE). Feel free to
 ---
 
 Congratulations! You now have Zust Social Media App set up and ready to use with Visual Studio 2022. If you have any questions or need further assistance, please refer to the documentation or reach out to the community for support. Happy coding! 🚀
+
+## Project Showcase
+
+Check out this YouTube video showcasing Zust Social Media App:
+
+<a href="https://www.youtube.com/watch?v=vOdeSuh_zMY">
+    <img src="https://media.aykhan.net/thumbnails/step-it-academy/asp-net/task27.png" alt="Description" width="100%">
+</a>
+
