@@ -10,7 +10,7 @@ Welcome to Zust Social Media App! This guide will help you get started with sett
 Check out this YouTube video showcasing Zust Social Media App:
 
  <a href="https://www.youtube.com/watch?v=vOdeSuh_zMY">
-      <img src="https://img.youtube.com/vi/vOdeSuh_zMY/0.jpg" alt="Description" width="100%">
+      <img src="https://media.aykhan.net/thumbnails/step-it-academy/asp-net/task27.png" alt="Description" width="100%">
   </a>
 
 ## Clone the Repository
