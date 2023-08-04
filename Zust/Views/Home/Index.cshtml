@@ -109,9 +109,17 @@
         }
     }
 
+    video,
+    .post-video,
     .image-post {
         background-color: #fcfcfc;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto; /* Ensure video width adjusts based on aspect ratio */
+        height: auto; /* Ensure video height adjusts based on aspect ratio */
     }
+
+
 
     .fit-image {
         max-width: 100%;
@@ -440,10 +448,16 @@
         var fileInput = $('#file-upload')[0];
         var file = fileInput.files[0];
 
+        console.log(file);
+        console.log(fileInput);
+
         // Create FormData object to send the data
         var formData = new FormData();
         formData.append('Description', description);
         formData.append('MediaFile', file);
+
+        console.log(formData.description);
+        console.log(formData.file);
 
         startSpinner();
         container.innerHTML = '';
