@@ -9,7 +9,7 @@ Welcome to Zust Social Media App! This guide will help you get started with sett
 
 Check out this YouTube video showcasing Zust Social Media App:
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/vOdeSuh_zMY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+[![Zust Social Media App Showcase](https://img.youtube.com/vi/vOdeSuh_zMY/0.jpg)](https://www.youtube.com/watch?v=vOdeSuh_zMY)
 
 ## Clone the Repository
 
