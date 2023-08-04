@@ -146,9 +146,12 @@ namespace Zust.Business.Concrete
         {
             var posts = await _postDal.GetAllAsync(p => p.UserId == userId);
 
-            foreach (var post in posts)
+            if (posts != null)
             {
-                await _postDal.DeleteAsync(post);
+                foreach (var post in posts)
+                {
+                    await _postDal.DeleteAsync(post);
+                }
             }
         }
 
@@ -161,13 +164,16 @@ namespace Zust.Business.Concrete
         {
             var posts = await _postDal.GetAllAsync(p => p.UserId == userId);
 
-            foreach (var post in posts)
+            if (posts != null)
             {
-                var comments = await _commentService.GetCommentsOfPostAsync(post.Id);
-
-                foreach (var comment in comments)
+                foreach (var post in posts)
                 {
-                    await _commentService.DeleteCommentAsync(comment);
+                    var comments = await _commentService.GetCommentsOfPostAsync(post.Id);
+
+                    foreach (var comment in comments)
+                    {
+                        await _commentService.DeleteCommentAsync(comment);
+                    }
                 }
             }
         }
@@ -181,13 +187,16 @@ namespace Zust.Business.Concrete
         {
             var posts = await _postDal.GetAllAsync(p => p.UserId == userId);
 
-            foreach (var post in posts)
+            if (posts != null)
             {
-                var likes = await _likeService.GetPostLikesAsync(post.Id);
-
-                foreach (var like in likes)
+                foreach (var post in posts)
                 {
-                    await _likeService.DeleteLikeAsync(like);
+                    var likes = await _likeService.GetPostLikesAsync(post.Id);
+
+                    foreach (var like in likes)
+                    {
+                        await _likeService.DeleteLikeAsync(like);
+                    }
                 }
             }
         }

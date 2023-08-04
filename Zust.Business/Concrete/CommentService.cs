@@ -53,9 +53,12 @@ namespace Zust.Business.Concrete
         {
             var comments = await _commentDal.GetAllAsync(c => c.UserId == userId);
 
-            foreach (var comment in comments)
+            if (comments != null)
             {
-                await _commentDal.DeleteAsync(comment);
+                foreach (var comment in comments)
+                {
+                    await _commentDal.DeleteAsync(comment);
+                }
             }
         }
 

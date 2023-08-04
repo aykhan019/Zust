@@ -42,9 +42,12 @@ namespace Zust.Business.Concrete
         {
             var notifications = await _notificationDal.GetAllAsync(n => n.FromUserId == userId || n.ToUserId == userId);
 
-            foreach (var notification in notifications)
+            if (notifications != null)
             {
-                await _notificationDal.DeleteAsync(notification);
+                foreach (var notification in notifications)
+                {
+                    await _notificationDal.DeleteAsync(notification);
+                }
             }
         }
 

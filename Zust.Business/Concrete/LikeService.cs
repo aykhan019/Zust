@@ -54,9 +54,12 @@ namespace Zust.Business.Concrete
         {
             var usersLikes = await _likeDal.GetAllAsync(l => l.UserId == userId);
 
-            foreach (var userLike in usersLikes)
+            if (usersLikes != null)
             {
-                await RemoveLikeAsync(userLike);
+                foreach (var userLike in usersLikes)
+                {
+                    await RemoveLikeAsync(userLike);
+                }
             }
         }
 

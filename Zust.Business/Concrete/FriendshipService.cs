@@ -128,9 +128,12 @@ namespace Zust.Business.Concrete
         {
             var friendships = await _friendshipDal.GetAllAsync(f => f.UserId == userId || f.FriendId == userId);
 
-            foreach (var friendship in friendships)
+            if (friendships != null)
             {
-                await _friendshipDal.DeleteAsync(friendship);
+                foreach (var friendship in friendships)
+                {
+                    await _friendshipDal.DeleteAsync(friendship);
+                }
             }
         }
     }
