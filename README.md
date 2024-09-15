@@ -14,7 +14,7 @@ To get started, first, you need to clone the GitHub repository to your local mac
 3. Execute the following command:
 
 ```bash
-git clone https://github.com/Drongo-J/Zust
+git clone https://github.com/aykhan019/Zust
 ```
 
 ## Set Connection String
